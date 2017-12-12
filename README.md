@@ -1,4 +1,4 @@
-# Processing.js IDE (early prototype proposal)
+# Processing.js IDE (early prototype)
 
 This is an early prototype of a project to create a lightweight web-based IDE
 for [Processing.js](http://processingjs.org/).
@@ -12,6 +12,17 @@ programming. For this reason the main focus areas of this project will be:
 *   Online / inline help system.
 
 *   Translation of the interface to Japanese.
+
+Currently this project only includes the local version of HTML files for quick
+development.
+
+## Getting started
+
+Install the dependencies using npm
+
+    npm install
+
+Open the `ide.html` in browser.
 
 ## License
 
