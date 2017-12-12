@@ -1,0 +1,17 @@
+{
+	"name": "processingjs-ide",
+	"version": "0.1.0",
+	"description": "A small and lightweight IDE for Processing.JS targeted at programming beginners.",
+	"author": "Salikh Zakirov <salikh@gmail.com>",
+	"license": "Apache-2.0",
+	"scripts": {
+		"test": "mocha"
+	},
+	"dependencies": {
+		"chai": "^4.1.2",
+		"codemirror": "^5.31.0",
+		"jquery": "^3.2.1",
+		"mocha": "^4.0.1",
+		"pegjs": "^0.10.0"
+	}
+}
