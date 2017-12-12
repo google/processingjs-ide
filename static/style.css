@@ -1,0 +1,50 @@
+body {
+  width: 1002px;
+  margin: 0 auto;
+}
+table.frame {
+  width: 100%;
+  border-collapse: collapse;
+  border: 0px;
+}
+table.frame > tr > td#left {
+  width: 70%;
+}
+table.frame > tr > td#right {
+}
+main {
+  border: solid 1px #EEE;
+  width: 700px;
+  height: 400px;
+}
+#editor {
+  width: 700px;
+}
+#suggestions {
+  border: solid 1px #EEE;
+  float: right;
+  width: 300px;
+  height: 200px;
+}
+#help {
+  border: solid 1px #EEE;
+  float: right;
+  width: 300px;
+  height: 200px;
+}
+#reference {
+  clear: both;
+  display: none;
+}
+#canvas {
+  display: none;
+  position: absolute;
+  top: 100px;
+  margin: 0 auto;
+  border: solid 3px #EEE;
+  padding: 1em;
+  width: 600px;
+  height: 400px;
+  z-index: 10;
+  background-color: white;
+}
