@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google LLC
+Copyright 2018 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,14 @@ You may obtain a copy of the License at
 //
 // Usage:
 //
-//   go run cmd/server.go --dir .
+//   go run cmd/server/server.go --dir .
+//
+// Or, with Bazel:
+//
+//   bazel build cmd/server
+//   bazel-bin/cmd/server/linux_amd64_stripped/server --dir .
+//
+// Then visit http://localhost:8080/ to get access to ide.html via HTTP.
 //
 package main
 

@@ -22,7 +22,7 @@ Install the dependencies using npm
 
     npm install
 
-Open the `ide.html` in browser.
+Open the file `ide.html` in browser.
 
 ## License
 
