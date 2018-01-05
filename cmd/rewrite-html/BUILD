@@ -12,10 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+package(default_visibility = ["//visibility:public"])
+
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
 
 go_binary(
-    name = "server",
-    srcs = ["server.go"],
-    importpath = "github.com/google/processingjs-ide/cmd/server",
+    name = "rewrite-html",
+    srcs = ["rewrite-html.go"],
+    importpath = "github.com/google/processingjs-ide/cmd/rewrite-html",
+    deps = [
+        "@com_github_PuerkitoBio_goquery//:go_default_library",
+        "@com_github_golang_net//html:go_default_library",
+    ],
 )

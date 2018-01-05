@@ -65,8 +65,41 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_go/releases/download/0.8.1/rules_go-0.8.1.tar.gz",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains", "go_repository")
 
 go_rules_dependencies()
 
 go_register_toolchains()
+
+#
+# Import dependencies of Goquery.
+#
+go_repository(
+    name = "com_github_andybalholm_cascadia",
+    commit = "349dd0209470eabd9514242c688c403c0926d266",
+    importpath = "github.com/andybalholm/cascadia",
+    remote = "https://github.com/andybalholm/cascadia.git",
+    vcs = "git",
+)
+
+#
+# Import Goquery.
+#
+go_repository(
+    name = "com_github_PuerkitoBio_goquery",
+    importpath = "github.com/PuerkitoBio/goquery",
+    sha256 = "8242ca59ecb79aada1463ee327304953ad49bb5053807e79e2ad07e8d70a00c6",
+    strip_prefix = "goquery-1.1.0",
+    urls = ["https://github.com/PuerkitoBio/goquery/archive/v1.1.0.tar.gz"],
+)
+
+#
+# Import golang.org/x/net/html
+#
+go_repository(
+    name = "com_github_golang_net",
+    commit = "42fe2e1c20de1054d3d30f82cc9fb5b41e2e3767",
+    importpath = "golang.org/x/net",
+    remote = "https://github.com/golang/net.git",
+    vcs = "git",
+)

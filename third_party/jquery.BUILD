@@ -11,11 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+package(default_visibility = ["//visibility:public"])
 
-go_binary(
-    name = "server",
-    srcs = ["server.go"],
-    importpath = "github.com/google/processingjs-ide/cmd/server",
+exports_files(
+    [
+        "dist/jquery.min.js",
+        "dist/jquery.js",
+    ],
+    visibility = ["//visibility:public"],
 )
+
+# vim:ft=bzl

@@ -1,40 +1,38 @@
-<!DOCTYPE html>
-<title>Processing.JS IDE (Local HTML)</title>
+<!DOCTYPE html><html><head><title>Processing.JS IDE (Local HTML)</title>
 <script src="node_modules/jquery/dist/jquery.js"></script>
 <script src="node_modules/codemirror/lib/codemirror.js"></script>
 <script src="node_modules/codemirror/addon/lint/lint.js"></script>
-<link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
-<link rel="stylesheet" href="node_modules/codemirror/addon/lint/lint.css">
+<link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css"/>
+<link rel="stylesheet" href="node_modules/codemirror/addon/lint/lint.css"/>
 <script src="node_modules/codemirror/mode/clike/clike.js"></script>
 <script src="third_party/processing-js/processing.js"></script>
-<link rel='stylesheet' type='text/css' href='static/style.css'>
-<script src='grammars/toplevel.js'></script>
-<script src='bazel-bin/ide-bin.js'></script>
-<script src='processingjs-lint.js'></script>
-<div id='outer'>
+<link rel="stylesheet" type="text/css" href="static/style.css"/>
+<script src="grammars/toplevel.js"></script>
+<script src="bazel-bin/ide-bin.js"></script>
+<script src="processingjs-lint.js"></script>
+</head><body><div id="outer">
   <header>
     <h1>Processing.JS IDE (Local HTML)</h1>
-    <a href='#' id='start_sketch'>Render</a>
-    <a href='#' id='stop_sketch'>Stop</a>
-    <a href='#' id='show_help'>Help</a>
+    <a href="#" id="start_sketch">Render</a>
+    <a href="#" id="stop_sketch">Stop</a>
+    <a href="#" id="show_help">Help</a>
   </header>
-  <div id='canvas'>
-    <canvas id='processing_canvas' processing-data-sources=''>
+  <div id="canvas">
+    <canvas id="processing_canvas" processing-data-sources="">
     </canvas>
   </div>
-  <table class='frame'>
-    <tr>
-      <td rowspan='2' class='left'>
+  <table class="frame">
+    <tbody><tr>
+      <td rowspan="2" class="left">
 	<main>
-	  <div id='editor'>
-	  <textarea id='editor_area' cols='80' rows='25'>
-void setup() {
+	  <div id="editor">
+	  <textarea id="editor_area" cols="80" rows="25">void setup() {
   size(300, 300);
   background(255);
   frameRate(10);
   textSize(30);
   fill(0);
-  text("Processing started", 50, 50);
+  text(&#34;Processing started&#34;, 50, 50);
 }
 
 int i = 0;
@@ -49,16 +47,16 @@ void draw() {
 	  </div>
 	</main>
       </td>
-      <td class='right'>
-        <aside id='suggestions'>
+      <td class="right">
+        <aside id="suggestions">
           <h2>Suggestions</h2>
           Here a dynamic list of suggestions will appear
         </aside>
       </td>
     </tr>
     <tr>
-      <td class='right'>
-        <aside id='help'>
+      <td class="right">
+        <aside id="help">
           <div>
           <h2>Help</h2>
           Here dynamic help will appear
@@ -66,60 +64,60 @@ void draw() {
         </aside>
       </td>
     </tr>
-  </table>
-  <div id='reference'>
-    <div id='ref-more' class='section'>
+  </tbody></table>
+  <div id="reference">
+    <div id="ref-more" class="section">
     <h1>More</h1>
     <b>More</b> contains <strong>more</strong> documentation.
     </div>
-    <div id='ref-void'>
+    <div id="ref-void">
       <h1>void</h1>
       <code>void</code> is a type that represents nothing. For example, to define a function that returns nothing (aka procedure or subroutine), make it a void type:
 	<pre>void f() {
   // ...
 }</pre>
     </div>
-    <div id='ref-draw' class='section'>
+    <div id="ref-draw" class="section">
       <h1>draw</h1>
       <code>draw()</code> is a function that is repeatedly called during
       sketch execution. It is equivalent to having the following loop
       executed:
-      <pre>
-setup();
+      <pre>setup();
 while (noloop() has not been called) {
   draw();
 }</pre>
     </div>
-    <div id='ref-setup' class='section'>
+    <div id="ref-setup" class="section">
       <h1>setup</h1>
       <code>setup()</code> is a function that is called once at the
       beginning of the sketch execution.
       <p>
       See also <a href="#ref-draw">draw()</a>.
-    </div>
-    <div id='ref-textSize' class='section'>
+    </p></div>
+    <div id="ref-textSize" class="section">
       <h1>textSize</h1>
       <code>textSize(size)</code> changes the text size to be used by
-      the next <a href='#ref-text'>text()</a> call. It does not produce
+      the next <a href="#ref-text">text()</a> call. It does not produce
       any output itself. Arguments:
       <ul>
         <li><code>size</code> an integer specifying the text size. Typical
           values between 5 and 50.
-      </ul>
+      </li></ul>
     </div>
-    <div id='ref-text' class='section'>
+    <div id="ref-text" class="section">
       <h1>text</h1>
       <code>text(message, x, y)</code> prints out the text message at
       position (x, y). Arguments:
       <ul>
-        <li><code>message</code> &mdash; a string to print.
-        <li><code>x</code> &mdash; x coordinate of where to print text.
-        <li><code>y</code> &mdash; y coordinate of where to print text.
-      </ul>
+        <li><code>message</code> — a string to print.
+        </li><li><code>x</code> — x coordinate of where to print text.
+        </li><li><code>y</code> — y coordinate of where to print text.
+      </li></ul>
     </div>
-    <div id='ref-str' class='section'>
+    <div id="ref-str" class="section">
       <h1>str</h1>
       <code>str(obj)</code> converts any object to string.
     </div>
   </div>
 </div>
+</body></html>

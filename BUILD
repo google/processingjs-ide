@@ -32,3 +32,23 @@ closure_js_binary(
         ":ide-js",
     ],
 )
+
+genrule(
+    name = "ide-html-bin",
+    srcs = [
+        "ide.html",
+    ],
+    outs = ["ide-bin.html"],
+    cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
+          """--edits_json='[{"selector": "script[src=\\"ide.js\\"]", "action": {"src": "ide-bin.js"}}]'""",
+    tools = ["//cmd/rewrite-html"],
+)
+
+filegroup(
+    name = "static-files",
+    data = [
+        "third_party/processing-js/processing.min.js",
+        ":ide-html-bin",
+        "@jquery//:dist/jquery.min.js",
+    ],
+)
