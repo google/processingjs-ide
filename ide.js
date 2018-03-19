@@ -28,6 +28,8 @@ var ide = (/** @type {function(): !Object} */ (function() {
     /** @type {?Element} */
     canvasDiv: null,
     /** @type {?Element} */
+    canvas: null,
+    /** @type {?Element} */
     processingCanvas: null,
     /** @type {!Object<string, !Element>} */
     referenceDict: {},
@@ -46,12 +48,16 @@ var ide = (/** @type {function(): !Object} */ (function() {
     ide.processing = new Processing(ide.processingCanvas, sketch);
     // }
     switchSketchState(true);
-    ide.canvasDiv.style.display = 'block';
+    ide.canvasDiv.style.overflow = 'visible';
+    ide.processingCanvas.style.width = '' + ide.processingCanvas.width + 'px';
+    ide.processingCanvas.style.height = '' + ide.processingCanvas.height + 'px';
   }
 
   function stopSketch() {
     switchSketchState(false);
-    ide.canvasDiv.style.display = 'none';
+    ide.canvasDiv.style.overflow = 'hidden';
+    //ide.processingCanvas.style.width = '100%';
+    //ide.processingCanvas.style.height = '100%';
   }
 
   /**
@@ -130,24 +136,31 @@ var ide = (/** @type {function(): !Object} */ (function() {
     });
   }
 
+  function keypress(ev) {
+    window.console.log(ev);
+  }
+
   function setup() {
     computeReferenceDict();
-    document.getElementById('start_sketch').onclick = startSketch;
-    document.getElementById('stop_sketch').onclick = stopSketch;
-    document.getElementById('show_help').onclick = showHelp;
+    document.getElementById('start_sketch_button').onclick = startSketch;
+    document.getElementById('stop_sketch_button').onclick = stopSketch;
+    document.getElementById('show_help_button').onclick = showHelp;
     var textarea = /** @type {!HTMLTextAreaElement} */ (
-        document.getElementById('editor_area'));
+        document.getElementById('editor_textarea'));
     var codemirror_options = {
       value: textarea.value,
       mode: 'clike',
       lint: CodeMirror.lint.processingjs,
+      extraKeys: {
+	F1: showHelp,
+      },
     };
     // Instantiate CodeMirror.
     ide.codemirror = CodeMirror.fromTextArea(textarea, codemirror_options);
-    ide.canvasDiv = document.getElementById('canvas');
-    ide.helpDiv = document.getElementById('help');
-    ide.suggestionsDiv = document.getElementById('suggestions');
+    ide.canvasDiv = document.getElementById('canvas_div');
+    ide.helpDiv = document.getElementById('help_div');
     ide.processingCanvas = document.getElementById('processing_canvas');
+    $(textarea).keypress(ide.keypress);
   }
 
   window.addEventListener('load', function() {
