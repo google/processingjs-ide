@@ -91,7 +91,8 @@ var ide = (/** @type {function(): !Object} */ (function() {
     } else {
       var keyword = refkey.substr(4);
       ide.helpDiv.innerHTML =
-          '<div>No help on <code>' + keyword + '</code>.</div>';
+          ('<div>No help on <code>' + keyword + '</code>.' +
+	   '<p>Put the cursor on a function name and press F1</div>');
     }
   }
 
