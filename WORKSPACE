@@ -17,9 +17,12 @@
 #
 http_archive(
     name = "io_bazel_rules_closure",
-    sha256 = "25f5399f18d8bf9ce435f85c6bbf671ec4820bc4396b3022cc5dc4bc66303609",
-    strip_prefix = "rules_closure-0.4.2",
-    url = "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/0.4.2.tar.gz",
+    sha256 = "a80acb69c63d5f6437b099c111480a4493bad4592015af2127a2f49fb7512d8d",
+    strip_prefix = "rules_closure-0.7.0",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/0.7.0.tar.gz",
+        "https://github.com/bazelbuild/rules_closure/archive/0.7.0.tar.gz",
+    ],
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
@@ -61,14 +64,11 @@ new_http_archive(
 #
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "90bb270d0a92ed5c83558b2797346917c46547f6f7103e648941ecdb6b9d0e72",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.8.1/rules_go-0.8.1.tar.gz",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.12.0/rules_go-0.12.0.tar.gz",
+    sha256 = "c1f52b8789218bb1542ed362c4f7de7052abcf254d865d96fb7ba6d44bc15ee3",
 )
-
 load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains", "go_repository")
-
 go_rules_dependencies()
-
 go_register_toolchains()
 
 #
