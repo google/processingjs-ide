@@ -57,17 +57,8 @@ genrule(
     tools = ["//cmd/rewrite-html"],
 )
 
-filegroup(
-    name = "static-files",
-    data = [
-        "third_party/processing-js/processing.min.js",
-        ":ide-html-bin",
-        "@jquery//:dist/jquery.min.js",
-    ],
-)
-
 genrule(
-    name = "static",
+    name = "static-files",
     srcs = [
         "third_party/processing-js/processing.min.js",
 	":ide-bin",
