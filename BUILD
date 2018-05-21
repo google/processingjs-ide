@@ -33,6 +33,7 @@ closure_js_binary(
     ],
 )
 
+# A HTML rewritten to be loaded from a flat static directory.
 genrule(
     name = "ide-html-bin",
     srcs = [
@@ -40,7 +41,19 @@ genrule(
     ],
     outs = ["ide-bin.html"],
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
-          """--edits_json='[{"selector": "script[src=\\"ide.js\\"]", "action": {"src": "ide-bin.js"}}]'""",
+          """--edits_json='[
+	    {"selector": "script[src=\\"ide.js\\"]", "action": {"src": "ide-bin.js"}},
+	    {"selector": "body > h1", "action": {"html": "<h1>ide-bin.html (Built)</h1>"}},
+	    {"selector": "script[src$$=\\"jquery.js\\"]", "action": {"src": "jquery.min.js"}},
+	    {"selector": "script[src$$=\\"codemirror.js\\"]", "action": {"src": "codemirror.js"}},
+	    {"selector": "script[src$$=\\"/lint.js\\"]", "action": {"src": "lint.js"}},
+	    {"selector": "link[href$$=\\"codemirror.css\\"]", "action": {"href": "codemirror.css"}},
+	    {"selector": "link[href$$=\\"lint.css\\"]", "action": {"href": "lint.css"}},
+	    {"selector": "script[src$$=\\"clike.js\\"]", "action": {"src": "clike.js"}},
+	    {"selector": "script[src$$=\\"processing.js\\"]", "action": {"src": "processing.js"}},
+	    {"selector": "link[href$$=\\"style.css\\"]", "action": {"href": "style.css"}},
+	    {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "action": {"src": "toplevel.js"}}
+	  ]'""",
     tools = ["//cmd/rewrite-html"],
 )
 
@@ -52,3 +65,25 @@ filegroup(
         "@jquery//:dist/jquery.min.js",
     ],
 )
+
+genrule(
+    name = "static",
+    srcs = [
+        "third_party/processing-js/processing.min.js",
+	":ide-bin",
+	":ide-html-bin",
+        "@jquery//:dist/jquery.min.js",
+	"static/style.css",
+	"node_modules/codemirror/lib/codemirror.js",
+	"node_modules/codemirror/addon/lint/lint.js",
+	"node_modules/codemirror/lib/codemirror.css",
+	"node_modules/codemirror/addon/lint/lint.css",
+	"node_modules/codemirror/mode/clike/clike.js",
+	"third_party/processing-js/processing.js",
+	"processingjs-lint.js",
+	"grammars/toplevel.js",
+    ],
+    outs = ["static"],
+    cmd = """mkdir -v -p "$@"; cp -v $(SRCS) "$@"/""",
+)
+

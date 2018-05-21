@@ -125,7 +125,10 @@ func run(input, output string, edits []HTMLEdit) error {
 		return fmt.Errorf("error parsing input HTML %q: %s", input, err)
 	}
 	for _, edit := range edits {
-		applyEdit(doc, edit)
+		err := applyEdit(doc, edit)
+		if err != nil {
+			return err
+		}
 	}
 	outBuf := new(bytes.Buffer)
 	err = html.Render(outBuf, doc)
