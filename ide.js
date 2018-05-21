@@ -29,7 +29,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
     canvasDiv: null,
     /** @type {?Element} */
     canvas: null,
-    /** @type {?Element} */
+    /** @type {?HTMLCanvasElement} */
     processingCanvas: null,
     /** @type {!Object<string, !Element>} */
     referenceDict: {},
@@ -138,7 +138,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
   }
 
   function keypress(ev) {
-    window.console.log(ev);
+    //window.console.log(ev);
   }
 
   function setup() {
@@ -160,8 +160,8 @@ var ide = (/** @type {function(): !Object} */ (function() {
     ide.codemirror = CodeMirror.fromTextArea(textarea, codemirror_options);
     ide.canvasDiv = document.getElementById('canvas_div');
     ide.helpDiv = document.getElementById('help_div');
-    ide.processingCanvas = document.getElementById('processing_canvas');
-    $(textarea).keypress(ide.keypress);
+    ide.processingCanvas = /** @type{HTMLCanvasElement!} */(document.getElementById('processing_canvas'));
+    $(textarea).keypress(keypress);
   }
 
   window.addEventListener('load', function() {
