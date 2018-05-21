@@ -31,6 +31,7 @@ void setup() {
 }
 
 int i = 0;
+int next = 0;
 
 void draw() {
   i += 1;
@@ -38,6 +39,10 @@ void draw() {
   textSize(30);
   fill(0);
   text(str(i), 150, 150);
+  if (millis() &gt; next) {
+    next = millis() + 1500;
+    speak(str(i));
+  }
 }</textarea>
     </div>
   </div>

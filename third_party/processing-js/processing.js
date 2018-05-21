@@ -7918,7 +7918,7 @@ module.exports = function setupParser(Processing, options) {
       "round", "saturation", "save", "saveFrame", "saveStrings", "scale",
       "screenX", "screenY", "screenZ", "second", "set", "setup", "shape",
       "shapeMode", "shared", "shearX", "shearY", "shininess", "shorten", "sin", "size", "smooth",
-      "sort", "specular", "sphere", "sphereDetail", "splice", "split",
+      "sort", "speak", "specular", "sphere", "sphereDetail", "splice", "split",
       "splitTokens", "spotLight", "sq", "sqrt", "status", "str", "stroke",
       "strokeCap", "strokeJoin", "strokeWeight", "subset", "tan", "text",
       "textAlign", "textAscent", "textDescent", "textFont", "textLeading",
@@ -9956,6 +9956,7 @@ module.exports = function setupParser(Processing, options) {
         maxPixelsCached = 1000,
         pressedKeysMap = [],
         lastPressedKeyCode = null,
+	globalVoices = window.speechSynthesis.getVoices(),
         codedKeys = [ PConstants.SHIFT, PConstants.CONTROL, PConstants.ALT, PConstants.CAPSLK, PConstants.PGUP, PConstants.PGDN,
                       PConstants.END, PConstants.HOME, PConstants.LEFT, PConstants.UP, PConstants.RIGHT, PConstants.DOWN, PConstants.NUMLK,
                       PConstants.INSERT, PConstants.F1, PConstants.F2, PConstants.F3, PConstants.F4, PConstants.F5, PConstants.F6, PConstants.F7,
@@ -21003,6 +21004,18 @@ module.exports = function setupParser(Processing, options) {
       } else if (arguments.length === 6) { // for text( stringdata, x, y , width, height, z)
         text$6(toP5String(arguments[0]), arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
       }
+    };
+
+    p.speak = function(text, lang='ja-JP', rate=1, volume=1, voice_num=0, pitch=1) {
+      var msg = new SpeechSynthesisUtterance();
+      msg.voice = globalVoices[voice_num]; // Note: some voices don't support altering params
+      msg.voiceURI = 'native';
+      msg.volume = volume; // 0 to 1
+      msg.rate = rate; // 0.1 to 10
+      msg.pitch = pitch; //0 to 2
+      msg.text = text;
+      msg.lang = lang;
+      speechSynthesis.speak(msg);
     };
 
     /**
