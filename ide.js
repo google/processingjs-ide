@@ -31,9 +31,53 @@ var ide = (/** @type {function(): !Object} */ (function() {
     canvas: null,
     /** @type {?HTMLCanvasElement} */
     processingCanvas: null,
+    /** @type {?HTMLTextAreaElement} */
+    textarea: null,
     /** @type {!Object<string, !Element>} */
     referenceDict: {},
   };
+
+  /**
+   * @return{!Object<string, string>}
+   */
+  function parseFragment() {
+    var params = {};
+    var parts = window.location.hash.substring(1).split('&');
+    for (var i = 0; i < parts.length; i++) {
+      var part = parts[i];
+      if (part == '') continue;
+      var pieces = part.split('=');
+      if (pieces.length != 2) {
+        window.console.error('Invalid fragment parameter: ' + part);
+        continue;
+      }
+      params[pieces[0]] = decodeURIComponent(pieces[1]);
+    }
+    return params;
+  }
+
+  /**
+   * Update the fragment hash with a new key-value pair.
+   * If value is null, removes that part from the fragment hash.
+   * @param {string} key
+   * @param {?string} value
+   */
+  function updateFragment(key, value) {
+    var params = parseFragment();
+    if (value == null) {
+      delete params[key];
+    } else {
+      params[key] = value;
+    }
+    var hash = "";
+    for (key in params) {
+      if (hash.length > 0) {
+        hash = hash + '&';
+      }
+      hash = hash + encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+    }
+    window.location.hash = hash;
+  }
 
   function startSketch() {
     var /** string */ processingCode = ide.codemirror.getValue();
@@ -88,11 +132,12 @@ var ide = (/** @type {function(): !Object} */ (function() {
       } else {
         ide.helpDiv.appendChild(doc);
       }
+      updateFragment('help', refkey.substr(4));
     } else {
       var keyword = refkey.substr(4);
       ide.helpDiv.innerHTML =
           ('<div>No help on <code>' + keyword + '</code>.' +
-	   '<p>Put the cursor on a function name and press F1</div>');
+     '<p>Put the cursor on a function name and press [Help] button</div>');
     }
   }
 
@@ -119,10 +164,52 @@ var ide = (/** @type {function(): !Object} */ (function() {
   /**
    * @param {!Event} ev
    */
+  function saveSketch(ev) {
+    ev.preventDefault();
+    var /** string */processingCode = ide.codemirror.getValue();
+    var params = parseFragment();
+    ide.textarea.value = processingCode;
+    window.console.log(ide.textarea);
+    var data = $(ide.textarea).serializeArray();
+    var id = params['sketch'];
+    if (id) {
+      window.console.log("Saving /sketch/" + id, data);
+      $.post('/sketch/' + id, data, function(data, status, xhr) {
+        if (status == 'success') {
+          ide.helpDiv.innerHTML = '<div class="error">Saved OK</div>';
+          window.console.log("Saved /sketch/" + id);
+        } else {
+          ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
+          window.console.log(status);
+        }
+      });
+    } else {
+      window.console.log("Saving new sketch", data);
+      $.post('/sketch', data, function(data, status, xhr) {
+        var id = data;
+        if (status == 'success') {
+          ide.helpDiv.innerHTML = '<div class="error">Saved OK</div>';
+          window.console.log("Saved /sketch/" + id);
+          updateFragment('sketch', id);
+        } else {
+          ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
+          window.console.log(status);
+        }
+      });
+    }
+  }
+
+
+  /**
+   * @param {!Event} ev
+   * @return {boolean}
+   */
   function showDoc(ev) {
     var elt = /** @type {!Element} */ (ev.target);
     var hash = elt.getAttribute('href');
     showHelpSection(hash);
+    updateFragment('help', hash.substr(5));
+    return false;
   }
 
   function computeReferenceDict() {
@@ -143,25 +230,58 @@ var ide = (/** @type {function(): !Object} */ (function() {
 
   function setup() {
     computeReferenceDict();
-    document.getElementById('start_sketch_button').onclick = startSketch;
-    document.getElementById('stop_sketch_button').onclick = stopSketch;
-    document.getElementById('show_help_button').onclick = showHelp;
-    var textarea = /** @type {!HTMLTextAreaElement} */ (
+    document.getElementById('start_sketch_button')
+      .addEventListener('click',  startSketch);
+    document.getElementById('stop_sketch_button')
+      .addEventListener('click', stopSketch);
+    document.getElementById('show_help_button')
+      .addEventListener('click', showHelp);
+    document.getElementById('save_sketch_button')
+      .addEventListener('click', saveSketch);
+    ide.textarea = /** @type {!HTMLTextAreaElement} */ (
         document.getElementById('editor_textarea'));
     var codemirror_options = {
-      value: textarea.value,
+      value: ide.textarea.value,
       mode: 'clike',
       lint: CodeMirror.lint.processingjs,
-      extraKeys: {
-	F1: showHelp,
-      },
     };
+    // Parse and act on the fragment address.
+    if (window.location.hash) {
+      var params = parseFragment();
+      window.console.log(params);
+      if (params['sketch']) {
+        var id = params['sketch'];
+        $.ajax('/sketch/' + id, {
+          success:
+          /**
+           * @param {string} data
+           */
+          function(data) {
+            window.console.log("Loaded /sketch/" + id);
+            ide.textarea.value = data;
+            ide.codemirror.setValue(data);
+          },
+          error:
+          /**
+           * @param {!Object} jqXHR
+           * @param {?Object} status
+           * @param {?Object} err
+           */
+          function(jqXHR, status, err) {
+            window.console.log(status, err);
+          },
+        });
+      }
+      // TODO(salikh): Parse 'help' key from the fragment
+      // and show the appropriate help page.
+    }
     // Instantiate CodeMirror.
-    ide.codemirror = CodeMirror.fromTextArea(textarea, codemirror_options);
+    ide.codemirror = CodeMirror.fromTextArea(ide.textarea, codemirror_options);
+    ide.codemirror.setOption("extraKeys", { Tab: showHelp });
     ide.canvasDiv = document.getElementById('canvas_div');
     ide.helpDiv = document.getElementById('help_div');
     ide.processingCanvas = /** @type{HTMLCanvasElement!} */(document.getElementById('processing_canvas'));
-    $(textarea).keypress(keypress);
+    $(ide.textarea).keypress(keypress);
   }
 
   window.addEventListener('load', function() {

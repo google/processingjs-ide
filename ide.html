@@ -17,10 +17,11 @@
     <button href='#' id='start_sketch_button'>Render</button>
     <button href='#' id='stop_sketch_button'>Stop</button>
     <button href='#' id='show_help_button'>Help</button>
+    <button href='#' id='save_sketch_button'>Save</button>
   </div>
   <div id='main'>
     <div id='editor'>
-      <textarea id='editor_textarea' cols='80' rows='25'>
+      <textarea id='editor_textarea' cols='80' rows='25' name='source'>
 void setup() {
   size(300, 300);
   background(255);
@@ -52,7 +53,7 @@ void draw() {
   </div>
   <div id='help_div'>
     <h2>Help</h2>
-    Put your cursor on a function name and press F1 or [Help] button above.
+    Put your cursor on a function name and press [Help] button above.
   </div>
 </div>
 <div id='reference'>

@@ -68,6 +68,17 @@ CodeMirror.prototype.getCursor = function() {};
  */
 CodeMirror.prototype.getLine = function(lineno) {};
 
+/**
+ * @param {string} value
+ */
+CodeMirror.prototype.setValue = function(value) {};
+
+/**
+ * @param {string} key
+ * @param {?Object} value
+ */
+CodeMirror.prototype.setOption = function(key, value) {};
+
 CodeMirror.lint = {
   /**
    * @type {Object}
