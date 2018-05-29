@@ -1,3 +1,13 @@
+// Copyright 2018 Google Inc. All rights reserved.
+// Use of this source code is governed by the Apache 2.0
+// license that can be found in the LICENSE file.
+
+// Binary convert-docs may be used to convert the Processing.js documentation into a single-page
+// HTML format suitable for inclusion into ide.html directly and usable as online help.
+//
+// NOTE: The documentation is distributed under CC BY-SA-NC license
+// that is not compatible with the license of this repo, so cannot
+// be included directly.
 package main
 
 import (
