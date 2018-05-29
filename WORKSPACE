@@ -111,3 +111,25 @@ go_repository(
     remote = "https://github.com/golang/net.git",
     vcs = "git",
 )
+
+#
+# Import gopkg.in/russross/blackfriday.v2
+#
+go_repository(
+		name = "com_github_russross_blackfriday",
+		commit = "cadec560ec52d93835bf2f15bd794700d3a2473b",
+		importpath = "gopkg.in/russross/blackfriday.v2",
+		remote = "https://github.com/russross/blackfriday",
+		vcs = "git",
+)
+
+#
+# Import github.com/shurcool/sanitized_anchor_name, a dependency of blackfriday.
+#
+go_repository(
+		name = "com_github_shurcool_sanitized_anchor_name",
+		commit = "86672fcb3f950f35f2e675df2240550f2a50762f",
+		importpath = "github.com/shurcooL/sanitized_anchor_name",
+		remote = "https://github.com/shurcooL/sanitized_anchor_name",
+		vcs = "git",
+)

@@ -33,6 +33,16 @@ closure_js_binary(
     ],
 )
 
+genrule(
+    name = "docs-en-html",
+    srcs = [
+	"docs/en.md",
+    ],
+    outs = ["docs-en.html"],
+    cmd = """$(location //cmd/render-markdown) --input_md_file="$<" --output_html_file="$@" """,
+    tools = ["//cmd/render-markdown"],
+)
+
 # A HTML rewritten to be loaded from a flat static directory.
 genrule(
     name = "ide-html-bin",
