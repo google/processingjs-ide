@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -155,6 +156,11 @@ func sketchPostHandler(w http.ResponseWriter, req *http.Request) error {
 	sketch.Source = []byte(req.PostFormValue("source"))
 	if len(sketch.Source) == 0 {
 		sketch.Source = []byte(req.FormValue("source"))
+	}
+	// Extract the sketch name.
+	re := regexp.MustCompile("// *([a-zA-Z_-]*)")
+	if m := re.FindSubmatch(sketch.Source); m != nil {
+		sketch.Title = string(m[1])
 	}
 	log.Printf("source = %q", sketch.Source)
 	var id db.ID
