@@ -20,4 +20,4 @@ help entry will be shown.
 
 `setup()` is a function that is called once at the beginning of the sektch execution.
 
-See also <a href='#ref-draw'>`draw()`</a>
+See also <a href='#ref-draw'>draw()</a>

@@ -1,3 +1,5 @@
+// Binary rewrite-html is an ad-hoc purpose build utility
+// to manipulate HTML source of ide.html.
 package main
 
 import (
@@ -29,12 +31,21 @@ var (
 
 // HTMLEdit specifies one edit action to be performed on the HTML tree.
 type HTMLEdit struct {
-	// Selector is the CSS-style selector passed to Goquery.
+	// Selector is the CSS-style selector passed to Goquery to identify
+	// the HTML element to apply edits to.
 	Selector string
-	// Value is the string value or an HTML fragment to be used as a replacement.
-	// "html" key is used to replace the selected element with a new fragment.
-	// Other keys in action map are interpreted as attribute names.
-	Action map[string]string
+	// Attr is a map from attr name to value.
+	Attr map[string]string
+	// HTML fragment to be used as a replacement for the target
+	// element. If empty, ignored.
+	HTML string
+	// The HTML fragment to replace the content of the target the
+	// element. If empty, ignored.
+	Content string
+	// The path to the HTML file to be loaded. If empty, ignored.
+	File string
+	// The selector to cut the fragment from the loaded HTML.
+	FileSelector string
 }
 
 func render(node *html.Node) string {
@@ -46,7 +57,102 @@ func render(node *html.Node) string {
 	return buf.String()
 }
 
-// Updates the HTML element tree in place according to a given instruction.
+// parseHTMLFragment parses a HTML snippet into a list of nodes.
+func parseHTMLFragment(fragment string, parent *html.Node) ([]*html.Node, error) {
+	nn, err := html.ParseFragment(strings.NewReader(fragment), parent)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing HTML fragment %q: %s", fragment, err)
+	}
+	if len(nn) == 0 {
+		return nil, errors.New("empty HTML fragment given")
+	}
+	return nn, nil
+}
+
+func extractHTMLFragment(file, selector string) ([]*html.Node, error) {
+	b, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, fmt.Errorf("error reading %q: %s", file, err)
+	}
+	root, err := html.Parse(bytes.NewBuffer(b))
+	if err != nil {
+		return nil, fmt.Errorf("error parsing HTML file %q: %s", file, err)
+	}
+	doc := goquery.NewDocumentFromNode(root)
+	log.Print(render(root))
+	s := doc.Find(selector)
+	log.Printf("extracted %d nodes from file %q", len(s.Nodes), file)
+	return s.Nodes, nil
+}
+
+// replaceElement replaces the element with a list of replacement
+// nodes.
+func replaceElement(node *html.Node, nn []*html.Node) {
+	if len(nn) == 0 {
+		// Just cut out the element.
+		if node.PrevSibling != nil {
+			node.PrevSibling.NextSibling = node.NextSibling
+		}
+		if node.NextSibling != nil {
+			node.NextSibling.PrevSibling = node.PrevSibling
+		}
+		return
+	}
+	// Link the new nodes into instead of the given node.
+	for i := range nn {
+		if i == 0 {
+			nn[i].PrevSibling = node.PrevSibling
+		} else {
+			nn[i].PrevSibling = nn[i-1]
+		}
+		if i < len(nn)-1 {
+			nn[i].NextSibling = nn[i+1]
+		} else {
+			nn[i].NextSibling = node.NextSibling
+		}
+	}
+	if node.Parent.FirstChild == node && len(nn) > 0 {
+		node.Parent.FirstChild = nn[0]
+	}
+	if node.Parent.LastChild == node {
+		node.Parent.LastChild = nn[len(nn)-1]
+	}
+	if node.PrevSibling != nil {
+		node.PrevSibling.NextSibling = nn[0]
+	}
+	if node.NextSibling != nil {
+		node.NextSibling.PrevSibling = nn[len(nn)-1]
+	}
+}
+
+// replaceContent replaces the children of the node
+// with the replacement nodes nn.
+func replaceContent(node *html.Node, nn []*html.Node) {
+	if len(nn) == 0 {
+		node.FirstChild = nil
+		node.LastChild = nil
+		return
+	}
+	// Link the new nodes into instead of the given node.
+	for i := range nn {
+		if i == 0 {
+			nn[i].PrevSibling = nil
+		} else {
+			nn[i].PrevSibling = nn[i-1]
+		}
+		if i < len(nn)-1 {
+			nn[i].NextSibling = nn[i+1]
+		} else {
+			nn[i].NextSibling = nil
+		}
+		nn[i].Parent = node
+	}
+	node.FirstChild = nn[0]
+	node.LastChild = nn[len(nn)-1]
+}
+
+// Updates the HTML element tree in place according to a given
+// instruction.
 // NOTE: this method ignores namespaces.
 func applyEdit(root *html.Node, edit HTMLEdit) error {
 	doc := goquery.NewDocumentFromNode(root)
@@ -56,56 +162,40 @@ func applyEdit(root *html.Node, edit HTMLEdit) error {
 	}
 	node := s.Nodes[0]
 	log.Printf("Found node: %s", render(node))
-	replacementHTML, ok := edit.Action["html"]
-	if ok {
-		if len(edit.Action) != 1 {
-			return fmt.Errorf("cannot have both attribute and HTML replacement instructions")
-		}
-		nn, err := html.ParseFragment(strings.NewReader(replacementHTML), node.Parent)
+	if edit.HTML != "" {
+		nn, err := parseHTMLFragment(edit.HTML, node.Parent)
 		if err != nil {
-			return fmt.Errorf("error parsing HTML fragment %q: %s", replacementHTML, err)
+			return err
 		}
-		if len(nn) == 0 {
-			return errors.New("empty HTML fragment given")
-		}
-		// Link the new nodes into instead of the given node.
-		for i := range nn {
-			if i == 0 {
-				nn[i].PrevSibling = node.PrevSibling
-			} else {
-				nn[i].PrevSibling = nn[i-1]
-			}
-			if i < len(nn)-1 {
-				nn[i].NextSibling = nn[i+1]
-			} else {
-				nn[i].NextSibling = node.NextSibling
-			}
-		}
-		if node.Parent.FirstChild == node {
-			node.Parent.FirstChild = nn[0]
-		}
-		if node.Parent.LastChild == node {
-			node.Parent.LastChild = nn[len(nn)-1]
-		}
-		if node.PrevSibling != nil {
-			node.PrevSibling.NextSibling = nn[0]
-		}
-		if node.NextSibling != nil {
-			node.NextSibling.PrevSibling = nn[len(nn)-1]
-		}
+		replaceElement(node, nn)
 		return nil
 	}
-	// "html" key may be only the only key, so it is not present.
+	if edit.Content != "" {
+		// Replace the content of the selected element.
+		nn, err := parseHTMLFragment(edit.Content, node)
+		if err != nil {
+			return err
+		}
+		replaceContent(node, nn)
+	}
+	if edit.File != "" {
+		nn, err := extractHTMLFragment(edit.File, edit.FileSelector)
+		if err != nil {
+			return err
+		}
+		replaceContent(node, nn)
+	}
+	// The rest of actions are attribute edit actions.
 	done := make(map[string]bool)
 	for i, attr := range node.Attr {
-		value, ok := edit.Action[attr.Key]
+		value, ok := edit.Attr[attr.Key]
 		if ok {
 			log.Printf("Rewriting attribute %s from %q to %q", attr.Key, attr.Val, value)
 			node.Attr[i] = html.Attribute{Namespace: attr.Namespace, Key: attr.Key, Val: value}
 			done[attr.Key] = true
 		}
 	}
-	for key, value := range edit.Action {
+	for key, value := range edit.Attr {
 		if done[key] {
 			continue
 		}
@@ -136,7 +226,7 @@ func run(input, output string, edits []HTMLEdit) error {
 	if err != nil {
 		return fmt.Errorf("error writing %q: %s", output, err)
 	}
-	fmt.Println("OK")
+	log.Println("OK")
 	return nil
 }
 
@@ -145,7 +235,7 @@ func main() {
 	edits := []HTMLEdit{}
 	err := json.Unmarshal([]byte(*editsJSON), &edits)
 	if err != nil {
-		log.Fatalf("Could parse --edits_json=%q: %s", *editsJSON, err)
+		log.Fatalf("Could not parse --edits_json=%s: %s", *editsJSON, err)
 	}
 	log.Printf("Edits: %#v\n", edits)
 	err = run(*inputHTMLFile, *outputHTMLFile, edits)
