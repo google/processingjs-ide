@@ -55,7 +55,6 @@ func main() {
 	r := mux.NewRouter()
 	r.Methods("GET").Path("/").Handler(appHandler(indexHandler))
 	r.Methods("GET").Path("/list").Handler(appHandler(listHandler))
-	r.Methods("GET").Path("/sketch").Handler(appHandler(sketchGoHandler))
 	r.Methods("GET").Path("/sketch/{id}").Handler(appHandler(sketchGetHandler))
 	r.Methods("POST").Path("/sketch").Handler(appHandler(sketchPostHandler))
 	r.Methods("POST").Path("/sketch/{id}").Handler(appHandler(sketchPostHandler))
@@ -102,25 +101,6 @@ func listHandler(w http.ResponseWriter, req *http.Request) error {
 	}
 	sketchListTmpl.Execute(w, sketches)
 	return nil
-}
-
-// sketchGoHandler retrieves the previous sketch ID from the session and
-// redirects to it.
-func sketchGoHandler(w http.ResponseWriter, req *http.Request) error {
-	session, err := sessionStore.Get(req, sessionName)
-	if err != nil {
-		return err
-	}
-	idstr, ok := session.Values["sketch"]
-	if ok {
-		http.Redirect(w, req, fmt.Sprintf("/static/ide-bin.html#sketch=%s",
-			url.PathEscape(idstr.(string))), http.StatusFound)
-		return nil
-	} else {
-		w.Header().Set("Content-type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, "You do not have a previous sketch. <a href='/'>Back to top</a>.")
-		return nil
-	}
 }
 
 func sketchPostHandler(w http.ResponseWriter, req *http.Request) error {
@@ -215,8 +195,17 @@ func sketchGetHandler(w http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) error {
-	// TODO(salikh): Create a new copy of the default sketch and Redirect to it.
-	http.Redirect(w, r, "/static/ide-bin.html", http.StatusFound)
+func indexHandler(w http.ResponseWriter, req *http.Request) error {
+	session, err := sessionStore.Get(req, sessionName)
+	if err != nil {
+		return err
+	}
+	idstr, ok := session.Values["sketch"]
+	if ok {
+		http.Redirect(w, req, fmt.Sprintf("/static/ide-bin.html#sketch=%s",
+			url.PathEscape(idstr.(string))), http.StatusFound)
+	} else {
+		http.Redirect(w, req, "/static/ide-bin.html", http.StatusFound)
+	}
 	return nil
 }
