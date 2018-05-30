@@ -66,3 +66,7 @@ h1 {
   margin: 1px;
   border: dashed 2px black;
 }
+footer {
+  text-align: center;
+  font-size: 8pt;
+}

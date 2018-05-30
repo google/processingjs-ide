@@ -53,7 +53,7 @@ genrule(
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
         """--edits_json='[
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
-            {"selector": "body > h1", "content": "ide-bin.html (Built)"},
+            {"selector": "body > h1", "content": "Processing.js IDE"},
             {"selector": "script[src$$=\\"jquery.js\\"]", "attr": {"src": "jquery.min.js"}},
             {"selector": "script[src$$=\\"codemirror.js\\"]", "attr": {"src": "codemirror.js"}},
             {"selector": "script[src$$=\\"/lint.js\\"]", "attr": {"src": "lint.js"}},
@@ -63,6 +63,7 @@ genrule(
             {"selector": "script[src$$=\\"processing.js\\"]", "attr": {"src": "processing.js"}},
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
             {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.js"}},
+	    {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
             {"selector": "div#reference", "file": "$(location :docs-en.html)", "fileselector": "div"}
         ]'""",
     tools = ["//cmd/rewrite-html", ":docs-en.html"],
@@ -76,6 +77,7 @@ genrule(
         ":ide-html-bin",
         "@jquery//:dist/jquery.min.js",
         "static/style.css",
+	"static/terms.html",
         "node_modules/codemirror/lib/codemirror.js",
         "node_modules/codemirror/addon/lint/lint.js",
         "node_modules/codemirror/lib/codemirror.css",
