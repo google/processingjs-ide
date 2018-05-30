@@ -22,14 +22,25 @@ limitations under the License.
 
 /**
  * @param {Element} canvas
- * @param {string} source
+ * @param {!Object} source
  * @constructor
  */
 var Processing = function(canvas, source) {};
 
 /**
  * @param {string} source
- * @return {string}
+ * @constructor
+ */
+Processing.Sketch = function(source) {};
+
+/**
+ * @param {Processing} processing
+ */
+Processing.Sketch.prototype.attach = function(processing) {};
+
+/**
+ * @param {string} source
+ * @return {!Processing.Sketch}
  */
 Processing.compile = function(source) {};
 

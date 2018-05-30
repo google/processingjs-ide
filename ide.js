@@ -82,15 +82,14 @@ var ide = (/** @type {function(): !Object} */ (function() {
   function startSketch() {
     var /** string */ processingCode = ide.codemirror.getValue();
     // window.console.log(processingCode);
-    var /** string */ sketch = Processing.compile(processingCode);
+    var /** !Processing.Sketch */sketch = Processing.compile(processingCode);
     // window.console.log(sketch.sourceCode);
     // TODO(salikh): Do not create a new processing instance?
-    // if (!ide.processing) {
-    //   var processingInit = eval(sketch.sourceCode);
-    //   processingInit(ide.processing);
-    // } else {
-    ide.processing = new Processing(ide.processingCanvas, sketch);
-    // }
+    if (ide.processing == null) {
+      ide.processing = new Processing(ide.processingCanvas, sketch);
+    } else {
+      sketch.attach(ide.processing);
+    }
     switchSketchState(true);
     ide.canvasDiv.style.overflow = 'visible';
     ide.processingCanvas.style.width = '' + ide.processingCanvas.width + 'px';
