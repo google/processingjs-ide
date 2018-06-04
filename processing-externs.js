@@ -48,3 +48,13 @@ Processing.prototype.loop = function() {};
 Processing.prototype.noLoop = function() {};
 Processing.prototype.setup = function() {};
 Processing.prototype.exit = function() {};
+
+/**
+ * @type {number}
+ */
+Processing.prototype.width = 0;
+
+/**
+ * @type {number}
+ */
+Processing.prototype.height = 0;

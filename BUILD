@@ -18,6 +18,7 @@ load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_deps")
 
 closure_js_library(
     name = "ide-js",
+    suppress = ["reportUnknownTypes"],
     srcs = [
         "codemirror-externs.js",
         "ide.js",
@@ -77,6 +78,7 @@ genrule(
         ":ide-html-bin",
         "@jquery//:dist/jquery.min.js",
         "static/style.css",
+        "static/inner.css",
 	"static/terms.html",
         "node_modules/codemirror/lib/codemirror.js",
         "node_modules/codemirror/addon/lint/lint.js",

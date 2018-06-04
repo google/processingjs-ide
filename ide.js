@@ -35,6 +35,10 @@ var ide = (/** @type {function(): !Object} */ (function() {
     textarea: null,
     /** @type {!Object<string, !Element>} */
     referenceDict: {},
+    /** @type {number} */
+    prevHeight: 0,
+    /** @type {number} */
+    prevWidth: 0,
   };
 
   /**
@@ -82,21 +86,68 @@ var ide = (/** @type {function(): !Object} */ (function() {
   function startSketch() {
     var /** string */ processingCode = ide.codemirror.getValue();
     // window.console.log(processingCode);
-    var /** !Processing.Sketch */sketch = Processing.compile(processingCode);
-    // window.console.log(sketch.sourceCode);
-    // TODO(salikh): Do not create a new processing instance?
-    if (ide.processing == null) {
-      ide.processing = new Processing(ide.processingCanvas, sketch);
-    } else {
-      sketch.attach(ide.processing);
-      if (typeof ide.processing.setup == "function") {
-        ide.processing.setup();
-      }
+    try {
+      // Try compilation and report an error if any.
+      Processing.compile(processingCode);
+    } catch(/** @type{!Error} */e) {
+      window.console.error(e);
+      ide.canvasDiv.innerHTML = 'Error: ' + e;
     }
-    switchSketchState(true);
+    // Isolate the running Processing sketch in an iframe.
+    var iframe = /** @type {!HTMLIFrameElement} */(document.createElement("iframe"));
+    // Find out the links to processing.js library from the current
+    // page.
+    /** @type {string} */
+    var processing_js;
+    try {
+      processing_js = /** @type {string} */ ($("script[src*='processing.']")[0].src);
+    } catch(e) {
+      processing_js = '/static/processing.min.js';
+    }
+    /** @type{string} */
+    var style_css;
+    try {
+      style_css = $("link[href*='style']")[0].href.replace('style.css', 'inner.css');
+    } catch(e) {
+      style_css = '/static/inner.css';
+    }
+    // Create the iframe HTML.
+    var iframeHtml = '<!DOCTYPE html>\n' +
+      '<link rel="stylesheet" type="text/css" href="'+ style_css + '">'+
+      '<script src="' + processing_js + '"></script>' + 
+      '<script type="application/processing" data-processing-target="pjs">' + processingCode + '</script>'+
+      '<canvas id="pjs"></canvas>';
+
+    // Delete all existing children. This will drop the previous
+    // iframe.
+    $(ide.canvasDiv).empty();
+    ide.canvasDiv.appendChild(iframe);
+    var win = /** @type {!Window} */(iframe.contentWindow);
+    win.document.open();
+    win.document.write(iframeHtml);
+    win.document.close();
+    window.setTimeout(function() {
+      // Assume there is only one instance running in the iframe.
+      /** @type {!Processing} */
+      var inst;
+      try {
+        /** @suppress {missingProperties} */
+        inst = /** @type {!Processing} */($('iframe')[0].contentWindow.Processing['instances'][0]);
+      } catch(/** @type {!Error} */e) {
+        window.console.log(e);
+        window.console.log('Could not find Processing in <iframe>');
+      }
+      ide.processing = inst;
+      iframe.style.height = '' + (inst.height) + 'px';
+      iframe.style.width = '' + (inst.width) + 'px';
+      ide.prevWidth = inst.width;
+      ide.prevHeight = inst.height;
+    }, 40);
+    if (ide.prevHeight > 0) {
+      iframe.style.height = '' + (ide.prevHeight) + 'px';
+      iframe.style.width = '' + (ide.prevWidth) + 'px';
+    }
     ide.canvasDiv.style.overflow = 'visible';
-    ide.processingCanvas.style.width = '' + ide.processingCanvas.width + 'px';
-    ide.processingCanvas.style.height = '' + ide.processingCanvas.height + 'px';
   }
 
   function stopSketch() {
