@@ -29,6 +29,7 @@ limitations under the License.
     var seen = {};
     for (var i = 0; i < result.length; i++) {
       var block = result[i];
+      if (!block) continue;
       if (block.kind == 'error') {
         var start = block.location.start;
         var end = block.location.end;
