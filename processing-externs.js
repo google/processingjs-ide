@@ -46,3 +46,5 @@ Processing.compile = function(source) {};
 
 Processing.prototype.loop = function() {};
 Processing.prototype.noLoop = function() {};
+Processing.prototype.setup = function() {};
+Processing.prototype.exit = function() {};

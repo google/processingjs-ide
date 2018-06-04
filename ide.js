@@ -89,6 +89,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
       ide.processing = new Processing(ide.processingCanvas, sketch);
     } else {
       sketch.attach(ide.processing);
+      if (typeof ide.processing.setup == "function") {
+        ide.processing.setup();
+      }
     }
     switchSketchState(true);
     ide.canvasDiv.style.overflow = 'visible';
