@@ -65,7 +65,8 @@ genrule(
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
             {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.js"}},
 	    {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
-            {"selector": "div#reference", "file": "$(location :docs-en.html)", "fileselector": "div"}
+            {"selector": "div#reference", "file": "$(location :docs-en.html)", "fileselector": "div"},
+	    {"selector": "div#help_div", "file": "$(location :docs-en.html)", "fileselector": "div#ref-help"}
         ]'""",
     tools = ["//cmd/rewrite-html", ":docs-en.html"],
 )

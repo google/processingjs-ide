@@ -17,11 +17,29 @@
     <button href='#' id='start_sketch_button'>Render</button>
     <button href='#' id='stop_sketch_button'>Stop</button>
     <button href='#' id='show_help_button'>Help</button>
-    <button href='#' id='save_sketch_button'>Save</button>
+    <button href='#' id='revert_sketch_button'>Revert</button>
   </div>
   <div id='main'>
     <div id='editor'>
       <textarea id='editor_textarea' cols='80' rows='25' name='source'>
+</textarea>
+    </div>
+  </div>
+  <div id='canvas_div'>
+    <canvas id='processing_canvas' processing-data-sources=''>
+    </canvas>
+  </div>
+  <div id='help_section'>
+		<div id='help-nav'>
+			<button href='#' id='help_top_button'>Top</button>
+			<button href='#' id='help_index_button'>Index</button>
+		</div>
+		<div id='help_div'>
+			<h2>Help</h2>
+			Here is a sketch to get you started.<br>
+			Go ahead and press the [Revert] button above.
+
+			<pre class='sketch'>// Count
 void setup() {
   size(300, 300);
   background(255);
@@ -44,19 +62,21 @@ void draw() {
     next = millis() + 1500;
     speak(str(i));
   }
-}</textarea>
-    </div>
-  </div>
-  <div id='canvas_div'>
-    <canvas id='processing_canvas' processing-data-sources=''>
-    </canvas>
-  </div>
-  <div id='help_div'>
-    <h2>Help</h2>
-    Put your cursor on a function name and press [Help] button above.
-  </div>
+}
+
+			</pre>
+		</div>
+	</div>
+	<footer>
+		Built from <a href='http://github.com/google/processingjs-ide'>github.com/google/processingjs-ide</a>.
+		<a href='static/terms.html'>Terms and conditions</a>
+	</footer>
 </div>
 <div id='reference'>
+  <div id='ref-help' class='section'>
+  <h1>Help top</h1>
+	See also <a href="#ref-index">Index</a>.
+  </div>
   <div id='ref-more' class='section'>
   <h1>More</h1>
   <b>More</b> contains <strong>more</strong> documentation.
@@ -78,6 +98,10 @@ setup();
 while (noloop() has not been called) {
 draw();
 }</pre>
+  </div>
+  <div id='ref-index' class='section'>
+    <h1>Index</h1>
+    See also <a href="#ref-top">Top</a>.
   </div>
   <div id='ref-setup' class='section'>
     <h1>setup</h1>
@@ -111,7 +135,3 @@ draw();
     <code>str(obj)</code> converts any object to string.
   </div>
 </div>
-<footer>
-	Built from <a href='http://github.com/google/processingjs-ide'>github.com/google/processingjs-ide</a>.
-	<a href='static/terms.html'>Terms and conditions</a>
-</footer>

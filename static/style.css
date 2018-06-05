@@ -12,7 +12,7 @@ h1 {
 #outer {
   display: grid;
   grid-template-columns: 5fr 4fr;
-  grid-template-rows: 2em 6fr 4fr;
+  grid-template-rows: 2em 6fr 4fr 2em;
   grid-gap: 2px;
   height: 90%;
 }
@@ -52,10 +52,16 @@ h1 {
 #editor_area, .CodeMirror {
   height: 100%;
 }
-#help_div {
+#help_section {
   grid-column: 2;
   grid-row: 3;
   border: solid 2px #EEE;
+}
+footer {
+  grid-column: 1 / 3;
+  grid-row: 4;
+  text-align: center;
+  font-size: 8pt;
 }
 #reference {
   clear: both;
@@ -65,8 +71,4 @@ h1 {
   padding: 1px;
   margin: 1px;
   border: dashed 2px black;
-}
-footer {
-  text-align: center;
-  font-size: 8pt;
 }

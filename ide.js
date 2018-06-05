@@ -39,6 +39,12 @@ var ide = (/** @type {function(): !Object} */ (function() {
     prevHeight: 0,
     /** @type {number} */
     prevWidth: 0,
+    // The last canonical sketch to revert to.
+    /** @type {string} */
+    reverted: "",
+    // The last saved sketch state.
+    /** @type {string} */
+    saved: "",
   };
 
   /**
@@ -214,11 +220,41 @@ var ide = (/** @type {function(): !Object} */ (function() {
     showHelpSection('ref-' + keyword);
   }
 
+
   /**
    * @param {!Event} ev
    */
-  function saveSketch(ev) {
+  function revertSketch(ev) {
     ev.preventDefault();
+    // Try to find the sketch source in the current help article.
+    var pre = $('#help_div code');
+    if (pre.length > 0) {
+      var source = /** @type {string} */($(pre[0]).text());
+      ide.codemirror.setValue(source);
+      // Save the canonical sketch for the next revert.
+      ide.reverted = source;
+      // Avoid autosaving unless there were changes.
+      ide.saved = ide.reverted;
+      // Drop the sketch id. A new value will be allocated on the
+      // next save.
+      updateFragment('sketch', null);
+    } else if (ide.reverted) {
+      // Otherwise use the last saved revert value.
+      ide.codemirror.setValue(ide.reverted);
+    }
+  }
+
+  // Saves the sketch automatically if there were any changes.
+  function autosaveSketch() {
+    /** @type {string} */
+    var source = ide.codemirror.getValue();
+    if (ide.saved != source) {
+      saveSketch();
+      ide.saved = source;
+    }
+  }
+
+  function saveSketch() {
     var /** string */processingCode = ide.codemirror.getValue();
     var params = parseFragment();
     ide.textarea.value = processingCode;
@@ -229,10 +265,10 @@ var ide = (/** @type {function(): !Object} */ (function() {
       window.console.log("Saving /sketch/" + id, data);
       $.post('/sketch/' + id, data, function(data, status, xhr) {
         if (status == 'success') {
-          ide.helpDiv.innerHTML = '<div class="error">Saved OK</div>';
+          //ide.helpDiv.innerHTML = '<div class="error">Saved OK</div>';
           window.console.log("Saved /sketch/" + id);
         } else {
-          ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
+          //ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
           window.console.log(status);
         }
       });
@@ -241,11 +277,11 @@ var ide = (/** @type {function(): !Object} */ (function() {
       $.post('/sketch', data, function(data, status, xhr) {
         var id = data;
         if (status == 'success') {
-          ide.helpDiv.innerHTML = '<div class="error">Saved OK</div>';
+          //ide.helpDiv.innerHTML = '<div class="error">Saved OK</div>';
           window.console.log("Saved /sketch/" + id);
           updateFragment('sketch', id);
         } else {
-          ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
+          //ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
           window.console.log(status);
         }
       });
@@ -263,6 +299,22 @@ var ide = (/** @type {function(): !Object} */ (function() {
     showHelpSection(hash);
     updateFragment('help', hash.substr(5));
     return false;
+  }
+
+  /**
+   * @param {!Event} ev
+   */
+  function helpTop(ev) {
+    ev.preventDefault();
+    showHelpSection('ref-help');
+  }
+
+  /**
+   * @param {!Event} ev
+   */
+  function helpIndex(ev) {
+    ev.preventDefault();
+    showHelpSection('ref-index');
   }
 
   function computeReferenceDict() {
@@ -289,8 +341,12 @@ var ide = (/** @type {function(): !Object} */ (function() {
       .addEventListener('click', stopSketch);
     document.getElementById('show_help_button')
       .addEventListener('click', showHelp);
-    document.getElementById('save_sketch_button')
-      .addEventListener('click', saveSketch);
+    document.getElementById('revert_sketch_button')
+      .addEventListener('click', revertSketch);
+    document.getElementById('help_top_button')
+      .addEventListener('click', helpTop);
+    document.getElementById('help_index_button')
+      .addEventListener('click', helpIndex);
     ide.textarea = /** @type {!HTMLTextAreaElement} */ (
         document.getElementById('editor_textarea'));
     var codemirror_options = {
@@ -341,6 +397,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
     // window.console.log("page loaded");
     setup();
   });
+
+  // Autosave every 30 seconds.
+  window.setInterval(autosaveSketch, 30000);
 
   return ide;
 }))();
