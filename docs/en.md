@@ -1,14 +1,13 @@
 # Help {#ref-help}
 
 This is online help. Any word can have a help entry.
-You just need to have a &lt;div id="ref-keyword"&gt;,
+You just need to have a `<div id="ref-keyword">`,
 and then you can type **keyword** in the sketch editor,
-put the cursor on it and press [Help] button and the
+put the cursor on it and press `[Help]` button and the
 help entry will be shown.
 
-```
-// This is top sketch.
-```
+    // This is default sketch. 
+    speak('こんにちは');
 
 This is also `code`.
 
@@ -16,7 +15,8 @@ See also <a href='#ref-index'>index</a>
 
 # draw
 
-`draw()` is a function that is repeatedly called during sketch execution. One can imagine the following top-level sketch execution loop:
+`draw()` is a function that is repeatedly called during sketch execution. One
+can imagine the following top-level sketch execution loop:
 
 		setup();
 		while(noLoop() has not been called) {

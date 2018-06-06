@@ -186,11 +186,11 @@ var ide = (/** @type {function(): !Object} */ (function() {
     /** @type {?Element} */
     var doc = ide.referenceDict[refkey];
     if (doc) {
-      if (ide.helpDiv.children.length > 0) {
-        ide.helpDiv.replaceChild(doc, ide.helpDiv.children[0]);
-      } else {
-        ide.helpDiv.appendChild(doc);
+      // Empty the help div.
+      while (ide.helpDiv.lastChild) {
+        ide.helpDiv.removeChild(ide.helpDiv.lastChild);
       }
+      ide.helpDiv.appendChild(doc);
       updateFragment('help', refkey.substr(4));
     } else {
       var keyword = refkey.substr(4);
@@ -227,7 +227,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
   function revertSketch(ev) {
     ev.preventDefault();
     // Try to find the sketch source in the current help article.
-    var pre = $('#help_div code');
+    var pre = $('#help_div pre code');
     if (pre.length > 0) {
       var source = /** @type {string} */($(pre[0]).text());
       ide.codemirror.setValue(source);
