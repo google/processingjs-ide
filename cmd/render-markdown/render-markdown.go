@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"golang.org/x/net/html"
 	"gopkg.in/russross/blackfriday.v2"
@@ -25,6 +26,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// Returns the concatenated direct text contents of a node.
+func text(elt *html.Node) string {
+	var r []string
+	for ch := elt.FirstChild; ch != nil; ch = ch.NextSibling {
+		if ch.Type == html.TextNode {
+			r = append(r, ch.Data)
+		}
+	}
+	return strings.Join(r, "")
 }
 
 func run() error {
@@ -60,6 +72,10 @@ func run() error {
 		// Split into sections on h1.
 		if elt.Data == "h1" {
 			prevDiv := divElt
+			if len(elt.Attr) == 0 {
+				elt.Attr = append(elt.Attr, html.Attribute{Key: "id", Val: "ref-" + text(elt)})
+				fmt.Printf("%v\n", elt)
+			}
 			divElt = &html.Node{
 				Type:        html.ElementNode,
 				Data:        "div",
