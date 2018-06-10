@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -51,7 +52,9 @@ func run() error {
 		return err
 	}
 	// First render the markdown into a first-pass HTML.
-	rendered := blackfriday.Run(cont, blackfriday.WithExtensions(blackfriday.HeadingIDs|blackfriday.Titleblock))
+	rendered := blackfriday.Run(cont,
+		blackfriday.WithExtensions(blackfriday.HeadingIDs|blackfriday.Titleblock),
+		blackfriday.WithRefOverride(refOverride))
 	// Parse the
 	root, err := html.Parse(bytes.NewBuffer(rendered))
 	if err != nil {
@@ -74,7 +77,6 @@ func run() error {
 			prevDiv := divElt
 			if len(elt.Attr) == 0 {
 				elt.Attr = append(elt.Attr, html.Attribute{Key: "id", Val: "ref-" + text(elt)})
-				fmt.Printf("%v\n", elt)
 			}
 			divElt = &html.Node{
 				Type:        html.ElementNode,
@@ -119,4 +121,15 @@ func run() error {
 		return err
 	}
 	return nil
+}
+
+var identRegex = regexp.MustCompile("^([a-zA-Z_][a-zA-Z0-9_]*)(\\(\\))?$")
+
+func refOverride(reference string) (*blackfriday.Reference, bool) {
+	if m := identRegex.FindStringSubmatch(reference); len(m) > 0 {
+		return &blackfriday.Reference{
+			Link: "#ref-" + m[1],
+		}, true
+	}
+	return nil, false
 }

@@ -11,7 +11,7 @@ help entry will be shown.
 
 This is also `code`.
 
-See also <a href='#ref-index'>index</a> and <a href='#ref-draw'>draw</a>.
+See also [index] and [draw].
 
 # draw
 
@@ -28,30 +28,13 @@ can imagine the following top-level sketch execution loop:
 
 `setup()` is a function that is called once at the beginning of the sektch execution.
 
-See also <a href='#ref-draw'>draw()</a>
+See also [draw()].
 
 # Help index {#ref-index}
 
-## A
-
-## B
-
-## C
-
-## D
-
-* <a href='#ref-draw'>draw()</a>
-
-## N
-
-* <a href='#ref-noLoop'>noLoop()</a>
-
-## L
-
-* <a href='#ref-loop'>loop()</a>
-
-## S
-
-* <a href='#ref-setup'>setup()</a>
+* [draw()]
+* [noLoop()]
+* [loop()]
+* [setup()]
 
 

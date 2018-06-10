@@ -28,16 +28,15 @@
 
 ## 参考
 
-* <a href='#ref-draw'><code>draw()</code></a>
-* <a href='#ref-noLoop'><code>noLoop()</code></a>
-* <a href='#ref-loop'><code>loop()</code></a>
+* [draw()]
+* [noLoop()]
+* [loop()]
 
 # draw
 
 スケッチの実行を初めてから`draw()`は繰り返しで呼ばれています。
 一回の`draw()`の呼びで一回のフレームを描くと過程しています。
-呼ばれる頻度は<a href='#ref-frameRate'><code>frameRate()</code></a>
-で設定できます。
+呼ばれる頻度は[frameRate()]で設定できます。
 
 # frameRate
 
@@ -48,26 +47,9 @@
 
 # インデックス {#ref-index}
 
-## A
-
-## B
-
-## C
-
-## D
-
-* <a href='#ref-draw'>draw()</a>
-
-## N
-
-* <a href='#ref-noLoop'>noLoop()</a>
-
-## L
-
-* <a href='#ref-loop'>loop()</a>
-
-## S
-
-* <a href='#ref-setup'>setup()</a>
+* [draw()]
+* [noLoop()]
+* [loop()]
+* [setup()]
 
 
