@@ -6,12 +6,12 @@ and then you can type **keyword** in the sketch editor,
 put the cursor on it and press `[Help]` button and the
 help entry will be shown.
 
-    // This is default sketch. 
+    // This is a simple sketch. 
     speak('こんにちは');
 
 This is also `code`.
 
-See also <a href='#ref-index'>index</a>
+See also <a href='#ref-index'>index</a> and <a href='#ref-draw'>draw</a>.
 
 # draw
 
@@ -32,6 +32,26 @@ See also <a href='#ref-draw'>draw()</a>
 
 # Help index {#ref-index}
 
-See also <a href='#ref-help'>top</a>
+## A
 
-Help index will be here.
+## B
+
+## C
+
+## D
+
+* <a href='#ref-draw'>draw()</a>
+
+## N
+
+* <a href='#ref-noLoop'>noLoop()</a>
+
+## L
+
+* <a href='#ref-loop'>loop()</a>
+
+## S
+
+* <a href='#ref-setup'>setup()</a>
+
+

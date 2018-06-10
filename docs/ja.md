@@ -1,0 +1,73 @@
+# プロセシング {#ref-help}
+
+テキスト式のプログラミングにようこそ。
+プロセシングでは画像やアニメーションを簡単に作れます。
+
+たとえば、こちらのスケッチを試してみましょう
+
+    // キャンワスの大きさを設定する。
+    size(300, 300);
+    // キャンワスをホワイトで塗る
+    background(255);
+    // 今度描く色は黒に設定する。
+    fill(0);
+    // 四角を描く。
+    rect(90, 90, 120, 120);
+
+# setup
+
+`setup()`は実行の初めに一回呼ばれています。そこではキャンワスの大きさの設定などをしましょう。
+
+スケッチの実行はこのように説明できます：
+
+    setup();
+    while(noLoop()は呼ばれていない) {
+      // frameRate()で定められた頻度どdraw()を呼ぶ。
+      draw();
+    }
+
+## 参考
+
+* <a href='#ref-draw'><code>draw()</code></a>
+* <a href='#ref-noLoop'><code>noLoop()</code></a>
+* <a href='#ref-loop'><code>loop()</code></a>
+
+# draw
+
+スケッチの実行を初めてから`draw()`は繰り返しで呼ばれています。
+一回の`draw()`の呼びで一回のフレームを描くと過程しています。
+呼ばれる頻度は<a href='#ref-frameRate'><code>frameRate()</code></a>
+で設定できます。
+
+# frameRate
+
+`frameRate(x)`は`draw()`を呼ばれる頻度を設定します。
+たとえば、`frameRate(10)`では、`draw()`の実行を終わってから
+次の`draw()`を呼ぶまで0.1秒をまっています。`frameRate(1)`では、
+1秒をまっています。
+
+# インデックス {#ref-index}
+
+## A
+
+## B
+
+## C
+
+## D
+
+* <a href='#ref-draw'>draw()</a>
+
+## N
+
+* <a href='#ref-noLoop'>noLoop()</a>
+
+## L
+
+* <a href='#ref-loop'>loop()</a>
+
+## S
+
+* <a href='#ref-setup'>setup()</a>
+
+

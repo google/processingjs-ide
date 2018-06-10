@@ -44,6 +44,16 @@ genrule(
     tools = ["//cmd/render-markdown"],
 )
 
+genrule(
+    name = "docs-ja-html",
+    srcs = [
+        "docs/ja.md",
+    ],
+    outs = ["docs-ja.html"],
+    cmd = """$(location //cmd/render-markdown) --input_md_file="$<" --output_html_file="$@" """,
+    tools = ["//cmd/render-markdown"],
+)
+
 # A HTML rewritten to be loaded from a flat static directory.
 genrule(
     name = "ide-html-bin",
@@ -72,11 +82,38 @@ genrule(
 )
 
 genrule(
+    name = "ide-html-ja",
+    srcs = [
+        "ide.html",
+    ],
+    outs = ["ide-ja.html"],
+    cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
+        """--edits_json='[
+            {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
+            {"selector": "body > h1", "content": "Processing.js IDE"},
+            {"selector": "script[src$$=\\"jquery.js\\"]", "attr": {"src": "jquery.min.js"}},
+            {"selector": "script[src$$=\\"codemirror.js\\"]", "attr": {"src": "codemirror.js"}},
+            {"selector": "script[src$$=\\"/lint.js\\"]", "attr": {"src": "lint.js"}},
+            {"selector": "link[href$$=\\"codemirror.css\\"]", "attr": {"href": "codemirror.css"}},
+            {"selector": "link[href$$=\\"lint.css\\"]", "attr": {"href": "lint.css"}},
+            {"selector": "script[src$$=\\"clike.js\\"]", "attr": {"src": "clike.js"}},
+            {"selector": "script[src$$=\\"processing.js\\"]", "attr": {"src": "processing.js"}},
+            {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
+            {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.js"}},
+	    {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
+            {"selector": "div#reference", "file": "$(location :docs-ja.html)", "fileselector": "div"},
+	    {"selector": "div#help_div", "file": "$(location :docs-ja.html)", "fileselector": "div#ref-help"}
+        ]'""",
+    tools = ["//cmd/rewrite-html", ":docs-ja.html"],
+)
+
+genrule(
     name = "static-files",
     srcs = [
         "third_party/processing-js/processing.min.js",
         ":ide-bin",
         ":ide-html-bin",
+        ":ide-html-ja",
         "@jquery//:dist/jquery.min.js",
         "static/style.css",
         "static/inner.css",
