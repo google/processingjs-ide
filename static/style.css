@@ -74,3 +74,9 @@ footer {
   margin: 1px;
   border: dashed 2px black;
 }
+pre {
+  border: solid 1px #AAA;
+  margin: 10px;
+  padding: 4px;
+  background-color: #F0F0F0;
+}
