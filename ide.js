@@ -391,6 +391,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
     ide.helpDiv = document.getElementById('help_div');
     ide.processingCanvas = /** @type{HTMLCanvasElement!} */(document.getElementById('processing_canvas'));
     $(ide.textarea).keypress(keypress);
+    if (params['help']) {
+      showHelpSection('ref-' + params['help']);
+    }
   }
 
   window.addEventListener('load', function() {
