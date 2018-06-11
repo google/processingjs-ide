@@ -23,6 +23,23 @@
   <div id='main'>
     <div id='editor'>
       <textarea id='editor_textarea' cols='80' rows='25' name='source'>
+// Default sketch
+void setup() {
+	size(300, 200);
+	frameRate(1);
+	fill(0);
+	textSize(30);
+	background(200);
+	text("Start", 50, 50);
+}
+int i = 0;
+void draw() {
+	i++;
+	background(200);
+	speak(str(i));
+	text(str(i), 50, 50);
+	if (i &gt;= 5) noLoop();
+}
 </textarea>
     </div>
   </div>
@@ -38,7 +55,7 @@
 		<div id='help_div'>
 			<h2>Help</h2>
 			Here is a sketch to get you started.<br>
-			Go ahead and press the [Revert] button above.
+			Go ahead and press the Load button.
 
 			<pre><code>// Count
 void setup() {

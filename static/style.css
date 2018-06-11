@@ -11,8 +11,8 @@ h1 {
 }
 #outer {
   display: grid;
-  grid-template-columns: 5fr 4fr;
-  grid-template-rows: 2em 6fr 4fr 2em;
+  grid-template-columns: 54fr 46fr;
+  grid-template-rows: 2em 4fr 6fr 2em;
   grid-gap: 2px;
   height: 90%;
 }
@@ -38,8 +38,6 @@ h1 {
   background-color: white;
   overflow: hidden;
   position: relative;
-  min-height: 300px;
-  height: 300px;
 }
 #processing_canvas {
   position: absolute;
@@ -51,13 +49,17 @@ h1 {
   margin: 0px;
   padding: 0px;
 }
-#editor_area, .CodeMirror {
+#editor {
+  height: 100%;
+}
+.CodeMirror {
   height: 100%;
 }
 #help_section {
   grid-column: 2;
   grid-row: 3;
   border: solid 2px #EEE;
+  overflow: scroll;
 }
 footer {
   grid-column: 1 / 3;

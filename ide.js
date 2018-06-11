@@ -228,7 +228,10 @@ var ide = (/** @type {function(): !Object} */ (function() {
     ev.preventDefault();
     // Try to find the sketch source in the current help article.
     var pre = $('#help_div pre code');
-    if (pre.length > 0) {
+    if (ide.reverted) {
+      // Use the last saved revert value.
+      ide.codemirror.setValue(ide.reverted);
+    } else if (pre.length > 0) {
       var source = /** @type {string} */($(pre[0]).text());
       ide.codemirror.setValue(source);
       // Save the canonical sketch for the next revert.
@@ -238,9 +241,6 @@ var ide = (/** @type {function(): !Object} */ (function() {
       // Drop the sketch id. A new value will be allocated on the
       // next save.
       updateFragment('sketch', null);
-    } else if (ide.reverted) {
-      // Otherwise use the last saved revert value.
-      ide.codemirror.setValue(ide.reverted);
     }
   }
 
@@ -327,10 +327,25 @@ var ide = (/** @type {function(): !Object} */ (function() {
         $(elt).click(showDoc);
       }
     });
-  }
-
-  function keypress(ev) {
-    //window.console.log(ev);
+    // Add the [Load] buttons to code snippets.
+    $('pre').each(function(index, elt) {
+      var code = $(elt).find('code');
+      if (code.length == 1) {
+        var source = /** @type {string} */(code.text());
+        var button = document.createElement("button");
+        $(button).text('Load');
+        $(button).click(function(ev) {
+          ev.preventDefault();
+          ide.codemirror.setValue(source);
+          // Save the canonical sketch for the next revert.
+          ide.reverted = source;
+          // Avoid autosaving unless there were changes.
+          ide.saved = ide.reverted;
+        });
+        $(elt).prepend($('<br>'));
+        $(elt).prepend(button);
+      }
+    });
   }
 
   function setup() {
@@ -353,6 +368,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
       value: ide.textarea.value,
       mode: 'clike',
       lint: CodeMirror.lint.processingjs,
+      extraKeys: {
+        'F1': showHelp,
+      },
     };
     // Parse and act on the fragment address.
     if (window.location.hash) {
@@ -393,7 +411,6 @@ var ide = (/** @type {function(): !Object} */ (function() {
     ide.canvasDiv = document.getElementById('canvas_div');
     ide.helpDiv = document.getElementById('help_div');
     ide.processingCanvas = /** @type{HTMLCanvasElement!} */(document.getElementById('processing_canvas'));
-    $(ide.textarea).keypress(keypress);
     if (params['help']) {
       showHelpSection('ref-' + params['help']);
     }
