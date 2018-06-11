@@ -76,7 +76,7 @@ const sessionName = "pjs"
 var sketchListHTML = `
 <!DOCTYPE html>
 <title>Sketch list</title>
-<p><a href='/sketch'>Create new</a></p>
+<p><a href='/'>Create new</a></p>
 {{range .}}
 <a href='/static/ide-bin.html#sketch={{.ID}}'>{{if .Title}}{{.Title}}{{else}}sketch{{end}}</a>
 {{else}}
