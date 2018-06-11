@@ -38,6 +38,16 @@
 一回の`draw()`の呼びで一回のフレームを描くと過程しています。
 呼ばれる頻度は[frameRate()]で設定できます。
 
+    int i = 0;
+    void draw() {
+      text(str(millis()/1000), 10, 30);
+      i++;
+    }
+
+    void setup() {
+      frameRate(1);
+    }
+
 # frameRate
 
 `frameRate(x)`は`draw()`を呼ばれる頻度を設定します。
