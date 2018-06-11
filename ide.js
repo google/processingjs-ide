@@ -148,7 +148,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
       iframe.style.width = '' + (inst.width) + 'px';
       ide.prevWidth = inst.width;
       ide.prevHeight = inst.height;
-    }, 40);
+    }, 200);
     if (ide.prevHeight > 0) {
       iframe.style.height = '' + (ide.prevHeight) + 'px';
       iframe.style.width = '' + (ide.prevWidth) + 'px';
@@ -258,11 +258,11 @@ var ide = (/** @type {function(): !Object} */ (function() {
     var /** string */processingCode = ide.codemirror.getValue();
     var params = parseFragment();
     ide.textarea.value = processingCode;
-    window.console.log(ide.textarea);
     var data = $(ide.textarea).serializeArray();
     var id = params['sketch'];
+    // Note the saved state.
     if (id) {
-      window.console.log("Saving /sketch/" + id, data);
+      //window.console.log("Saving /sketch/" + id);
       $.post('/sketch/' + id, data, function(data, status, xhr) {
         if (status == 'success') {
           //ide.helpDiv.innerHTML = '<div class="error">Saved OK</div>';
@@ -273,7 +273,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
         }
       });
     } else {
-      window.console.log("Saving new sketch", data);
+      //window.console.log("Saving new sketch");
       $.post('/sketch', data, function(data, status, xhr) {
         var id = data;
         if (status == 'success') {
@@ -367,6 +367,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
            */
           function(data) {
             window.console.log("Loaded /sketch/" + id);
+            // Reset the revert state and saved state.
+            ide.reverted = data;
+            ide.saved = data;
             ide.textarea.value = data;
             ide.codemirror.setValue(data);
           },
@@ -401,8 +404,8 @@ var ide = (/** @type {function(): !Object} */ (function() {
     setup();
   });
 
-  // Autosave every 30 seconds.
-  window.setInterval(autosaveSketch, 30000);
+  // Autosave every 3 seconds.
+  window.setInterval(autosaveSketch, 3000);
 
   return ide;
 }))();
