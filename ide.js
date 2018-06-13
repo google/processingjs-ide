@@ -39,9 +39,6 @@ var ide = (/** @type {function(): !Object} */ (function() {
     prevHeight: 0,
     /** @type {number} */
     prevWidth: 0,
-    // The last canonical sketch to revert to.
-    /** @type {string} */
-    reverted: "",
     // The last saved sketch state.
     /** @type {string} */
     saved: "",
@@ -221,29 +218,6 @@ var ide = (/** @type {function(): !Object} */ (function() {
   }
 
 
-  /**
-   * @param {!Event} ev
-   */
-  function revertSketch(ev) {
-    ev.preventDefault();
-    // Try to find the sketch source in the current help article.
-    var pre = $('#help_div pre code');
-    if (ide.reverted) {
-      // Use the last saved revert value.
-      ide.codemirror.setValue(ide.reverted);
-    } else if (pre.length > 0) {
-      var source = /** @type {string} */($(pre[0]).text());
-      ide.codemirror.setValue(source);
-      // Save the canonical sketch for the next revert.
-      ide.reverted = source;
-      // Avoid autosaving unless there were changes.
-      ide.saved = ide.reverted;
-      // Drop the sketch id. A new value will be allocated on the
-      // next save.
-      updateFragment('sketch', null);
-    }
-  }
-
   // Saves the sketch automatically if there were any changes.
   function autosaveSketch() {
     /** @type {string} */
@@ -333,14 +307,14 @@ var ide = (/** @type {function(): !Object} */ (function() {
       if (code.length == 1) {
         var source = /** @type {string} */(code.text());
         var button = document.createElement("button");
-        $(button).text('Load');
+        $(button).text('読み込む');
         $(button).click(function(ev) {
           ev.preventDefault();
           ide.codemirror.setValue(source);
-          // Save the canonical sketch for the next revert.
-          ide.reverted = source;
           // Avoid autosaving unless there were changes.
-          ide.saved = ide.reverted;
+          ide.saved = source;
+          // Forget the previous sketch id.
+          updateFragment('sketch', null);
         });
         $(elt).prepend($('<br>'));
         $(elt).prepend(button);
@@ -356,8 +330,6 @@ var ide = (/** @type {function(): !Object} */ (function() {
       .addEventListener('click', stopSketch);
     document.getElementById('show_help_button')
       .addEventListener('click', showHelp);
-    document.getElementById('revert_sketch_button')
-      .addEventListener('click', revertSketch);
     document.getElementById('help_top_button')
       .addEventListener('click', helpTop);
     document.getElementById('help_index_button')
@@ -385,8 +357,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
            */
           function(data) {
             window.console.log("Loaded /sketch/" + id);
-            // Reset the revert state and saved state.
-            ide.reverted = data;
+            // Reset the saved state.
             ide.saved = data;
             ide.textarea.value = data;
             ide.codemirror.setValue(data);

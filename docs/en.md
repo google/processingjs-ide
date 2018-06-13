@@ -4,7 +4,12 @@ Welcome to the Processing Workshop. Let's make computer speak!
 Let's start with a simple example. See if you can make the
 computer greet you. Let's get started.
 
-* Start a tutorial from [step1].
+* Tutorial
+  * [step1]
+  * [step2]
+  * [step3]
+  * [step4]
+  * [step5]
 * Look at some [Demos].
 * Play some [Games].
 
@@ -28,6 +33,14 @@ Let's put your name in a variable.
     // GreetWithName
     String name = "たろう";
     speak("こんにちは、" + name)
+
+A computer will remember your name, so it is possible to
+use it multiple times.
+
+    // GreetText
+    String name = "太郎";
+    speak("こんにちは、" + name);
+    text("こんにちは、" + name, 50, 50);
 
 Next, proceed to the [step3] or go back to [step1].
 
@@ -53,25 +66,12 @@ call a function whenever an input event happened. The only thing
 we need to provide is a specially named function. For mouse clicks,
 we need to have a function named [mouseClicked()].
 
-    void mouseClicked() {
-      ellipse(mouseX, mouseY, 10, 10);
-      speak("ぶ");
-    }
-
-    void setup() {
-      size(300, 300);
-      background(200);
-      fill(0);
-    }
-
-Next, proceed to the [step5] or explore the demo [Drawing].
-
-# Step 5 {#ref-step5}
-
 Let's do something differend depending on the where the user clicked.
 
     void mouseClicked() {
-      float dist = sqrt((mouseX - 100)*(mouseX - 100) + (mouseY - 100)*(mouseY - 100));
+      int dx = mouseX - 100;
+      int dy = mouseY - 100;
+      float dist = sqrt(dx*dx + dy*dy);
       if (dist <= 40) {
         speak("ピンポン");
       } else {
@@ -80,15 +80,15 @@ Let's do something differend depending on the where the user clicked.
     }
 
     void setup() {
-      size(300, 300);
+      size(200, 200);
       background(200);
       stroke(0);
       ellipse(100, 100, 80, 80);
     }
 
-Next, proceed to the [step6].
+Next, proceed to the [step5] or go back to [step3].
 
-# Step 6 {#ref-step6}
+# Step 5 {#ref-step5}
 
 Let's play a simple game to learn some English words.
 

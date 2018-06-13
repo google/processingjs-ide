@@ -15,10 +15,9 @@
 <h1>Processing.JS IDE (Local HTML)</h1>
 <div id='outer'>
   <div id='nav'>
-    <button href='#' id='start_sketch_button'>Render</button>
-    <button href='#' id='stop_sketch_button'>Stop</button>
-    <button href='#' id='show_help_button'>Help</button>
-    <button href='#' id='revert_sketch_button'>Revert</button>
+    <button href='#' id='start_sketch_button'>実行</button>
+    <button href='#' id='stop_sketch_button'>停止</button>
+    <button href='#' id='show_help_button'>参照</button>
   </div>
   <div id='main'>
     <div id='editor'>
@@ -49,38 +48,17 @@ void draw() {
   </div>
   <div id='help_section'>
 		<div id='help-nav'>
-			<button href='#' id='help_top_button'>Top</button>
-			<button href='#' id='help_index_button'>Index</button>
+			<button href='#' id='help_top_button'>トップ</button>
+			<button href='#' id='help_index_button'>索引</button>
 		</div>
 		<div id='help_div'>
 			<h2>Help</h2>
 			Here is a sketch to get you started.<br>
 			Go ahead and press the Load button.
 
-			<pre><code>// Count
-void setup() {
-  size(300, 300);
-  background(255);
-  frameRate(10);
-  textSize(30);
-  fill(0);
-  text("Processing started", 50, 50);
-}
-
-int i = 0;
-int next = 0;
-
-void draw() {
-  i += 1;
-  background(255);
-  textSize(30);
-  fill(0);
-  text(str(i), 150, 150);
-  if (millis() &gt; next) {
-    next = millis() + 1500;
-    speak(str(i));
-  }
-}</code></pre>
+			<pre><code> // 「こんにちは」と話して。 
+speak("こんにちは");
+</code></pre>
 		</div>
 	</div>
 	<footer>

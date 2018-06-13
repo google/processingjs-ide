@@ -78,7 +78,7 @@ var sketchListHTML = `
 <title>Sketch list</title>
 <p><a href='/'>Create new</a></p>
 {{range .}}
-<a href='/static/ide-bin.html#sketch={{.ID}}'>{{if .Title}}{{.Title}}{{else}}sketch{{end}}</a>
+<a href='/static/ide-ja.html#sketch={{.ID}}'>{{if .Title}}{{.Title}}{{else}}sketch{{end}}</a>
 {{else}}
 0 sketches
 {{end}}
@@ -202,10 +202,10 @@ func indexHandler(w http.ResponseWriter, req *http.Request) error {
 	}
 	idstr, ok := session.Values["sketch"]
 	if ok {
-		http.Redirect(w, req, fmt.Sprintf("/static/ide-bin.html#sketch=%s",
+		http.Redirect(w, req, fmt.Sprintf("/static/ide-ja.html#sketch=%s",
 			url.PathEscape(idstr.(string))), http.StatusFound)
 	} else {
-		http.Redirect(w, req, "/static/ide-bin.html", http.StatusFound)
+		http.Redirect(w, req, "/static/ide-ja.html", http.StatusFound)
 	}
 	return nil
 }
