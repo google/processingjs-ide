@@ -88,10 +88,9 @@
 
     // マウスがクリックした時に実行されます。
     void mouseClicked() {　
-      int dx = mouseX - 100;　// mouseXはクリックのX座標
-      int dy = mouseY - 100;  // mouseYはクリックのY座標
-      float dist = sqrt(dx*dx + dy*dy);  // (100, 100) から距離を計算します。
-      if (dist <= 40) {  // 円形の中か外か判断します。 
+      // 四角の中か外か判断する。 
+      if (60 <= mouseX && mouseX <= 140 &&
+          60 <= mouseY && mouseY <= 140) {
         speak("ピンポン");
       } else {
         speak("ぶぶ");
@@ -100,10 +99,10 @@
 
     // 設定。実行の最初に実行されます。
     void setup() {
-      size(200, 200);   // キャンワスの大きさを設定します。
-      background(200);　// 灰色に塗ります。
-      stroke(0);　　　　 // 筆色を黒にします。
-      ellipse(100, 100, 80, 80); // 円形を描きます。
+      size(200, 200);   // キャンワスの大きさを設定する。
+      background(200);　// 灰色に塗る。
+      stroke(0);　　　　 // 筆色を黒にする。
+      rect(60, 60, 80, 80);  // 四角を描く。
     }
 
 次の[ステップ5][step5]に進みましょう。
