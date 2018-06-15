@@ -361,11 +361,11 @@
 
 # Games
 
-* [JumpingBall (未完成)]
-* [JumpingBall (完成)]
+* [JumpingBall (未完成)][JumpingBallTemplate]
+* [JumpingBall (完成)][JumpingBallCompleted]
 * [TouchTheNumber]
 
-# JumpingBall (未完成)
+# JumpingBall (未完成) {#ref-JumpingBallTemplate}
 
     // JumpingBallTemplate
 
@@ -460,7 +460,7 @@
     }
 
 
-# JumpingBall (完成)
+# JumpingBall (完成) {#ref-JumpingBallCompleted}
 
     // JumpingBall
 

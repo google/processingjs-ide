@@ -295,11 +295,11 @@ pressed and released a mouse button.
 See [Mouse]
 
 # Games
-* [JumpingBall (template)]
-* [JumpingBall (completed)]
+* [JumpingBall (template)][JumpingBallTemplate]
+* [JumpingBall (completed)][JumpingBallCompleted]
 * [TouchTheNumber]
 
-# JumpingBall (template)
+# JumpingBall (template) {#ref-JumpingBallTemplate}
 
     // JumpingBallTemplate
 
@@ -394,7 +394,7 @@ See [Mouse]
     }
 
 
-# JumpingBall (completed)
+# JumpingBall (completed) {#ref-JumpingBallCompleted}
 
     // JumpingBall
 
