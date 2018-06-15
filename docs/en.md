@@ -295,103 +295,209 @@ pressed and released a mouse button.
 See [Mouse]
 
 # Games
-
-* [JumpingBall]
+* [JumpingBall (template)]
+* [JumpingBall (completed)]
 * [TouchTheNumber]
 
-# JumpingBall
+# JumpingBall (template)
 
-    // JumpingBall
+    // JumpingBallTemplate
 
-    Ball b;
-    width = 512;
-    height = 256;
-    ArrayList<Wall> walls;
-    bool stop;
+    int width = 512;
+    int skyHeight = 256;
+    int groundHeight = 10;
+
+    // ball
+    // walls
 
     void setup() {
-      size(width, height);
-      b = new Ball(40, 20, 20);  
-      walls = new ArrayList<Wall>();
-      stop = false;
+      // set up the size
+      // create the ball
+      // create the container of the walls
     }
 
     void draw() {
-      if (stop) return;
-      background(255, 255, 255);
-      
-      if (frameCount % 50 == 0 && random(100) < 50) {
-        walls.add(new Wall(width, random(height / 2)));
-      }
-      
-      for (int i = 0; i < walls.size(); ++i) {
-        walls.get(i).update();
-        if (b.hit(walls.get(i))) {
-          stop = true;
-        }
-        if (walls.get(i).x < 0) {
-          walls.remove(i);
-            i--;
-            continue;
-        }
-        walls.get(i).draw();
-      }
-      
-      b.update();
-      b.draw();
+      // set up the background
+
+      // create a new wall
+
+      // update the walls
+      // draw the walls
+
+      // check if the ball hits any of the wall
+
+      // draw the ground
+
+      // update the ball
+      // draw the ball
     }
 
     void mouseClicked() {
-      b.v = 20;
+      // give the ball some velocity
+    }
+
+    void drawGround() {
+      for (int start = -(4 * frameCount % 11); start < width; start += 11) {
+        fill(100, 100, 100);
+        rect(start, skyHeight, 11, groundHeight);
+      }
     }
 
     class Ball {
       int x, y, r;
-        int v;
-      
-        Ball(int init_x, int init_y, int init_r) {
-          x = init_x;
-            y = init_y;
-            r = init_r;
-            v = 0;
+      int v;
+
+      Ball(int init_x, int init_y, int init_r) {
+        x = init_x;
+        y = init_y;
+        r = init_r;
+        v = 0;
+      }
+
+      void update() {
+        if (v < 0 && y - r <= 0) {
+          v = 0;
+          y = r;
+        } else {
+          y += v;
+          v--;
         }
-      
-        void update() {
-          if (v < 0 && y - r <= 0) {
-              v = 0;
-                y = r;
-            } else {
-                y += v;
-              v--;
-            }
-        }
-      
-        bool hit(Wall w) {
-          if (w.x > x + r || w.x < x - r) return false;
-            return y - r < w.y;
-        }
-      
-        void draw() {
-          fill(0, 0, 0);
-            ellipse(x, height - 1 - y, r*2, r*2);
-        }
+      }
+
+      bool hit(Wall w) {
+        if (w.x > x + r || w.x < x - r) return false;
+        return y - r < w.y;
+      }
+
+      void draw() {
+        fill(0, 0, 0);
+        ellipse(x, skyHeight - 1 - y, r*2, r*2);
+      }
     }
 
     class Wall {
       int x, y;
-      
+
       Wall(int init_x, int init_y) {
         x = init_x;
         y = init_y;
       }
-      
+
       void update() {
         x -= 4;
       }
-      
+
       void draw() {
         fill(0, 255, 0);
-        rect(x, height - 1 - y, 5, y);
+        rect(x, skyHeight - 1 - y, 5, y);
+      }
+    }
+
+
+# JumpingBall (completed)
+
+    // JumpingBall
+
+    int width = 512;
+    int skyHeight = 256;
+    int groundHeight = 10;
+
+    ArrayList<Wall> walls;
+    Ball ball;
+
+    void setup() {
+      size(width, skyHeight + groundHeight);
+      ball = new Ball(40, 20, 20);
+      walls = new ArrayList<Wall>();
+    }
+
+    void draw() {
+      background(255, 255, 255);
+
+      if (frameCount % 50 == 0 && random(100) < 50) {
+       walls.add(new Wall(width, int(random(skyHeight / 2))));
+      }
+
+      for (int i = 0; i < walls.size(); ++i) {
+       walls.get(i).update();
+        if (ball.hit(walls.get(i))) {
+          alert("Game Over");
+          speak("Game Over");
+          noLoop();
+        }
+        if (walls.get(i).x < 0) {
+          walls.remove(i);
+          i--;
+          continue;
+        }
+        walls.get(i).draw();
+      }
+
+      drawGround();
+      ball.update();
+      ball.draw();
+    }
+
+    void mouseClicked() {
+      if (ball.y <= ball.r) {
+       ball.v = 20;
+      }
+    }
+
+    void drawGround() {
+      for (int start = -(4 * frameCount % 11); start < width; start += 11) {
+        fill(100, 100, 100);
+        rect(start, skyHeight, 11, groundHeight);
+      }
+    }
+
+    class Ball {
+      int x, y, r;
+      int v;
+
+      Ball(int init_x, int init_y, int init_r) {
+        x = init_x;
+        y = init_y;
+        r = init_r;
+        v = 0;
+      }
+
+      void update() {
+        if (v < 0 && y - r <= 0) {
+          v = 0;
+          y = r;
+        } else {
+          y += v;
+          v--;
+        }
+      }
+
+      bool hit(Wall w) {
+        if (w.x > x + r || w.x < x - r) return false;
+        return y - r < w.y;
+      }
+
+      void draw() {
+        fill(0, 0, 0);
+        ellipse(x, skyHeight - 1 - y, r*2, r*2);
+      }
+    }
+
+    class Wall {
+      int x, y;
+
+      Wall(int init_x, int init_y) {
+        x = init_x;
+        y = init_y;
+      }
+
+      void update() {
+        x -= 4;
+      }
+
+      void draw() {
+        fill(0, 255, 0);
+        rect(x, skyHeight - 1 - y, 5, y);
       }
     }
 
