@@ -339,7 +339,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
     var codemirror_options = {
       value: ide.textarea.value,
       mode: 'clike',
-      lint: CodeMirror.lint.processingjs,
+      //lint: CodeMirror.lint.processingjs,
       extraKeys: {
         'F1': showHelp,
       },
