@@ -41,7 +41,7 @@ var (
 // (bytes in MP3 format).
 func TextToMP3(ctx context.Context, text, language string) ([]byte, error) {
 	if language == "" {
-		language = "ja-JP"
+		return nil, fmt.Errorf("unspecified language")
 	}
 	ttsRequest := &Request{
 		Input:       Input{text},

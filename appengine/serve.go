@@ -22,6 +22,7 @@ import (
 	"github.com/salikh/processingjs-ide/tts"
 	"golang.org/x/net/context"
 	"google.golang.org/appengine"
+	"google.golang.org/appengine/memcache"
 )
 
 var (
@@ -206,12 +207,34 @@ func ttsHandler(w http.ResponseWriter, req *http.Request) error {
 	}
 	text := html.UnescapeString(req.FormValue("text"))
 	lang := html.UnescapeString(req.FormValue("lang"))
+	if len(text) > 240 {
+		return fmt.Errorf("input text too long, must be under 240 bytes")
+	}
+	cacheKey := text + ":" + lang
+	item, err := memcache.Get(ctx, cacheKey)
+	if err != nil && err != memcache.ErrCacheMiss {
+		return err
+	}
+	if err == nil {
+		// Cache hit.
+		log.Printf("Cache hit for %q", cacheKey)
+		w.Header()["Content-Type"] = []string{"audio/mp3"}
+		w.Write(item.Value)
+		return nil
+	}
+	// Cache miss, query the TTS API.
 	wave, err := tts.TextToMP3(ctx, text, lang)
 	if err != nil {
 		return err
 	}
 	w.Header()["Content-Type"] = []string{"audio/mp3"}
 	w.Write(wave)
+	item = &memcache.Item{
+		Key:   cacheKey,
+		Value: wave,
+	}
+	// Ignore error.
+	_ = memcache.Add(ctx, item)
 	return nil
 }
 
