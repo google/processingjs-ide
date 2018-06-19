@@ -199,17 +199,19 @@ func sketchGetHandler(w http.ResponseWriter, req *http.Request) error {
 }
 
 func ttsHandler(w http.ResponseWriter, req *http.Request) error {
+	ctx := appengine.NewContext(req)
 	err := req.ParseForm()
 	if err != nil {
 		return fmt.Errorf("invalid form submission: %s", err)
 	}
-	text := req.FormValue("text")
-	lang := req.FormValue("lang")
-	wave, err := tts.TextToMP3(text, lang)
+	text := html.UnescapeString(req.FormValue("text"))
+	lang := html.UnescapeString(req.FormValue("lang"))
+	wave, err := tts.TextToMP3(ctx, text, lang)
 	if err != nil {
 		return err
 	}
-	fmt.Fprintf(w, "<!DOCTYPE html><pre>%s</pre>", html.EscapeString(string(wave)))
+	w.Header()["Content-Type"] = []string{"audio/mp3"}
+	w.Write(wave)
 	return nil
 }
 

@@ -1,7 +1,17 @@
 package tts
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+
+	"golang.org/x/net/context"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+	"google.golang.org/appengine/urlfetch"
 )
 
 type Input struct {
@@ -22,32 +32,68 @@ type Request struct {
 	AudioConfig `json:"audioConfig"`
 }
 
+var (
+	ttsURL   = `https://texttospeech.googleapis.com/v1beta1/text:synthesize`
+	ttsScope = `https://www.googleapis.com/auth/cloud-platform`
+)
+
 // Converts a given input text into a speech waveform
 // (bytes in MP3 format).
-func TextToMP3(text, language string) ([]byte, error) {
+func TextToMP3(ctx context.Context, text, language string) ([]byte, error) {
 	if language == "" {
 		language = "ja-JP"
 	}
-	req := &Request{
+	ttsRequest := &Request{
 		Input:       Input{text},
 		Voice:       Voice{language},
 		AudioConfig: AudioConfig{"MP3"},
 	}
-	jsonBytes, err := json.Marshal(req)
+	log.Printf("text: %q", text)
+	log.Printf("ttsRequest: %#v", ttsRequest)
+	jsonBytes, err := json.Marshal(ttsRequest)
 	if err != nil {
 		return nil, err
 	}
-	return jsonBytes, nil
-	/*
-		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
-		req.Header.Set("X-Custom-Header", "myvalue")
-		req.Header.Set("Content-Type", "application/json")
-
-		client := &http.Client{}
-		resp, err := client.Do(req)
-		if err != nil {
-			panic(err)
+	req, err := http.NewRequest("POST", ttsURL, bytes.NewReader(jsonBytes))
+	req.Header.Set("Content-Type", "application/json")
+	transport := &oauth2.Transport{
+		Source: google.AppEngineTokenSource(ctx, ttsScope),
+		Base:   &urlfetch.Transport{Context: ctx},
+	}
+	client := &http.Client{Transport: transport}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	buf := new(bytes.Buffer)
+	_, err = buf.ReadFrom(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[string]interface{})
+	err = json.Unmarshal(buf.Bytes(), &result)
+	if err != nil {
+		return nil, err
+	}
+	errObj, ok := result["error"]
+	if ok {
+		errMap, ok := errObj.(map[string]interface{})
+		if ok {
+			message, ok := errMap["message"]
+			if ok {
+				return nil, fmt.Errorf("error: %s (code %.0f, status %s)", message, errMap["code"], errMap["status"])
+			}
 		}
-		defer resp.Body.Close()
-	*/
+		return nil, fmt.Errorf("error: %s", errObj)
+	}
+	content64, ok := result["audioContent"].(string)
+	if !ok {
+		return nil, fmt.Errorf("unrecognized response format: %q", result)
+	}
+	content, err := base64.StdEncoding.DecodeString(content64)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
 }
