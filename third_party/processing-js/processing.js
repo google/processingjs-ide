@@ -7918,7 +7918,7 @@ module.exports = function setupParser(Processing, options) {
       "round", "saturation", "save", "saveFrame", "saveStrings", "scale",
       "screenX", "screenY", "screenZ", "second", "set", "setup", "shape",
       "shapeMode", "shared", "shearX", "shearY", "shininess", "shorten", "sin", "size", "smooth",
-      "sort", "speak", "specular", "sphere", "sphereDetail", "splice", "split",
+      "sort", "speak", "setClientTTS", "specular", "sphere", "sphereDetail", "splice", "split",
       "splitTokens", "spotLight", "sq", "sqrt", "status", "str", "stroke",
       "strokeCap", "strokeJoin", "strokeWeight", "subset", "tan", "text",
       "textAlign", "textAscent", "textDescent", "textFont", "textLeading",
@@ -9957,6 +9957,8 @@ module.exports = function setupParser(Processing, options) {
         pressedKeysMap = [],
         lastPressedKeyCode = null,
 	globalVoices = window.speechSynthesis.getVoices(),
+	playPromise = null,
+	useClientTTS = false,
         codedKeys = [ PConstants.SHIFT, PConstants.CONTROL, PConstants.ALT, PConstants.CAPSLK, PConstants.PGUP, PConstants.PGDN,
                       PConstants.END, PConstants.HOME, PConstants.LEFT, PConstants.UP, PConstants.RIGHT, PConstants.DOWN, PConstants.NUMLK,
                       PConstants.INSERT, PConstants.F1, PConstants.F2, PConstants.F3, PConstants.F4, PConstants.F5, PConstants.F6, PConstants.F7,
@@ -21006,16 +21008,68 @@ module.exports = function setupParser(Processing, options) {
       }
     };
 
-    p.speak = function(text, lang='ja-JP', rate=1, volume=1, voice_num=0, pitch=1) {
-      var msg = new SpeechSynthesisUtterance();
-      msg.voice = globalVoices[voice_num]; // Note: some voices don't support altering params
-      msg.voiceURI = 'native';
-      msg.volume = volume; // 0 to 1
-      msg.rate = rate; // 0.1 to 10
-      msg.pitch = pitch; //0 to 2
-      msg.text = text;
-      msg.lang = lang;
-      speechSynthesis.speak(msg);
+    function loadTTS(text, lang, resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/tts", /*async=*/true);
+      xhr.responseType = "blob";
+      var data = new FormData();
+      data.set('text', text);
+      data.set('lang', lang);
+      xhr.onload = function (ev) {
+	var blob = xhr.response;
+	if (blob) {
+	  window.console.log('Received ' + blob.size + ' bytes of audio/mp3');
+	  resolve(blob);
+	}
+      };
+      xhr.onerror = function() {
+	reject(xhr.status);
+      }
+      xhr.send(data);
+    }
+
+    p.setClientTTS = function(on) {
+      useClientTTS = on;
+    };
+
+    p.speak = function(text, lang='ja-JP') {
+      if (useClientTTS) {
+	var msg = new SpeechSynthesisUtterance();
+	msg.voice = globalVoices[10]; // Note: some voices don't support altering params
+	msg.voiceURI = 'native';
+	//msg.volume = volume; // 0 to 1
+	//msg.rate = rate; // 0.1 to 10
+	//msg.pitch = pitch; //0 to 2
+	msg.text = text;
+	msg.lang = lang;
+	speechSynthesis.speak(msg);
+      } else {
+	// Alternative implementation using server-side TTS.
+	var audio = document.querySelector('audio');
+	if (!audio) {
+	  audio = document.createElement('audio');
+	  document.body.appendChild(audio);
+	}
+	var loadPromise = new Promise(function(resolve, reject) {
+	  loadTTS(text, lang, resolve, reject);
+	});
+	var prevPromise = playPromise;
+	playPromise = new Promise(function(resolve, reject) {
+	  Promise.all([loadPromise, prevPromise]).then(values => {
+	    var blob = values[0];
+	    audio.src = URL.createObjectURL(blob);
+	    audio.play().then(ok => {
+	      // Play promise resolves when the playback starts, need to
+	      // additionally wait for the duration of the playback.
+	      window.setTimeout(function() {
+		resolve(ok);
+	      }, audio.duration*1000);
+	    }, err => {
+	      reject(err);
+	    });
+	  });
+	});
+      }
     };
 
     /**

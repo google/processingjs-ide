@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"golang.org/x/net/context"
@@ -48,8 +47,6 @@ func TextToMP3(ctx context.Context, text, language string) ([]byte, error) {
 		Voice:       Voice{language},
 		AudioConfig: AudioConfig{"MP3"},
 	}
-	log.Printf("text: %q", text)
-	log.Printf("ttsRequest: %#v", ttsRequest)
 	jsonBytes, err := json.Marshal(ttsRequest)
 	if err != nil {
 		return nil, err

@@ -1,8 +1,39 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
 <h1>TTS</h1>
-<form method="POST" action="/tts">
+<form method="POST" action="/tts" id="form">
   <label for="text">Text:</label>
-  <input type="text" name="text" placeholder="Text to speech"></input><br>
+  <input type="text" name="text" placeholder="Text to speech" value="こんにちは"></input><br>
   <label for="lang">Language:</label>
   <input type="text" name="lang" placeholder="Language" value="ja-JP"></input><br>
-  <input type="submit"/>
+  <input id='submit' type="submit"/>
 </form>
+<audio>
+  <source/>
+</audio>
+<script src="jquery.min.js"></script>
+<script>
+var button = document.getElementById('submit');
+button.onclick
+$('#submit').click(function(ev) {
+  ev.preventDefault();
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/tts", /*async=*/true);
+  xhr.responseType = "blob";
+  var form = document.querySelector("form");
+  var data = new FormData(form);
+  xhr.onload = function (ev) {
+    var blob = xhr.response; // Blob.
+    window.console.log(typeof xhr.response);
+    window.console.log(xhr.response);
+    if (blob) {
+      var audio = document.querySelector('audio');
+      audio.src = URL.createObjectURL(blob);
+      //$(audio).attr('controls', 'controls');
+      window.console.log('Received ' + blob.length + ' bytes of audio/mp3');
+      audio.play();
+    }
+  };
+  xhr.send(data);
+});
+</script>

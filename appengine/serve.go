@@ -146,7 +146,6 @@ func sketchPostHandler(w http.ResponseWriter, req *http.Request) error {
 	if m := re.FindSubmatch(sketch.Source); m != nil {
 		sketch.Title = string(m[1])
 	}
-	log.Printf("source = %q", sketch.Source)
 	var id db.ID
 	if sketch.ID != 0 {
 		err = dataStore.UpdateSketch(ctx, sketch)
@@ -201,7 +200,7 @@ func sketchGetHandler(w http.ResponseWriter, req *http.Request) error {
 
 func ttsHandler(w http.ResponseWriter, req *http.Request) error {
 	ctx := appengine.NewContext(req)
-	err := req.ParseForm()
+	err := req.ParseMultipartForm(10240)
 	if err != nil {
 		return fmt.Errorf("invalid form submission: %s", err)
 	}
@@ -217,11 +216,11 @@ func ttsHandler(w http.ResponseWriter, req *http.Request) error {
 	}
 	if err == nil {
 		// Cache hit.
-		log.Printf("Cache hit for %q", cacheKey)
 		w.Header()["Content-Type"] = []string{"audio/mp3"}
 		w.Write(item.Value)
 		return nil
 	}
+	log.Printf("Cache miss for %q", cacheKey)
 	// Cache miss, query the TTS API.
 	wave, err := tts.TextToMP3(ctx, text, lang)
 	if err != nil {
