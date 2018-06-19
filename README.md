@@ -49,6 +49,8 @@ Console
 ([instruction](https://cloud.google.com/appengine/docs/standard/go/quickstart))
 and enable App Engine on it, and configure the default project for gcloud.
 
+    gcloud init
+
 Second you need to build the static assets using combination of NPM and Bazel:
 
     npm install
