@@ -19,6 +19,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/salikh/processingjs-ide/db"
+	"github.com/salikh/processingjs-ide/tts"
 	"golang.org/x/net/context"
 	"google.golang.org/appengine"
 )
@@ -203,7 +204,12 @@ func ttsHandler(w http.ResponseWriter, req *http.Request) error {
 		return fmt.Errorf("invalid form submission: %s", err)
 	}
 	text := req.FormValue("text")
-	fmt.Fprintf(w, "<!DOCTYPE html><pre>%s</pre>", html.EscapeString(text))
+	lang := req.FormValue("lang")
+	wave, err := tts.TextToMP3(text, lang)
+	if err != nil {
+		return err
+	}
+	fmt.Fprintf(w, "<!DOCTYPE html><pre>%s</pre>", html.EscapeString(string(wave)))
 	return nil
 }
 
