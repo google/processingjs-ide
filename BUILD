@@ -74,9 +74,9 @@ genrule(
             {"selector": "script[src$$=\\"processing.js\\"]", "attr": {"src": "processing.js"}},
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
             {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.js"}},
-	    {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
+            {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
             {"selector": "div#reference", "file": "$(location :docs-en.html)", "fileselector": "div"},
-	    {"selector": "div#help_div", "file": "$(location :docs-en.html)", "fileselector": "div#ref-help"}
+            {"selector": "div#help_div", "file": "$(location :docs-en.html)", "fileselector": "div#ref-help"}
         ]'""",
     tools = ["//cmd/rewrite-html", ":docs-en.html"],
 )
@@ -100,9 +100,9 @@ genrule(
             {"selector": "script[src$$=\\"processing.js\\"]", "attr": {"src": "processing.js"}},
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
             {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.js"}},
-	    {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
+            {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
             {"selector": "div#reference", "file": "$(location :docs-ja.html)", "fileselector": "div"},
-	    {"selector": "div#help_div", "file": "$(location :docs-ja.html)", "fileselector": "div#ref-help"}
+            {"selector": "div#help_div", "file": "$(location :docs-ja.html)", "fileselector": "div#ref-help"}
         ]'""",
     tools = ["//cmd/rewrite-html", ":docs-ja.html"],
 )
@@ -117,7 +117,7 @@ genrule(
         "@jquery//:dist/jquery.min.js",
         "static/style.css",
         "static/inner.css",
-	"static/terms.html",
+        "static/terms.html",
         "node_modules/codemirror/lib/codemirror.js",
         "node_modules/codemirror/addon/lint/lint.js",
         "node_modules/codemirror/lib/codemirror.css",
