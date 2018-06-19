@@ -118,6 +118,7 @@ genrule(
         "static/style.css",
         "static/inner.css",
         "static/terms.html",
+        "static/tts.html",
         "node_modules/codemirror/lib/codemirror.js",
         "node_modules/codemirror/addon/lint/lint.js",
         "node_modules/codemirror/lib/codemirror.css",

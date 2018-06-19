@@ -7,6 +7,7 @@ package main
 
 import (
 	"fmt"
+	"html"
 	"html/template"
 	"log"
 	"net/http"
@@ -58,6 +59,7 @@ func main() {
 	r.Methods("GET").Path("/sketch/{id}").Handler(appHandler(sketchGetHandler))
 	r.Methods("POST").Path("/sketch").Handler(appHandler(sketchPostHandler))
 	r.Methods("POST").Path("/sketch/{id}").Handler(appHandler(sketchPostHandler))
+	r.Methods("POST").Path("/tts").Handler(appHandler(ttsHandler))
 
 	http.Handle("/", handlers.CombinedLoggingHandler(os.Stderr, r))
 	appengine.Main()
@@ -192,6 +194,16 @@ func sketchGetHandler(w http.ResponseWriter, req *http.Request) error {
 	if _, err := w.Write(sketch.Source); err != nil {
 		return err
 	}
+	return nil
+}
+
+func ttsHandler(w http.ResponseWriter, req *http.Request) error {
+	err := req.ParseForm()
+	if err != nil {
+		return fmt.Errorf("invalid form submission: %s", err)
+	}
+	text := req.FormValue("text")
+	fmt.Fprintf(w, "<!DOCTYPE html><pre>%s</pre>", html.EscapeString(text))
 	return nil
 }
 
