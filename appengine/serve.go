@@ -61,7 +61,8 @@ func main() {
 	r.Methods("GET").Path("/sketch/{id}").Handler(appHandler(sketchGetHandler))
 	r.Methods("POST").Path("/sketch").Handler(appHandler(sketchPostHandler))
 	r.Methods("POST").Path("/sketch/{id}").Handler(appHandler(sketchPostHandler))
-	r.Methods("POST").Path("/tts").Handler(appHandler(ttsHandler))
+	r.Methods("POST").Path("/tts").Handler(appHandler(ttsPostHandler))
+	r.Methods("GET").Path("/tts/{lang}").Handler(appHandler(ttsGetHandler))
 
 	http.Handle("/", handlers.CombinedLoggingHandler(os.Stderr, r))
 	appengine.Main()
@@ -198,14 +199,35 @@ func sketchGetHandler(w http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
-func ttsHandler(w http.ResponseWriter, req *http.Request) error {
-	ctx := appengine.NewContext(req)
+func ttsPostHandler(w http.ResponseWriter, req *http.Request) error {
 	err := req.ParseMultipartForm(10240)
 	if err != nil {
 		return fmt.Errorf("invalid form submission: %s", err)
 	}
 	text := html.UnescapeString(req.FormValue("text"))
 	lang := html.UnescapeString(req.FormValue("lang"))
+	return ttsCommon(w, req, text, lang)
+}
+
+func ttsGetHandler(w http.ResponseWriter, req *http.Request) error {
+	err := req.ParseForm()
+	if err != nil {
+		return err
+	}
+	vars := mux.Vars(req)
+	lang, err := url.QueryUnescape(vars["lang"])
+	if err != nil {
+		return fmt.Errorf("invalid lang %q: %s", lang, err)
+	}
+	text, err := url.QueryUnescape(req.FormValue("text"))
+	if err != nil {
+		return fmt.Errorf("invalid text %q: %s", text, err)
+	}
+	return ttsCommon(w, req, text, lang)
+}
+
+func ttsCommon(w http.ResponseWriter, req *http.Request, text, lang string) error {
+	ctx := appengine.NewContext(req)
 	if len(text) > 240 {
 		return fmt.Errorf("input text too long, must be under 240 bytes")
 	}

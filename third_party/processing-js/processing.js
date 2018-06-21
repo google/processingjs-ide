@@ -21010,11 +21010,9 @@ module.exports = function setupParser(Processing, options) {
 
     function loadTTS(text, lang, resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/tts", /*async=*/true);
+      var url = "/tts/" + encodeURIComponent(lang) + "?text=" + encodeURIComponent(text);
+      xhr.open("GET", url, /*async=*/true);
       xhr.responseType = "blob";
-      var data = new FormData();
-      data.set('text', text);
-      data.set('lang', lang);
       var ttsCache = window['ttsCache'];
       var key = text + ":" + lang;
       xhr.onload = function (ev) {
@@ -21036,7 +21034,7 @@ module.exports = function setupParser(Processing, options) {
       xhr.onerror = function() {
         reject('TTS error for ' + key + ': ' + xhr.status);
       }
-      xhr.send(data);
+      xhr.send(null);
     }
 
     p.setClientTTS = function(on) {
