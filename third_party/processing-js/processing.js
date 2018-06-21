@@ -21017,9 +21017,11 @@ module.exports = function setupParser(Processing, options) {
       data.set('lang', lang);
       xhr.onload = function (ev) {
 	var blob = xhr.response;
-	if (blob) {
+	if (blob && xhr.status == 200) {
 	  window.console.log('Received ' + blob.size + ' bytes of audio/mp3');
 	  resolve(blob);
+	} else {
+	  reject(xhr.status);
 	}
       };
       xhr.onerror = function() {
@@ -21067,7 +21069,11 @@ module.exports = function setupParser(Processing, options) {
 	    }, err => {
 	      reject(err);
 	    });
+	  }, err => {
+	    reject(err);
 	  });
+	}).catch(err => {
+	  window.console.log(err);
 	});
       }
     };
