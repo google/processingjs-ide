@@ -9737,7 +9737,7 @@ module.exports = function setupParser(Processing, options) {
     ////////////////////////////////////////////////////////////////////////////
     // JavaScript event binding and releasing
     ////////////////////////////////////////////////////////////////////////////
-	var eventHandlers = [];
+        var eventHandlers = [];
     function attachEventHandler(elem, type, fn) {
       if (elem.addEventListener) {
         elem.addEventListener(type, fn, false);
@@ -9956,9 +9956,9 @@ module.exports = function setupParser(Processing, options) {
         maxPixelsCached = 1000,
         pressedKeysMap = [],
         lastPressedKeyCode = null,
-	globalVoices = window.speechSynthesis.getVoices(),
-	playPromise = null,
-	useClientTTS = false,
+        globalVoices = window.speechSynthesis.getVoices(),
+        playPromise = null,
+        useClientTTS = false,
         codedKeys = [ PConstants.SHIFT, PConstants.CONTROL, PConstants.ALT, PConstants.CAPSLK, PConstants.PGUP, PConstants.PGDN,
                       PConstants.END, PConstants.HOME, PConstants.LEFT, PConstants.UP, PConstants.RIGHT, PConstants.DOWN, PConstants.NUMLK,
                       PConstants.INSERT, PConstants.F1, PConstants.F2, PConstants.F3, PConstants.F4, PConstants.F5, PConstants.F6, PConstants.F7,
@@ -21015,17 +21015,26 @@ module.exports = function setupParser(Processing, options) {
       var data = new FormData();
       data.set('text', text);
       data.set('lang', lang);
+      var ttsCache = window['ttsCache'];
+      var key = text + ":" + lang;
       xhr.onload = function (ev) {
-	var blob = xhr.response;
-	if (blob && xhr.status == 200) {
-	  window.console.log('Received ' + blob.size + ' bytes of audio/mp3');
-	  resolve(blob);
-	} else {
-	  reject(xhr.status);
-	}
+        var blob = xhr.response;
+        if (blob && xhr.status == 200) {
+          window.console.log('Received ' + blob.size + ' bytes of audio/mp3');
+          // Store in local cache.
+          if (ttsCache) {
+            ttsCache[key] = blob;
+          }
+          resolve(blob);
+        } else {
+          reject('TTS error for ' + key + ': ' + xhr.status);
+          if (ttsCache) {
+            ttsCache[key] = new Blob();
+          }
+        }
       };
       xhr.onerror = function() {
-	reject(xhr.status);
+        reject('TTS error for ' + key + ': ' + xhr.status);
       }
       xhr.send(data);
     }
@@ -21036,45 +21045,55 @@ module.exports = function setupParser(Processing, options) {
 
     p.speak = function(text, lang='ja-JP') {
       if (useClientTTS) {
-	var msg = new SpeechSynthesisUtterance();
-	msg.voice = globalVoices[10]; // Note: some voices don't support altering params
-	msg.voiceURI = 'native';
-	//msg.volume = volume; // 0 to 1
-	//msg.rate = rate; // 0.1 to 10
-	//msg.pitch = pitch; //0 to 2
-	msg.text = text;
-	msg.lang = lang;
-	speechSynthesis.speak(msg);
+        var msg = new SpeechSynthesisUtterance();
+        msg.voice = globalVoices[10]; // Note: some voices don't support altering params
+        msg.voiceURI = 'native';
+        //msg.volume = volume; // 0 to 1
+        //msg.rate = rate; // 0.1 to 10
+        //msg.pitch = pitch; //0 to 2
+        msg.text = text;
+        msg.lang = lang;
+        speechSynthesis.speak(msg);
       } else {
-	// Alternative implementation using server-side TTS.
-	var audio = document.querySelector('audio');
-	if (!audio) {
-	  audio = document.createElement('audio');
-	  document.body.appendChild(audio);
-	}
-	var loadPromise = new Promise(function(resolve, reject) {
-	  loadTTS(text, lang, resolve, reject);
-	});
-	var prevPromise = playPromise;
-	playPromise = new Promise(function(resolve, reject) {
-	  Promise.all([loadPromise, prevPromise]).then(values => {
-	    var blob = values[0];
-	    audio.src = URL.createObjectURL(blob);
-	    audio.play().then(ok => {
-	      // Play promise resolves when the playback starts, need to
-	      // additionally wait for the duration of the playback.
-	      window.setTimeout(function() {
-		resolve(ok);
-	      }, audio.duration*1000);
-	    }, err => {
-	      reject(err);
-	    });
-	  }, err => {
-	    reject(err);
-	  });
-	}).catch(err => {
-	  window.console.log(err);
-	});
+        // Alternative implementation using server-side TTS.
+        var audio = document.querySelector('audio');
+        if (!audio) {
+          audio = document.createElement('audio');
+          document.body.appendChild(audio);
+        }
+        var ttsCache = window['ttsCache'];
+        var loadPromise = new Promise(function(resolve, reject) {
+          var key = text + ":" + lang;
+          if (ttsCache && ttsCache.hasOwnProperty(key)) {
+            resolve(ttsCache[key]);
+          } else {
+            loadTTS(text, lang, resolve, reject);
+          }
+        });
+        var prevPromise = playPromise;
+        playPromise = new Promise(function(resolve, reject) {
+          Promise.all([loadPromise, prevPromise]).then(values => {
+            var blob = values[0];
+            if (blob.size > 0) {
+              audio.src = URL.createObjectURL(blob);
+              audio.play().then(ok => {
+                // Play promise resolves when the playback starts, need to
+                // additionally wait for the duration of the playback.
+                window.setTimeout(function() {
+                  resolve(ok);
+                }, audio.duration*1000);
+              }, err => {
+                reject(err);
+              });
+            } else {
+              reject('TTS error: ' + text + ':' + lang);
+            }
+          }, err => {
+            reject(err);
+          });
+        }).catch(err => {
+          window.console.error(err);
+        });
       }
     };
 

@@ -42,6 +42,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
     // The last saved sketch state.
     /** @type {string} */
     saved: "",
+    // The cache for TTS blobs.
+    /** @type {!Object<string, !Blob>} */
+    ttsCache: new Object(),
   };
 
   /**
@@ -125,19 +128,20 @@ var ide = (/** @type {function(): !Object} */ (function() {
     // iframe.
     $(ide.canvasDiv).empty();
     ide.canvasDiv.appendChild(iframe);
-    var win = /** @type {!Window} */(iframe.contentWindow);
-    win.document.open();
-    win.document.write(iframeHtml);
-    win.document.close();
+    var contentWindow = /** @type {!Window} */(iframe.contentWindow);
+    contentWindow.document.open();
+    contentWindow.document.write(iframeHtml);
+    contentWindow.document.close();
+    // Share the TTS cache.
+    contentWindow['ttsCache'] = ide.ttsCache;
     window.setTimeout(function() {
       // Assume there is only one instance running in the iframe.
       /** @type {!Processing} */
       var inst;
       try {
         /** @suppress {missingProperties} */
-        inst = /** @type {!Processing} */($('iframe')[0].contentWindow.Processing['instances'][0]);
+        inst = /** @type {!Processing} */(contentWindow.Processing['instances'][0]);
       } catch(/** @type {!Error} */e) {
-        window.console.log(e);
         window.console.log('Could not find Processing in <iframe>');
       }
       ide.processing = inst;
@@ -243,7 +247,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
           window.console.log("Saved /sketch/" + id);
         } else {
           //ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
-          window.console.log(status);
+          window.console.error(status);
         }
       });
     } else {
@@ -256,7 +260,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
           updateFragment('sketch', id);
         } else {
           //ide.helpDiv.innerHTML = '<div class="error">Saved error: ' + status + '</div>';
-          window.console.log(status);
+          window.console.error(status);
         }
       });
     }
@@ -347,7 +351,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
     // Parse and act on the fragment address.
     if (window.location.hash) {
       var params = parseFragment();
-      window.console.log(params);
+      //window.console.log(params);
       if (params['sketch']) {
         var id = params['sketch'];
         $.ajax('/sketch/' + id, {
@@ -369,7 +373,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
            * @param {?Object} err
            */
           function(jqXHR, status, err) {
-            window.console.log(status, err);
+            window.console.error(status, err);
           },
         });
       }
