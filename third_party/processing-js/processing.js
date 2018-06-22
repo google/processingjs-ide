@@ -21010,7 +21010,16 @@ module.exports = function setupParser(Processing, options) {
 
     function loadTTS(text, lang, resolve, reject) {
       var xhr = new XMLHttpRequest();
-      var url = "/tts/" + encodeURIComponent(lang) + "?text=" + encodeURIComponent(text);
+      var url;
+      if (/\//.test(text)) {
+        // If the text has a slash, we cannot pass it as a path component,
+        // and must encode in a parameter.
+        url = "/tts/" + encodeURIComponent(lang) + "?text=" + encodeURIComponent(text);
+      } else {
+        // If there are no embedded slashes, we can pass the text as an URL component
+        // to make the result more likely to be cached by the browser.
+        url = "/tts/" + encodeURIComponent(lang) + "/" + encodeURIComponent(text);
+      }
       xhr.open("GET", url, /*async=*/true);
       xhr.responseType = "blob";
       var ttsCache = window['ttsCache'];

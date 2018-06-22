@@ -62,6 +62,7 @@ func main() {
 	r.Methods("POST").Path("/sketch").Handler(appHandler(sketchPostHandler))
 	r.Methods("POST").Path("/sketch/{id}").Handler(appHandler(sketchPostHandler))
 	r.Methods("POST").Path("/tts").Handler(appHandler(ttsPostHandler))
+	r.Methods("GET").Path("/tts/{lang}/{text}").Handler(appHandler(ttsGetHandler))
 	r.Methods("GET").Path("/tts/{lang}").Handler(appHandler(ttsGetHandler))
 
 	http.Handle("/", handlers.CombinedLoggingHandler(os.Stderr, r))
@@ -219,7 +220,10 @@ func ttsGetHandler(w http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return fmt.Errorf("invalid lang %q: %s", lang, err)
 	}
-	text, err := url.QueryUnescape(req.FormValue("text"))
+	text, err := url.QueryUnescape(vars["text"])
+	if text == "" {
+		text, err = url.QueryUnescape(req.FormValue("text"))
+	}
 	if err != nil {
 		return fmt.Errorf("invalid text %q: %s", text, err)
 	}
