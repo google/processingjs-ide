@@ -126,7 +126,7 @@ genrule(
         "node_modules/codemirror/mode/clike/clike.js",
         "third_party/processing-js/processing.js",
         "processingjs-lint.js",
-        "grammars/toplevel.js",
+        "//grammars:toplevel.js",
     ],
     outs = ["static"],
     cmd = """mkdir -v -p "$@"; cp -v $(SRCS) "$@"/""",

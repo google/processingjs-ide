@@ -133,3 +133,25 @@ go_repository(
 		remote = "https://github.com/shurcooL/sanitized_anchor_name",
 		vcs = "git",
 )
+
+#
+# Bazel rules for yarn modules and nodejs tests (Mocha etc.)
+#
+
+http_archive(
+    name = "org_pubref_rules_node",
+    url = "https://github.com/pubref/rules_node/archive/v0.4.1.tar.gz",
+    strip_prefix = "rules_node-0.4.1",
+    sha256 = "019cb4d3d96c90ac7fd92ebc7e1a86bb73e002a8c8b033d22704b179ac4250dc",
+)
+
+load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
+
+node_repositories()
+
+# Use a package.json file as input. Location of the package json
+# is arbitrary.
+yarn_modules(
+    name = "yarn_modules",
+    package_json = "//:package.json",
+)
