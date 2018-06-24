@@ -20,9 +20,12 @@ limitations under the License.
   function validator(text, options) {
     //window.console.log("processing-lint", options);
     try {
+      //window.console.log(text);
+      //window.console.log(btoa(text));
       var result = toplevelGrammar.parse(text);
+      //window.console.log(result);
     } catch(e) {
-      ide.suggestionsDiv.innerHTML = '<div class="error">Lint failed: ' + e + '</div>';
+      window.console.error(e);
       return;
     }
     var errors = [];
@@ -39,17 +42,19 @@ limitations under the License.
           from: CodeMirror.Pos(start.line-1, start.column-1),
           to: CodeMirror.Pos(end.line-1, end.column-1),
         })
-      } else {
+      } else if (block.name) {
+        // Check the named top level blocks for non-duplication.
         if (seen[block.name]) {
-          window.console.log("seen", block)
-          var start = block.location.start;
-          var end = block.location.end;
-          errors.push({
-            message: "Duplicated definition of " + block.name,
-            severity: "error",
-            from: CodeMirror.Pos(start.line-1, start.column-1),
-            to: CodeMirror.Pos(end.line-1, end.column-1),
-          })
+          if (block.location) {
+            var start = block.location.start;
+            var end = block.location.end;
+            errors.push({
+              message: "Duplicated definition of " + block.name,
+              severity: "error",
+              from: CodeMirror.Pos(start.line-1, start.column-1),
+              to: CodeMirror.Pos(end.line-1, end.column-1),
+            })
+          }
         }
         seen[block.name] = true;
         if (block.kind == 'var' && !block.semi) {
