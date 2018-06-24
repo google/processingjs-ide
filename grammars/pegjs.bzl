@@ -1,14 +1,28 @@
-def pegjs_grammar(name, srcs, varname):
+load("@org_pubref_rules_node//node:rules.bzl", "node_module")
+
+def pegjs_grammar(name, srcs, varname, visibility=["//visibility:private"]):
+  outjs = [src+".js" for src in srcs]
   native.genrule(
-    name=name,
-    srcs=srcs,
-    outs=[src.replace("\\.pegjs", "")+".js" for src in srcs],
-    cmd=("$(location @yarn_modules//:node_modules/pegjs/bin/pegjs) " +
+    name = name + '_genrule',
+    srcs = srcs,
+    outs = outjs,
+    cmd = ("$(location @yarn_modules//:node_modules/pegjs/bin/pegjs) " +
 	 "--format globals --export-var " + varname + " -o $@ $<"),
     tools = [
       "@yarn_modules//:node_modules/pegjs/bin/pegjs",
     ],
+    visibility = visibility,
   )
-  # TODO(salikh): Declare a js_library using the generated .js source.
+  node_module(
+    name = name,
+    main = outjs[0],
+    srcs = outjs,
+    version = "0.0.1",
+    description = "Synthetic node module for " + name,
+    deps = [
+      "@yarn_modules//:_all_",
+    ],
+    visibility = visibility,
+  )
     
 

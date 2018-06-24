@@ -73,7 +73,7 @@ genrule(
             {"selector": "script[src$$=\\"clike.js\\"]", "attr": {"src": "clike.js"}},
             {"selector": "script[src$$=\\"processing.js\\"]", "attr": {"src": "processing.js"}},
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
-            {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.js"}},
+            {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.pegjs.js"}},
             {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
             {"selector": "div#reference", "file": "$(location :docs-en.html)", "fileselector": "div"},
             {"selector": "div#help_div", "file": "$(location :docs-en.html)", "fileselector": "div#ref-help"}
@@ -99,7 +99,7 @@ genrule(
             {"selector": "script[src$$=\\"clike.js\\"]", "attr": {"src": "clike.js"}},
             {"selector": "script[src$$=\\"processing.js\\"]", "attr": {"src": "processing.js"}},
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
-            {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.js"}},
+            {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.pegjs.js"}},
             {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
             {"selector": "div#reference", "file": "$(location :docs-ja.html)", "fileselector": "div"},
             {"selector": "div#help_div", "file": "$(location :docs-ja.html)", "fileselector": "div#ref-help"}
@@ -126,9 +126,8 @@ genrule(
         "node_modules/codemirror/mode/clike/clike.js",
         "third_party/processing-js/processing.js",
         "processingjs-lint.js",
-        "//grammars:toplevel.js",
+        "//grammars:toplevel.pegjs.js",
     ],
     outs = ["static"],
     cmd = """mkdir -v -p "$@"; cp -v $(SRCS) "$@"/""",
 )
-

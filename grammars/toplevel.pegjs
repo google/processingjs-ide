@@ -7,10 +7,9 @@
 Source = _ decl:Decl* { return decl; }
 Decl = x:FuncDecl _ { return x; } / x:VarDecl _ { return x; } / c:CommentLine _ { return c; } / e:ErrorLine _ { return e; }
 ErrorLine = _ ( [^\n]* ) "\n" { return {"kind": "error", "location": location() }; }
-VarDecl = type:Type name:Identifier __ value:Assign? semi:Semi        
+VarDecl = type:Type vars:(name:Identifier __ value:Assign?)* semi:Semi        
 	{
-    	return { "kind": "var", "type": type, "name": name,
-        		 "semi": semi,
+    	return { "kind": "var", "type": type, "vars": vars, "semi": semi,
                  "location": location() };
     }
 FuncDecl = type:Type name:Identifier Args "{" _ BraceMatched "}"_   
@@ -42,9 +41,13 @@ AddOp = op:([+-] / "<<" / ">>") _ { return op; }
 MulOp = op:[*/%] _ { return op; }
 
 CommentLine = Comment
-BraceMatched =  AnyUnbraced ("{" _ BraceMatched "}" AnyUnbraced)*  { return null; }
+BraceMatched =  AnyUnbraced ("{" _ BraceMatched "}" _ AnyUnbraced /
+                             "(" _ BraceMatched ")" _ AnyUnbraced /
+                             "[" _ BraceMatched "]" _ AnyUnbraced)*  
+  
+  { return null; }
 Comment = "/*" ( !"*/" . )* "*/" / "//" ( ![\n\r] . )* NL?  { return null; }
-AnyUnbraced = ( Comment / ![{}] . )*            { return null; }
+AnyUnbraced = ( Comment / ![{}()\[\]] . )*            { return null; }
 
 Semi = ";" 						{ return true; }
        / NL              		{ return false; }

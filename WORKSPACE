@@ -155,3 +155,12 @@ yarn_modules(
     name = "yarn_modules",
     package_json = "//:package.json",
 )
+
+# A separate mocha installation used by mocha_test.
+yarn_modules(
+    name = "mocha_modules",
+    deps = {
+        "mocha": "^4.0.1",
+    },
+)
+

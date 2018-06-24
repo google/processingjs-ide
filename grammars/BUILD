@@ -4,8 +4,16 @@ pegjs_grammar(
     name = "toplevel",
     varname = "toplevelGrammar",
     srcs = ["toplevel.pegjs"],
+    visibility = ["//visibility:public"],
 )
 
-# TODO(salikh): Replace the manually generated output with a automatic output
-# from pegjs_grammar rule.
-exports_files(["toplevel.js"])
+load("@org_pubref_rules_node//node:rules.bzl", "mocha_test")
+
+mocha_test(
+    name = "toplevel_test",
+    main = "toplevel_test.js",
+    deps = [
+      "@yarn_modules//:_all_",
+      ":toplevel",
+    ],
+)
