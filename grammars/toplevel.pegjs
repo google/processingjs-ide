@@ -10,7 +10,7 @@ Decl = x:ClassDecl _ { return x; }
   / e:ErrorLine _ { return e; }
 
 ErrorLine
-  = _ ( [^\n]* ) "\n" { return {"kind": "error", "location": location() }; }
+  = _ ( [^\n]* ) NL { return {"kind": "error", "location": location() }; }
   / _ ( [^\n]+ ) { return {"kind": "error", "location": location() }; }
 ClassDecl = Visibility "class" _ identifier _ TypeParameters? ("extends" _ TypeList)? ("implements" _ TypeList)? ClassBody
 Visibility = "public" _
