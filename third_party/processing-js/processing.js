@@ -2199,6 +2199,7 @@ module.exports = function(options,undef) {
       // set up the template element
       var element = document.createElement("span");
       element.style.cssText = 'position: absolute; top: -1000; left: 0; opacity: 0; font-family: "PjsEmptyFont", fantasy;';
+      element.style.display = 'none';
       element.innerHTML = "AAAAAAAA";
       document.body.appendChild(element);
       this.template = element;
