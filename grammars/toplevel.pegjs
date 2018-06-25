@@ -94,17 +94,17 @@ Expression
 Term
   = left:Factor tail:(_ op:MulOp _ right:Term)*  { return null; }
 Factor
-  = "(" _ expr:Expression ")" {return expr;}
+  = "(" _ expr:Expression ")" _ {return expr;}
   / n:QualifiedName "(" _ ee:ExpressionList? ")" _
   / n:QualifiedName "[" _ e:Expression "]" _
   / n:QualifiedName { return {"kind": "identifier", "name": n}; }
-  / value:Literal { return{"kind": "literal", "value": value}; }
+  / value:literal _ { return{"kind": "literal", "value": value}; }
   / "{" _ ExpressionList? "}" _
 identifier = [a-zA-Z_][a-zA-Z_0-9]* { return text(); }
-Literal = String  / Number / Character
-String = '"' ( !'"' . / "\\\"" )* '"' { return {"string": text}; }
-Character = "'" ( !"'" . ) "'" { return {"char": text}; }
-Number = [+-]?[0-9]+("."[0-9]*)? { return parseFloat(text); }
+literal = string  / number / character
+string = '"' ( !'"' . / "\\\"" )* '"' { return {"string": text}; }
+character = "'" ( !"'" . ) "'" { return {"char": text}; }
+number = [+-]?[0-9]+("."[0-9]*)? { return parseFloat(text); }
 
 LogOp = op:([|&^~] / "&&" / "||") _ { return op; }
 AddOp = op:([+-] / "<<" / ">>") _ { return op; }
