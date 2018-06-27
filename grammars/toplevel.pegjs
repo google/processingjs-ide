@@ -44,7 +44,7 @@ InterfaceDecl = "interface" _ identifier _ TypeParameters? ("extends" _ TypeList
 InterfaceBody = BraceMatched
 
 
-Block = "{" _ BlockStatement* "}" _
+Block = "{" _ BlockStatement* _ "}" _
 BlockStatement = t:TypeDeclaration { return t; }
   / x:VarDecl _ { return x; }
   / s:Statement { return s; }
@@ -56,8 +56,8 @@ Statement = x:Block _ { return x; }
   / "do" _ s:Statement "while" _ "(" _ e:Expression ")" _ semi:Semi
   / "try" _ Block (CatchClause+ FinallyBlock? / FinallyBlock)
   / "switch" _ "(" _ e:Expression ")" _ SwitchBlock
-  / "return" _ e:Expression _ semi:Semi
-  / "break" _ i:identifier _ semi:Semi
+  / "return" _ e:Expression _ semi:Semi _
+  / "break" _ i:identifier _ semi:Semi _
   / "continue" _ i:identifier _
   / i:identifier _ ":" _ s:Statement
   / e:Expression semi:Semi _
@@ -68,23 +68,27 @@ CatchType = QualifiedName ("|" _ QualifiedName)*
 FinallyBlock = "finally" _ b:Block 
 VariableModifier = "final" _
 
-ForControl = ForInit? ";" _ e:Expression? ";" _ ForUpdate?
-  / TypeType 
-ForInit = VarDecl
-  ExpressionList
+ForControl = ForInit? _ ";" _ e:Expression? _ ";" _ ForUpdate?
+ForInit = VarDeclaration
+  / ExpressionList
 ForUpdate = ExpressionList
-ExpressionList = Expression (_ "," _ Expression)* _
+ExpressionList = Expression (_ "," _ Expression)*
 
 // TODO(salikh)
 SwitchBlock = BraceMatched
 
-VarDecl
-  = type:TypeType name:identifier (_ "[" _ "]")* __ value:Assign? semi:Semi        
+VarDecl = v:VarDeclaration semi:Semi
+  {
+    v["semi"] = semi
+    return v;
+  }
+VarDeclaration
+  = VariableModifier* TypeType VariableDeclarators
+  / type:TypeType name:identifier (_ "[" _ "]")* __ value:Assign?
     {
-      return {"kind": "var", "type": type, "name": name, "semi": semi,
+      return {"kind": "var", "type": type, "name": name,
 	"value": value, "location": location() };
     }
-  / VariableModifier* TypeType VariableDeclarators semi:Semi
 
 VariableDeclarators = 
   VariableDeclarator (_ "," _ VariableDeclarator)*
@@ -125,6 +129,9 @@ Term
   = left:Factor tail:(_ op:MulOp _ right:Term)*  __ { return null; }
 Factor
   = "(" _ expr:Expression ")" __ {return expr;}
+  / ("++"/"--") Expression
+  / [+-] Expression
+  / n:QualifiedName ("++"/"--")
   / n:QualifiedName "(" _ ee:ExpressionList? _ ")" __
   / n:QualifiedName "[" _ e:Expression _ "]" __
   / "new" _ x:Creator __
@@ -158,7 +165,7 @@ character = "'" ( !"'" . ) "'" { return {"char": text}; }
 number = [+-]?[0-9]+("."[0-9]*)? { return parseFloat(text); }
 
 
-AddOp = op:([=+<>^&|-] / "&&" / "||" / "<<" "<"? / ">>" ">"? / [+*/&|^-] "=") _ { return op; }
+AddOp = op:([+*/&|^<>!=-] "="  / "&&" / "||" / "<<" "<"? / ">>" ">"? / [=+<>^&|-]) _ { return op; }
 MulOp = op:[*/%] _ { return op; }
 
 CommentLine = Comment
@@ -172,6 +179,6 @@ AnyUnbraced = ( Comment / ![{}()\[\]] . )*            { return null; }
 
 Semi = ";" _ 						{ return true; }
        / NL _              		{ return false; }
-_ = [ \t\r\n]*                  { return null; }
-__ = [ \t]*     				{ return null; }
+_ = ( Comment / [ 　\t\r\n]+)*            { return null; }
+__ = ( Comment / [ 　\t]+)*     				{ return null; }
 NL = [\r]?[\n]                  { return null; }

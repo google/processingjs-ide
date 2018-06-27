@@ -232,6 +232,42 @@ describe('Grammar', function() {
       var source = 'a[1] = 2;'
       var result = grammar.parse(source, {startRule: "Statement"});
     });
+    it('parses semicolon', function() {
+      var source = ';'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses empty braces', function() {
+      var source = '{}'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses empty braces with comment', function() {
+      var source = '{\n//abc\n }'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses for loop', function() {
+      var source = 'for (i = 0; i < 10; i += 1) {}'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses for loop with var decl', function() {
+      var source = 'for (int i = 0; i < 10; i += 1) {}'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses for loop with var increment', function() {
+      var source = 'for (int i = 0; i < 10; i++) {}'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses for loop with body', function() {
+      var source = 'for (int i = 0; i < 10; i++) {\nspeak(str(i));\n}'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses for loop with body and comment', function() {
+      var source = 'for (int i = 0; i < 10; i++) {\n // comment\nspeak(str(i));\n}\n'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses for loop with body and comment and fullwidth space', function() {
+      var source = 'for (int i = 0; i < 10; i++) {\n　// comment\nspeak(str(i));\n}\n'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
   });
 
   describe('VariableDeclarators', function() {
@@ -304,6 +340,58 @@ describe('Grammar', function() {
 
     it('parses new array expression', function() {
       var source = 'new String[3]'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses assignment', function() {
+      var source = 'x = y'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses add-assignment', function() {
+      var source = 'x += 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses addition', function() {
+      var source = 'x + 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses subtraction', function() {
+      var source = 'x - 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses multiplication', function() {
+      var source = 'x * 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses division', function() {
+      var source = 'x / 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses modulo', function() {
+      var source = 'x % 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses less', function() {
+      var source = 'x < 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses less or equal', function() {
+      var source = 'x <= 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses greater', function() {
+      var source = 'x > 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses greater or equal', function() {
+      var source = 'x >= 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses equal', function() {
+      var source = 'x == 1'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses not equal', function() {
+      var source = 'x != 1'
       var result = grammar.parse(source, {startRule: "Expression"});
     });
   });
