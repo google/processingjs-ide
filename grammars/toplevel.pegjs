@@ -158,8 +158,7 @@ character = "'" ( !"'" . ) "'" { return {"char": text}; }
 number = [+-]?[0-9]+("."[0-9]*)? { return parseFloat(text); }
 
 
-LogOp = op:([|&^~] / "&&" / "||") _ { return op; }
-AddOp = op:([+-] / "<<" / ">>") _ { return op; }
+AddOp = op:([=+<>^&|-] / "&&" / "||" / "<<" "<"? / ">>" ">"? / [+*/&|^-] "=") _ { return op; }
 MulOp = op:[*/%] _ { return op; }
 
 CommentLine = Comment

@@ -216,11 +216,20 @@ describe('Grammar', function() {
       var source = 'String x = "a", y = "b";'
       var result = grammar.parse(source, {startRule: "VarDecl"});
     });
+
+    it('parses array declaration', function() {
+      var source = 'boolean[] shown = new boolean[9];'
+      var result = grammar.parse(source, {startRule: "VarDecl"});
+    });
   });
 
   describe('Statement', function() {
     it('parses function call', function() {
       var source = 'f();'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses array assignment', function() {
+      var source = 'a[1] = 2;'
       var result = grammar.parse(source, {startRule: "Statement"});
     });
   });
