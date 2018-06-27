@@ -78,11 +78,21 @@ ExpressionList = Expression (_ "," _ Expression)* _
 // TODO(salikh)
 SwitchBlock = BraceMatched
 
-VarDecl = type:TypeType name:identifier _ ("[" _ "]" _)* __ value:Assign? semi:Semi        
-  {
-    return {"kind": "var", "type": type, "name": name, "semi": semi,
-      "value": value, "location": location() };
-  }
+VarDecl
+  = type:TypeType name:identifier (_ "[" _ "]")* __ value:Assign? semi:Semi        
+    {
+      return {"kind": "var", "type": type, "name": name, "semi": semi,
+	"value": value, "location": location() };
+    }
+  / VariableModifier* TypeType VariableDeclarators semi:Semi
+
+VariableDeclarators = 
+  VariableDeclarator (_ "," _ VariableDeclarator)*
+VariableDeclarator =
+  VariableDeclaratorId (_ "=" _ VariableInitializer)?
+VariableDeclaratorId = identifier (_ "[" _ "]")* __
+
+
 FuncDecl = type:TypeType name:identifier _ Args "{" _ BraceMatched "}"_   
 	{
     	return { "kind": "func", "type": type,
@@ -122,7 +132,7 @@ Factor
   / value:literal __ { return{"kind": "literal", "value": value}; }
   / "{" _ ExpressionList? _ "}" _
 
-ArrayInitializer = "{" (_ VariableInitializer (_ "," VariableInitializer)* (_ ",")? )? _ "}" __
+ArrayInitializer = "{" (_ VariableInitializer (_ "," _ VariableInitializer)* (_ ",")? )? _ "}" __
 VariableInitializer = ArrayInitializer / Expression
 
 Creator = CreatedName (ArrayCreatorRest / ClassCreatorRest)

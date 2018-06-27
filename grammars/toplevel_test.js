@@ -16,7 +16,6 @@ function has_error(result) {
 
 chai.Assertion.addMethod('no_error', function () {
   var result = this._obj;
-  console.log(result);
   var num_errors = 0;
   if (result.length === undefined) {
     num_errors = -1;
@@ -62,13 +61,10 @@ describe('Grammar', function() {
       expect(result).to.have.no_error();
     });
 
-    /*
-     * These tests fail now.
     it('should parse multiple variables with initializer', function() {
       var source = 'int x = 1, y = 2;'
       var result = grammar.parse(source);
     });
-    */
 
     it('accepts an empty class', function() {
       var source = 'class X {}'
@@ -171,6 +167,10 @@ describe('Grammar', function() {
   });
 
   describe('VarDecl', function() {
+    it('parses a var declaration', function() {
+      var source = 'String x;'
+      var result = grammar.parse(source, {startRule: "VarDecl"});
+    });
     it('parses array declaration', function() {
       var source = 'String[] x;'
       var result = grammar.parse(source, {startRule: "VarDecl"});
@@ -206,12 +206,64 @@ describe('Grammar', function() {
 	var result = grammar.parse(source, {startRule: "VarDecl"});
       }).to.throw(/Expected.*"}"/);
     });
+
+    it('parses multival declaration', function() {
+      var source = 'String x, y;'
+      var result = grammar.parse(source, {startRule: "VarDecl"});
+    });
+
+    it('parses multival declaration with init values', function() {
+      var source = 'String x = "a", y = "b";'
+      var result = grammar.parse(source, {startRule: "VarDecl"});
+    });
   });
 
   describe('Statement', function() {
     it('parses function call', function() {
       var source = 'f();'
       var result = grammar.parse(source, {startRule: "Statement"});
+    });
+  });
+
+  describe('VariableDeclarators', function() {
+    it('parses one var', function() {
+      var source = 'x'
+      var result = grammar.parse(source, {startRule: "VariableDeclarators"});
+    });
+    it('parses var list', function() {
+      var source = 'x, y, z'
+      var result = grammar.parse(source, {startRule: "VariableDeclarators"});
+    });
+    it('parses var with init', function() {
+      var source = 'x = 1'
+      var result = grammar.parse(source, {startRule: "VariableDeclarators"});
+    });
+    it('parses var list with inits', function() {
+      var source = 'x = 1, y = 2, z = 3'
+      var result = grammar.parse(source, {startRule: "VariableDeclarators"});
+    });
+  });
+
+  describe('ArrayInitializer', function() {
+    it('parses empty braces', function() {
+      var source = '{}'
+      var result = grammar.parse(source, {startRule: "ArrayInitializer"});
+    });
+    it('parses empty braces with newline', function() {
+      var source = '{\n}'
+      var result = grammar.parse(source, {startRule: "ArrayInitializer"});
+    });
+    it('parses values', function() {
+      var source = '{1,2,3}'
+      var result = grammar.parse(source, {startRule: "ArrayInitializer"});
+    });
+    it('parses values with final newline', function() {
+      var source = '{1,2,3\n}'
+      var result = grammar.parse(source, {startRule: "ArrayInitializer"});
+    });
+    it('parses values with middle newline', function() {
+      var source = '{1,\n2,3}'
+      var result = grammar.parse(source, {startRule: "ArrayInitializer"});
     });
   });
 

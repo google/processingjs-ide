@@ -5,7 +5,7 @@ pegjs_grammar(
     varname = "toplevelGrammar",
     srcs = ["toplevel.pegjs"],
     visibility = ["//visibility:public"],
-    startrules = ["Source", "Decl", "ClassBody", "ClassDecl", "VarDecl", "Statement", "Factor", "QualifiedName", "Expression"],
+    startrules = ["Source", "Decl", "ClassBody", "ClassDecl", "VarDecl", "Statement", "Factor", "QualifiedName", "Expression", "ArrayInitializer", "VariableDeclarators"],
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "mocha_test")
