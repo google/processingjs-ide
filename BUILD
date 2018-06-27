@@ -64,6 +64,7 @@ genrule(
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
         """--edits_json='[
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
+            {"selector": "title", "content": "Processing.js IDE"},
             {"selector": "body > h1", "content": "Processing.js IDE"},
             {"selector": "script[src$$=\\"jquery.js\\"]", "attr": {"src": "jquery.min.js"}},
             {"selector": "script[src$$=\\"codemirror.js\\"]", "attr": {"src": "codemirror.js"}},
@@ -90,6 +91,7 @@ genrule(
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
         """--edits_json='[
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
+            {"selector": "title", "content": "Processing.js IDE"},
             {"selector": "body > h1", "content": "Processing.js IDE"},
             {"selector": "script[src$$=\\"jquery.js\\"]", "attr": {"src": "jquery.min.js"}},
             {"selector": "script[src$$=\\"codemirror.js\\"]", "attr": {"src": "codemirror.js"}},
