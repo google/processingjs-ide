@@ -27,9 +27,12 @@ Decl = x:ClassDecl _ { return x; }
   / e:ErrorLine _ { return e; }
 
 ErrorLine
-  = _ ( [^\n]* ) NL { return {"kind": "error", "location": location() }; }
-  / _ ( [^\n]+ ) { return {"kind": "error", "location": location() }; }
-ClassDecl = Visibility "class" _ identifier _ TypeParameters? ("extends" _ TypeList)? ("implements" _ TypeList)? ClassBody
+  = _ ( [^\n]* ) NL { return {kind: "error", location: location() }; }
+  / _ ( [^\n]+ ) { return {kind: "error", location: location() }; }
+ClassDecl = Visibility "class" _ name:identifier _ TypeParameters? ("extends" _ TypeList)? ("implements" _ TypeList)? ClassBody
+  {
+    return {kind: "class", "name": name, location: location() };
+  }
 Visibility = "public" _
   / "private" _
   / _
@@ -53,8 +56,8 @@ Statement = x:Block _ { return x; }
   / "do" _ s:Statement "while" _ "(" _ e:Expression ")" _ semi:Semi
   / "try" _ Block (CatchClause+ FinallyBlock? / FinallyBlock)
   / "switch" _ "(" _ e:Expression ")" _ SwitchBlock
-  / "return" _ e:Expression
-  / "break" _ i:identifier _
+  / "return" _ e:Expression _ semi:Semi
+  / "break" _ i:identifier _ semi:Semi
   / "continue" _ i:identifier _
   / i:identifier _ ":" _ s:Statement
   / e:Expression semi:Semi _
@@ -70,7 +73,7 @@ ForControl = ForInit? ";" _ e:Expression? ";" _ ForUpdate?
 ForInit = VarDecl
   ExpressionList
 ForUpdate = ExpressionList
-ExpressionList = Expression ("," _ Expression)*
+ExpressionList = Expression (_ "," _ Expression)* _
 
 // TODO(salikh)
 SwitchBlock = BraceMatched
@@ -103,25 +106,47 @@ PrimitiveType = ("boolean" / "byte" / "char" / "double" / "float"
 		/ "int" / "long" / "short") _
 
 
-QualifiedName = a:identifier _ b:("." _ c:identifier _ {return "." + c;})*
+QualifiedName = a:identifier b:(_ "." _ c:identifier {return "." + c;})* __
   { return a + b.join(""); }
 
 Expression
-  = left:Term tail:(_ op:AddOp _ right:Term)*  { return null; }
+  = left:Term tail:(_ op:AddOp _ right:Term)*  __ { return null; }
 Term
-  = left:Factor tail:(_ op:MulOp _ right:Term)*  { return null; }
+  = left:Factor tail:(_ op:MulOp _ right:Term)*  __ { return null; }
 Factor
-  = "(" _ expr:Expression ")" _ {return expr;}
-  / n:QualifiedName "(" _ ee:ExpressionList? ")" _
-  / n:QualifiedName "[" _ e:Expression "]" _
+  = "(" _ expr:Expression ")" __ {return expr;}
+  / n:QualifiedName "(" _ ee:ExpressionList? _ ")" __
+  / n:QualifiedName "[" _ e:Expression _ "]" __
+  / "new" _ x:Creator __
   / n:QualifiedName { return {"kind": "identifier", "name": n}; }
-  / value:literal _ { return{"kind": "literal", "value": value}; }
-  / "{" _ ExpressionList? "}" _
+  / value:literal __ { return{"kind": "literal", "value": value}; }
+  / "{" _ ExpressionList? _ "}" _
+
+ArrayInitializer = "{" (_ VariableInitializer (_ "," VariableInitializer)* (_ ",")? )? _ "}" __
+VariableInitializer = ArrayInitializer / Expression
+
+Creator = CreatedName (ArrayCreatorRest / ClassCreatorRest)
+CreatedName
+  = identifier TypeArgumentsOrDiamond? (_ '.' identifier TypeArgumentsOrDiamond)*
+  / PrimitiveType
+ClassCreatorRest = Arguments
+ArrayCreatorRest
+  = "[" _ "]" (_ "[" _ "]" )* _ ArrayInitializer
+  / "[" _ Expression _ "]" (_ "[" _ Expression _ "]")* (_ "[" _ "]")*
+
+Arguments = "(" _ ExpressionList ")" __
+
+TypeArgumentsOrDiamond
+  = _ '<' _ '>' __
+  / _ TypeArguments
+
+
 identifier = [a-zA-Z_][a-zA-Z_0-9]* { return text(); }
 literal = string  / number / character
 string = '"' ( !'"' . / "\\\"" )* '"' { return {"string": text}; }
 character = "'" ( !"'" . ) "'" { return {"char": text}; }
 number = [+-]?[0-9]+("."[0-9]*)? { return parseFloat(text); }
+
 
 LogOp = op:([|&^~] / "&&" / "||") _ { return op; }
 AddOp = op:([+-] / "<<" / ">>") _ { return op; }
@@ -136,8 +161,8 @@ BraceMatched =  AnyUnbraced ("{" _ BraceMatched "}" _ AnyUnbraced /
 Comment = "/*" ( !"*/" . )* "*/" / "//" ( ![\n\r] . )* NL?  { return null; }
 AnyUnbraced = ( Comment / ![{}()\[\]] . )*            { return null; }
 
-Semi = ";" 						{ return true; }
-       / NL              		{ return false; }
+Semi = ";" _ 						{ return true; }
+       / NL _              		{ return false; }
 _ = [ \t\r\n]*                  { return null; }
 __ = [ \t]*     				{ return null; }
 NL = [\r]?[\n]                  { return null; }
