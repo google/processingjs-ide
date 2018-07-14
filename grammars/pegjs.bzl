@@ -2,14 +2,15 @@ load("@org_pubref_rules_node//node:rules.bzl", "node_module")
 
 def pegjs_grammar(name, srcs, varname,
                   visibility=["//visibility:private"],
-                  startrules=[]):
+                  startrules=[],
+                  format="globals"):
   outjs = [src+".js" for src in srcs]
   native.genrule(
     name = name + '_genrule',
     srcs = srcs,
     outs = outjs,
     cmd = ("$(location @yarn_modules//:node_modules/pegjs/bin/pegjs) " +
-         "--format globals " +
+         "--format " + format + " " +
          ("--allowed-start-rules " + ",".join(startrules) + " "
           if len(startrules) > 0 else "") +
          "--export-var " + varname + " -o $@ $<"),

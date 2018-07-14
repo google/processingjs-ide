@@ -18,3 +18,5 @@ mocha_test(
       ":toplevel",
     ],
 )
+
+exports_files(["toplevel-externs.js"])

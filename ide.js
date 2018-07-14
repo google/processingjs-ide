@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+goog.require('processingjs.lint');
+
 /**
  * @type {!Object}
  */
@@ -341,10 +343,13 @@ var ide = (/** @type {function(): !Object} */ (function() {
       .addEventListener('click', helpIndex);
     ide.textarea = /** @type {!HTMLTextAreaElement} */ (
         document.getElementById('editor_textarea'));
+    var validator = function(text, options) {
+      return processingjs.lint.validator(text, options, toplevelGrammar.parse);
+    };
     var codemirror_options = {
       value: ide.textarea.value,
       mode: 'clike',
-      lint: CodeMirror.lint.processingjs,
+      lint: validator,
       extraKeys: {
         'F1': showHelp,
       },

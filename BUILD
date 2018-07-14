@@ -24,6 +24,10 @@ closure_js_library(
         "ide.js",
         "processing-externs.js",
         "@closure_compiler//:contrib/externs/jquery-3.2.js",
+	"//grammars:toplevel-externs.js",
+    ],
+    deps = [
+	":lint-js",
     ],
 )
 
@@ -127,9 +131,40 @@ genrule(
         "node_modules/codemirror/addon/lint/lint.css",
         "node_modules/codemirror/mode/clike/clike.js",
         "third_party/processing-js/processing.js",
-        "processingjs-lint.js",
         "//grammars:toplevel.pegjs.js",
     ],
     outs = ["static"],
     cmd = """mkdir -v -p "$@"; cp -v $(SRCS) "$@"/""",
+)
+
+closure_js_library(
+    name = "lint-js",
+    srcs = [
+	"lint.js",
+    ],
+    suppress = ["reportUnknownTypes", "checkTypes"],
+)
+
+load("@org_pubref_rules_node//node:rules.bzl", "node_module")
+
+node_module(
+    name = "lint-module",
+    main = "lint.js",
+    srcs = ["lint.js"],
+    version = "0.0.1",
+    description = "Synthetic module for lint.js",
+    deps = [
+    ],
+)
+
+load("@org_pubref_rules_node//node:rules.bzl", "mocha_test")
+
+mocha_test(
+    name = "lint_test",
+    main = "lint_test.js",
+    deps = [
+      "@yarn_modules//:_all_",
+      "//grammars:toplevel",
+      ":lint-module",
+    ],
 )
