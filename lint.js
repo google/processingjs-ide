@@ -29,19 +29,15 @@ var Pos = function(line, ch) {
 };
 
 /**
- * @param {string} text
- * @param {?Object} options
- * @param {!function(string):!Array<!Object>} parse
- * @return {!Object}
+ * Converts an array of parse results (AST) into array of linter messages.
+ * May throw errors.
+ * @param {!Array<!Object>} result
+ * @return {!Array<!Object>}
  */
-processingjs.lint.validator = function(text, options, parse) {
-  try {
-    var result = parse(text);
-  } catch(e) {
-    console.error(e);
-    return [];
-  }
+processingjs.lint.lint = function(result) {
   var errors = [];
+  // The map of names that has been seen (on the top parse level of the
+  // provided parse result).
   var seen = {};
   for (var i = 0; i < result.length; i++) {
     var block = result[i];
@@ -80,7 +76,27 @@ processingjs.lint.validator = function(text, options, parse) {
 	  "to": new Pos(end['line']-1, end['column']-1),
 	});
       }
-    }
+    } 
   }
   return errors;
+};
+
+/**
+ * The validator function that takes a source text, parse function
+ * and produces an array of messages usable for Codemirror wave underlines
+ * (lint plugin).
+ *
+ * @param {string} text
+ * @param {?Object} options
+ * @param {!function(string):!Array<!Object>} parse
+ * @return {!Object}
+ */
+processingjs.lint.validator = function(text, options, parse) {
+  try {
+    var result = parse(text);
+    return processingjs.lint.lint(result);
+  } catch(e) {
+    console.error(e);
+    return [];
+  }
 };
