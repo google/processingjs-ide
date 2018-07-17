@@ -44,7 +44,8 @@ InterfaceDecl = "interface" _ identifier _ TypeParameters? ("extends" _ TypeList
 InterfaceBody = BraceMatched
 
 
-Block = "{" _ BlockStatement* _ "}" _
+Block = "{" _ b:BlockStatement* _ "}" _
+  { return b; }
 BlockStatement = t:TypeDeclaration { return t; }
   / x:VarDecl _ { return x; }
   / s:Statement { return s; }
@@ -105,9 +106,10 @@ VariableDeclarator =
 VariableDeclaratorId = identifier (_ "[" _ "]")* __
 
 
-FuncDecl = type:TypeType name:identifier _ Args "{" _ BraceMatched "}"_   
+FuncDecl = type:TypeType name:identifier _ Args block:Block   
 	{
     	return { "kind": "func", "type": type,
+	  "children": block,
           "name": name, "location": location() };
     }
 
