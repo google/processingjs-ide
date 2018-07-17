@@ -66,17 +66,18 @@ processingjs.lint.lint = function(result) {
 	}
       }
       seen[block['name']] = true;
-      if (block['kind'] == 'var' && !block['semi']) {
-	var start = block['location']['start'];
-	var end = block['location']['end'];
-	errors.push({
-	  "message": "Missing semicolon ';'",
-	  "severity": "error",
-	  "from": new Pos(start['line']-1, start['column']-1),
-	  "to": new Pos(end['line']-1, end['column']-1),
-	});
-      }
-    } 
+    }
+    // Detect missing semicolons.
+    if (block.hasOwnProperty('semi') && !block['semi']) {
+      var start = block['location']['start'];
+      var end = block['location']['end'];
+      errors.push({
+	"message": "Missing semicolon ';'",
+	"severity": "error",
+	"from": new Pos(start['line']-1, start['column']-1),
+	"to": new Pos(end['line']-1, end['column']-1),
+      });
+    }
   }
   return errors;
 };

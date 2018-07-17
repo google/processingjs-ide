@@ -38,22 +38,24 @@ describe('lint', function() {
   });
 
   describe('missing semicolon', function() {
-    /*
     it('in var decl', function() {
       var parse_result = toplevelGrammar.parse('int x = 1\n');
       var result = processingjs.lint.lint(parse_result);
       expect(result).to.have.length(1);
-      expect(result[0]).to.have.property('kind');
-      expect(result[0]['kind']).to.equal('error');
+      expect(result[0]).to.have.property('severity');
+      expect(result[0]['severity']).to.equal('error');
       expect(result[0]).to.have.property('message');
-      expect(result[0]['message']).to.match(/missing semicolon/);
+      expect(result[0]['message']).to.match(/missing semicolon/i);
     });
-    */
 
     it('in var decl at eof', function() {
       var parse_result = toplevelGrammar.parse('int x = 1');
       var result = processingjs.lint.lint(parse_result);
       expect(result).to.have.length(1);
+      expect(result[0]).to.have.property('severity');
+      expect(result[0]['severity']).to.equal('error');
+      expect(result[0]).to.have.property('message');
+      expect(result[0]['message']).to.match(/missing semicolon/i);
     });
   });
 });

@@ -238,6 +238,16 @@ describe('Grammar', function() {
       var source = 'boolean[] shown = new boolean[9];'
       var result = grammar.parse(source, {startRule: "VarDecl"});
     });
+
+    it('parses variable declaration with missing semicolon', function() {
+      var source = 'int x = 1\n'
+      var result = grammar.parse(source, {startRule: "VarDecl"});
+    });
+
+    it('parses variable declaration with missing semicolon and NL', function() {
+      var source = 'int x = 1'
+      var result = grammar.parse(source, {startRule: "VarDecl"});
+    });
   });
 
   describe('Statement', function() {

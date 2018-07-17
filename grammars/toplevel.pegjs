@@ -77,13 +77,21 @@ ExpressionList = Expression (_ "," _ Expression)*
 // TODO(salikh)
 SwitchBlock = BraceMatched
 
-VarDecl = v:VarDeclaration semi:Semi
+VarDecl = v:VarDeclaration semi:Semi?
   {
-    v["semi"] = semi
+    if (semi) {
+      v["semi"] = semi
+    } else {
+      v["semi"] = false
+    }
     return v;
   }
 VarDeclaration
-  = VariableModifier* TypeType VariableDeclarators
+  = mod:VariableModifier* type:TypeType vars:VariableDeclarators
+    {
+      return {"kind": "var", "type": type, "vars": vars,
+	"location": location() };
+    }
   / type:TypeType name:identifier (_ "[" _ "]")* __ value:Assign?
     {
       return {"kind": "var", "type": type, "name": name,
