@@ -5,10 +5,10 @@ pegjs_grammar(
     varname = "toplevelGrammar",
     srcs = ["toplevel.pegjs"],
     visibility = ["//visibility:public"],
-    startrules = ["Source", "Decl", "ClassBody", "ClassDecl", "VarDecl", "Statement", "Factor", "QualifiedName", "Expression", "ArrayInitializer", "VariableDeclarators"],
+    startrules = ["Source", "StrictSource", "Decl", "ClassBody", "ClassDecl", "VarDecl", "Statement", "Factor", "QualifiedName", "Expression", "ArrayInitializer", "VariableDeclarators"],
 )
 
-load("@org_pubref_rules_node//node:rules.bzl", "mocha_test")
+load("@org_pubref_rules_node//node:rules.bzl", "mocha_test", "node_module")
 
 mocha_test(
     name = "toplevel_test",
@@ -16,7 +16,15 @@ mocha_test(
     deps = [
       "@yarn_modules//:_all_",
       ":toplevel",
+      ":examples",
     ],
+)
+
+node_module(
+    name = "examples",
+    srcs = glob(['examples/*']),
+    version = "0.0.0",
+    description = "Dummy module to provide examples as node module.",
 )
 
 exports_files(["toplevel-externs.js"])

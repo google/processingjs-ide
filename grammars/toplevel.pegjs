@@ -18,13 +18,16 @@
 // This is a very lenient grammar that tries to parse the pieces it can
 // and reports the rest with red wavy underlines.
 
-Source = _ decl:Decl* { return decl; }
-Decl = x:ClassDecl _ { return x; }
+Source = _ x:Decl* { return x; }
+StrictSource = _ x:StrictDecl* { return x; }
+Decl = x:StrictDecl { return x; }
+  / e:ErrorLine _ { return e; }
+StrictDecl = x:ClassDecl _ { return x; }
   / x:FuncDecl _ { return x; }
   / x:VarDecl _ { return x; }
   / x:Statement _ { return x; }
   / c:CommentLine _ { return c; }
-  / e:ErrorLine _ { return e; }
+  
 
 ErrorLine
   = _ ( [^\n]* ) NL { return {kind: "error", location: location() }; }

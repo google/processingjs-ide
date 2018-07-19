@@ -467,4 +467,19 @@ describe('Grammar', function() {
       var result = grammar.parse(source, {startRule: "QualifiedName"});
     });
   });
+
+  describe('StrictSource', function() {
+    it('parses all examples', function() {
+      console.log(require('process').cwd());
+      var dir = 'grammars/toplevel_test_modules/node_modules/grammars/examples/examples';
+      var names = fs.readdirSync(dir);
+      for (var i = 0; i < names.length; i++) {
+	var name = names[i];
+	if (name[0] == '_') continue;
+	var source = fs.readFileSync(dir + '/' + name).toString();
+	console.log(name, source);
+	var result = grammar.parse(source, {startRule: "StrictSource"});
+      }
+    });
+  });
 });
