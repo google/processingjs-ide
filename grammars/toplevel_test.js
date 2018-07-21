@@ -165,21 +165,97 @@ describe('Grammar', function() {
   });
 
   describe('ClassDecl', function() {
+    var startRule = 'ClassDecl';
     it('parses empty class', function() {
       var source = 'class X {}'
-      var result = grammar.parse(source, {startRule: "ClassDecl"});
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses class with a field', function() {
+      var source = 'class X { int x; }'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses class with a method declaration', function() {
+      var source = 'class X { int f(); }'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses class with a method definition', function() {
+      var source = 'class X { int f() { return 0; } }'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses class with a nested class', function() {
+      var source = 'class X { class Y {} }'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses class with a constructor', function() {
+      var source = 'class X { X() {} }'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses class with a method', function() {
+      var source = 'class X { boolean hit(Wall w) {return y - r;} }'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
+
+  describe('Block', function() {
+    var startRule = 'Block';
+    it('parses a block with return', function() {
+      var source = '{ return y- r; }';
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
+
+  describe('ClassBodyDecl', function() {
+    var startRule = 'ClassBodyDecl';
+    it('parses a method definition', function() {
+      var source = 'int f() { return 0; }';
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
+
+  describe('MethodDecl', function() {
+    var startRule = 'MethodDecl';
+    it('parses a method declaration', function() {
+      var source = 'int f();';
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses a method definition', function() {
+      var source = 'int f() { return 0; }';
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
+
+  describe('FormalParameters', function() {
+    var startRule = 'FormalParameters';
+    it('parses an empty list', function() {
+      var source = '()';
+      var result = grammar.parse(source, {"startRule": startRule});
     });
   });
 
   describe('Decl', function() {
+    var startRule = 'Decl';
     it('parses empty class', function() {
-      var source = 'class X {}'
-      var result = grammar.parse(source, {startRule: "Decl"});
+      var source = 'class X {}';
+      var result = grammar.parse(source, {"startRule": startRule});
     });
 
     it('parses array initializer with newlines', function() {
-      var source = 'String[] x = {\n"a", \n "b",\n "c"};'
-      var result = grammar.parse(source, {startRule: "Decl"});
+      var source = 'String[] x = {\n"a", \n "b",\n "c"};';
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+
+    it('parses a void function', function() {
+      var source = 'void f() {}';
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses an int function', function() {
+      var source = 'int f() { return 0; }';
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+
+    it('parses an generic type var decl', function() {
+      var source = 'ArrayList<Wall> walls;';
+      var result = grammar.parse(source, {"startRule": startRule});
     });
   });
 
@@ -284,7 +360,7 @@ describe('Grammar', function() {
       var result = grammar.parse(source, {startRule: "Statement"});
     });
     it('parses for loop with body', function() {
-      var source = 'for (int i = 0; i < 10; i++) {\nspeak(str(i));\n}'
+      var source = 'for (int i = 0; i < 10; ++i) {\nspeak(str(i));\n}'
       var result = grammar.parse(source, {startRule: "Statement"});
     });
     it('parses for loop with body and comment', function() {
@@ -293,6 +369,46 @@ describe('Grammar', function() {
     });
     it('parses for loop with body and comment and fullwidth space', function() {
       var source = 'for (int i = 0; i < 10; i++) {\n　// comment\nspeak(str(i));\n}\n'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses assignment', function() {
+      var source = 'x = 1;'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses var assignment', function() {
+      var source = 'x = init_x;'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses assignment with a function call', function() {
+      var source = 'x = f();'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses assignment with a new expression', function() {
+      var source = 'x = new Object();'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses generic type instantiation', function() {
+      var source = 'walls = new ArrayList<Wall>();'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses decrement', function() {
+      var source = 'v--;'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses add-assignment', function() {
+      var source = 'y += v;'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses return', function() {
+      var source = 'return y - r < w.y;'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses if', function() {
+      var source = 'if (w.x > x + r || w.x < x - r) return false;'
+      var result = grammar.parse(source, {startRule: "Statement"});
+    });
+    it('parses return with space', function() {
+      var source = 'return y- r;'
       var result = grammar.parse(source, {startRule: "Statement"});
     });
   });
@@ -344,7 +460,10 @@ describe('Grammar', function() {
       var source = 'f()'
       var result = grammar.parse(source, {startRule: "Expression"});
     });
-
+    it('parses variable', function() {
+      var source = 'x'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
     it('parses array access', function() {
       var source = 'a[0]'
       var result = grammar.parse(source, {startRule: "Expression"});
@@ -421,43 +540,87 @@ describe('Grammar', function() {
       var source = 'x != 1'
       var result = grammar.parse(source, {startRule: "Expression"});
     });
+    it('parses chained call', function() {
+      var source = 'walls.get(i).draw()'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
+    it('parses condition', function() {
+      var source = 'y - r < w.y'
+      var result = grammar.parse(source, {startRule: "Expression"});
+    });
   });
 
-  describe('Factor', function() {
-    it('parses function call', function() {
-      var source = 'f()'
-      var result = grammar.parse(source, {startRule: "Factor"});
+  describe('op', function() {
+    var startRule = 'op';
+    it('parses not equal', function() {
+      var source = '!='
+      var result = grammar.parse(source, {"startRule": startRule});
     });
+    it('parses equal', function() {
+      var source = '=='
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses assign', function() {
+      var source = '='
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses divide', function() {
+      var source = '/'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses divide-assign', function() {
+      var source = '/='
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
 
+  describe('Term', function() {
+    var startRule = 'Term';
+    it('parses variable', function() {
+      var source = 'x'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses int literal', function() {
+      var source = '1'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses float literal', function() {
+      var source = '1.1'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
     it('parses empty array initializer', function() {
       var source = '{}'
-      var result = grammar.parse(source, {startRule: "Factor"});
+      var result = grammar.parse(source, {"startRule": startRule});
     });
 
     it('parses array initializer', function() {
       var source = '{"abc"}'
-      var result = grammar.parse(source, {startRule: "Factor"});
+      var result = grammar.parse(source, {"startRule": startRule});
     });
 
     it('parses array initializer', function() {
       var source = '{"a", "b", "c"}'
-      var result = grammar.parse(source, {startRule: "Factor"});
+      var result = grammar.parse(source, {"startRule": startRule});
     });
 
     it('parses array initializer with newlines', function() {
       var source = '{\n"a",\n "b",\n "c"}'
-      var result = grammar.parse(source, {startRule: "Factor"});
+      var result = grammar.parse(source, {"startRule": startRule});
     });
 
     it('parses array initializer with newlines', function() {
       var source = '{\n"a", \n "b",\n "c"}'
-      var result = grammar.parse(source, {startRule: "Factor"});
+      var result = grammar.parse(source, {"startRule": startRule});
     });
     it('does not parses mismatched brace array initializer', function() {
       var source = '{"a", "b", "c"'
       expect(function() {
-	var result = grammar.parse(source, {startRule: "Factor"});
+	var result = grammar.parse(source, {"startRule": startRule});
       }).to.throw(/Expected.*"}"/);
+    });
+    it('parses new expression', function() {
+      var source = 'new Object()'
+      var result = grammar.parse(source, {"startRule": startRule});
     });
   });
 
@@ -468,14 +631,42 @@ describe('Grammar', function() {
     });
   });
 
+  describe('Creator', function() {
+    var startRule = 'Creator';
+    it('parses int array construction', function() {
+      var source = 'int[3]'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+    it('parses Object construction', function() {
+      var source = 'Object()'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
+
+  describe('CreatedName', function() {
+    var startRule = 'CreatedName';
+    it('parses Object', function() {
+      var source = 'Object'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
+
+  describe('ClassCreatorRest', function() {
+    var startRule = 'ClassCreatorRest';
+    it('parses parens', function() {
+      var source = '()'
+      var result = grammar.parse(source, {"startRule": startRule});
+    });
+  });
+
   describe('StrictSource', function() {
-    it('parses all examples', function() {
-      console.log(require('process').cwd());
-      var dir = 'grammars/toplevel_test_modules/node_modules/grammars/examples/examples';
+    var dir = 'grammars/toplevel_test_modules/node_modules/grammars/examples/examples';
+    it('parses all file examples', function() {
       var names = fs.readdirSync(dir);
       for (var i = 0; i < names.length; i++) {
 	var name = names[i];
 	if (name[0] == '_') continue;
+	if (!name.endsWith('.pde')) continue;
 	var source = fs.readFileSync(dir + '/' + name).toString();
 	console.log(name, source);
 	var result = grammar.parse(source, {startRule: "StrictSource"});

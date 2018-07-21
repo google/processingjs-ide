@@ -18,11 +18,11 @@
 // This is a very lenient grammar that tries to parse the pieces it can
 // and reports the rest with red wavy underlines.
 
-Source = _ x:Decl* { return x; }
-StrictSource = _ x:StrictDecl* { return x; }
-Decl = x:StrictDecl { return x; }
+Source = _ x:LenientDecl* { return x; }
+StrictSource = _ x:Decl* { return x; }
+LenientDecl = x:Decl { return x; }
   / e:ErrorLine _ { return e; }
-StrictDecl = x:ClassDecl _ { return x; }
+Decl = x:ClassDecl _ { return x; }
   / x:FuncDecl _ { return x; }
   / x:VarDecl _ { return x; }
   / x:Statement _ { return x; }
@@ -39,19 +39,55 @@ ClassDecl = Visibility "class" _ name:identifier _ TypeParameters? ("extends" _ 
 Visibility = "public" _
   / "private" _
   / _
-// TODO(salikh)
-ClassBody = BraceMatched
+ClassBody = "{" _ x:ClassBodyDecl* _ "}" _ { return x; }
+ClassBodyDecl
+  = ";" _
+  / "static" _ Block
+  / Modifier* ClassMemberDecl
+
+ClassMemberDecl = MethodDecl
+  / FieldDecl
+  / ClassDecl
+  / ConstructorDecl
+
+ConstructorDecl =
+  identifier _ ThrowsClause? FormalParameters Block
+
+MethodDecl = ("void" _ / TypeType) name:identifier _ FormalParameters
+  body:(b:Block {return b;} / ";" _ {return [];})
+  { return {"name": name, "kind": "method", "children": body}; }
+FormalParameters = "(" _ FormalParameterList? ")" _
+FormalParameterList
+  = FormalParameter ("," _ FormalParameter)* ("," _ LastFormalParameter)?
+  / LastFormalParameter
+FormalParameter =  VariableModifier* TypeType VariableDeclaratorId
+LastFormalParameter = VariableModifier* TypeType "..." _ VariableDeclaratorId
+
+FieldDecl = t:TypeType v:VariableDeclarators s:Semi
+  { return {"kind": "field", "vars": v, "type": t, "semi": s}; }
+
+ThrowsClause = "throws" _ QualifiedNameList
+QualifiedNameList = QualifiedName (_ "," _ QualifiedName)*
+
 TypeDeclaration = ClassDecl / InterfaceDecl
 InterfaceDecl = "interface" _ identifier _ TypeParameters? ("extends" _ TypeList)? InterfaceBody
 // TODO(salikh)
 InterfaceBody = BraceMatched
 
+Modifier =
+  s:("public"
+  / "protected"
+  / "private"
+  / "static"
+  / "abstract"
+  / "final"
+  / "strictfp") _ {return s; }
 
 Block = "{" _ b:BlockStatement* _ "}" _
   { return b; }
 BlockStatement = t:TypeDeclaration { return t; }
-  / x:VarDecl _ { return x; }
   / s:Statement { return s; }
+  / x:VarDecl _ { return x; }
 
 Statement = x:Block _ { return x; }
   / "if" _ "(" _ e:Expression ")" _ a:Statement ("else" _ b:Statement)?
@@ -106,7 +142,7 @@ VariableDeclarators =
   VariableDeclarator (_ "," _ VariableDeclarator)*
 VariableDeclarator =
   VariableDeclaratorId (_ "=" _ VariableInitializer)?
-VariableDeclaratorId = identifier (_ "[" _ "]")* __
+VariableDeclaratorId = identifier (__ "[" _ "]")* __
 
 
 FuncDecl = type:TypeType name:identifier _ Args block:Block   
@@ -127,7 +163,7 @@ TypeBound = TypeType ("&" _ TypeType)*
 TypeType = PrimitiveType ("[" _ "]" _)*
   / ClassType ("[" _ "]" _)*
 ClassType = identifier _ TypeArguments? ("." _ identifier _ TypeArguments?)*
-TypeArguments = "<" _ TypeArgument ("," _ TypeArgument)* ">" _
+TypeArguments = "<" _ TypeArgument ("," _ TypeArgument)* ">" __
 TypeArgument = TypeType / "?" _ (("extends" / "super") _ TypeType)?
 PrimitiveType = ("boolean" / "byte" / "char" / "double" / "float"
 		/ "int" / "long" / "short") _
@@ -136,26 +172,44 @@ PrimitiveType = ("boolean" / "byte" / "char" / "double" / "float"
 QualifiedName = a:identifier b:(_ "." _ c:identifier {return "." + c;})* __
   { return a + b.join(""); }
 
+
+
 Expression
-  = left:Term tail:(_ op:AddOp _ right:Term)*  __ { return null; }
+  = l:Term r:(_ ExprRest*)
+    { r['children'] = [l].concat(r); }
+  / t:Term
+    { return t; }
+
 Term
-  = left:Factor tail:(_ op:MulOp _ right:Term)*  __ { return null; }
-Factor
-  = "(" _ expr:Expression ")" __ {return expr;}
-  / ("++"/"--") Expression
-  / [+-] Expression
-  / n:QualifiedName ("++"/"--")
-  / n:QualifiedName "(" _ ee:ExpressionList? _ ")" __
-  / n:QualifiedName "[" _ e:Expression _ "]" __
-  / "new" _ x:Creator __
-  / n:QualifiedName { return {"kind": "identifier", "name": n}; }
-  / value:literal __ { return{"kind": "literal", "value": value}; }
-  / "{" _ ExpressionList? _ "}" _
+  = "(" _ e:Expression ")" __ { return e; }
+  / "{" _ e:ExpressionList? _ "}" __
+    { return {"kind": "initializer", "children": e}; }
+  / o:[~!+-] e:Expression
+    { return {"kind": "op", "op": o, "children": [e]}; }
+  / o:("++"/"--") e:Expression
+    { return {"kind": "op", "op": o, "children": [e]}; }
+  / "new" _ x:Creator
+    { x["kind"] = "new"; return x; }
+  / n:QualifiedName { return {"kind": "name", "name": n}; }
+  / v:literal __ { return{"kind": "literal", "value": v}; }
+
+ExprRest
+  = o:op _ e:Expression
+    { return {"kind": "op", "op": o, "children": [e]}; }
+  / "[" _ e:Expression _ "]" __
+    { return {"kind": "index", "children": [e]}; }
+  / "(" _ ee:ExpressionList? _ ")" __
+    { return {"kind": "call", "children": ee}; }
+  / o:("++"/"--") __
+    { return {"kind": "op", "op": o, "children": []}; }
+  / "." _ n:identifier __
+    { return {"kind": "access", "name": n}; }
 
 ArrayInitializer = "{" (_ VariableInitializer (_ "," _ VariableInitializer)* (_ ",")? )? _ "}" __
 VariableInitializer = ArrayInitializer / Expression
 
-Creator = CreatedName (ArrayCreatorRest / ClassCreatorRest)
+Creator = n:CreatedName e:(ArrayCreatorRest / ClassCreatorRest)
+  { return {"name": n}; }
 CreatedName
   = identifier TypeArgumentsOrDiamond? (_ '.' identifier TypeArgumentsOrDiamond)*
   / PrimitiveType
@@ -164,7 +218,8 @@ ArrayCreatorRest
   = "[" _ "]" (_ "[" _ "]" )* _ ArrayInitializer
   / "[" _ Expression _ "]" (_ "[" _ Expression _ "]")* (_ "[" _ "]")*
 
-Arguments = "(" _ ExpressionList ")" __
+Arguments = "(" _ e:ExpressionList? ")" __
+  { return e; }
 
 TypeArgumentsOrDiamond
   = _ '<' _ '>' __
@@ -178,8 +233,8 @@ character = "'" ( !"'" . ) "'" { return {"char": text}; }
 number = [+-]?[0-9]+("."[0-9]*)? { return parseFloat(text); }
 
 
-AddOp = op:([+*/&|^<>!=-] "="  / "&&" / "||" / "<<" "<"? / ">>" ">"? / [=+<>^&|-]) _ { return op; }
-MulOp = op:[*/%] _ { return op; }
+op = o:([+*/&%|^<>!=-] "="  / "&&" / "||" / "<<" "<"? / ">>" ">"? / [=+*%/<>^&|-])
+  { return o; }
 
 CommentLine = Comment
 BraceMatched =  AnyUnbraced ("{" _ BraceMatched "}" _ AnyUnbraced /

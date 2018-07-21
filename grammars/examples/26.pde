@@ -74,7 +74,7 @@
         }
       }
 
-      bool hit(Wall w) {
+      boolean hit(Wall w) {
         if (w.x > x + r || w.x < x - r) return false;
         return y - r < w.y;
       }
