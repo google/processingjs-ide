@@ -91,17 +91,31 @@ BlockStatement = t:TypeDeclaration { return t; }
   / x:VarDecl _ { return x; }
 
 Statement = x:Block _ { return x; }
-  / "if" _ "(" _ e:Expression ")" _ a:Statement ("else" _ b:Statement)?
+  / "if" _ "(" _ e:Expression ")" _ a:Statement b:("else" _ s:Statement { return s; })?
+    { return {"kind": "if", "children": [e, a].concat(b)}; }
   / "for" _ "(" _ f:ForControl ")" _ s:Statement
+    { return {"kind": "for", "children": [f, s]}; }
   / "while" _ "(" _ e:Expression ")" _ s:Statement
-  / "do" _ s:Statement "while" _ "(" _ e:Expression ")" _ semi:Semi
+    { return {"kind": "while", "children": [e, s]}; }
+  / "do" _ s:Statement "while" _ "(" _ e:Expression ")" _ semi:Semi?
+    { return {"kind": "dowhile", "children": [s, e], "semi": semi,
+              "location": location()}; }
   / "try" _ Block (CatchClause+ FinallyBlock? / FinallyBlock)
   / "switch" _ "(" _ e:Expression ")" _ SwitchBlock
-  / "return" _ e:Expression _ semi:Semi _
-  / "break" _ i:identifier _ semi:Semi _
+  / "return" _ e:Expression _ semi:Semi? _
+    { return {"kind": "return", "children": [e], "semi": semi,
+              "location": location()}; }
+  / "break" _ i:identifier _ semi:Semi? _
+    { return {"kind": "break", "semi": semi,
+              "location": location()}; }
   / "continue" _ i:identifier _
-  / i:identifier _ ":" _ s:Statement
-  / e:Expression semi:Semi _
+    { return {"kind": "continue", "semi": semi,
+              "location": location()}; }
+  / i:identifier _ ":" _ s:Statement 
+    { return s; }
+  / e:Expression semi:Semi _ 
+    { return {"kind": "expression", "children": [e], "semi": semi,
+              "location": location()}; }
   / ";" _
 
 CatchClause = "catch" _ "(" _ VariableModifier* CatchType identifier _ ")" _ b:Block
@@ -109,11 +123,13 @@ CatchType = QualifiedName ("|" _ QualifiedName)*
 FinallyBlock = "finally" _ b:Block 
 VariableModifier = "final" _
 
-ForControl = ForInit? _ ";" _ e:Expression? _ ";" _ ForUpdate?
+ForControl = a:ForInit? _ ";" _ e:Expression? _ ";" _ u:ForUpdate?
+  { return {"kind": "for-control", "children": [a,e,u]}; }
 ForInit = VarDeclaration
   / ExpressionList
 ForUpdate = ExpressionList
-ExpressionList = Expression (_ "," _ Expression)*
+ExpressionList = a:Expression b:(_ "," _ e:Expression { return e; })*
+  { return [a].concat(b); }
 
 // TODO(salikh)
 SwitchBlock = BraceMatched
