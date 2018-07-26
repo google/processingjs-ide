@@ -152,8 +152,14 @@ var ide = (/** @type {function(): !Object} */ (function() {
       iframe.style.width = '' + (inst.width) + 'px';
       ide.prevWidth = inst.width;
       ide.prevHeight = inst.height;
-    }, 200);
-    if (ide.prevHeight > 0) {
+    }, 1000);
+    // Detect the size inside of the sketch.
+    var m = processingCode.match(/[\r\n \t]size[ \t]*\([ \t]*([0-9]+)[ \t]*,[ \t]*([0-9]+)[ \t]*\)/);
+    if (m) {
+      iframe.style.height = '' + m[2] + 'px';
+      iframe.style.width = '' + m[1] + 'px';
+    } else if (ide.prevHeight > 0) {
+      // Otherwise default to the previously detected size.
       iframe.style.height = '' + (ide.prevHeight) + 'px';
       iframe.style.width = '' + (ide.prevWidth) + 'px';
     }
