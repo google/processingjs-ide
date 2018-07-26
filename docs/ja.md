@@ -422,8 +422,13 @@
 * [RandomSentenceGenerator]
 * [Drawing]
 * [ChaseTheCircle]
-* [LabyrinthWalker]
-* [LabyrinthSolver]
+* 迷路を解く
+  * [右手法][LabyrinthWalker]
+  * [地図作り][LabyrinthMapper]
+  * [最短の道][LabyrinthSearch]
+  * [道の作り直し][LabyrinthBacktrace]
+  * [完成版][LabyrinthSolver]
+
 
 # Drawing
 
@@ -1503,3 +1508,444 @@ Wall: 壁
         }
     }
  
+# LabyrinthMapper
+
+このプログラムは迷路の画像を解析して地図を作っていきます。
+
+    /* @pjs preload="/static/Labyrinth3a.png"; */
+    PImage imgLabyrinth = loadImage("/static/Labyrinth3a.png");
+    /* @pjs preload="/static/Walker44.png"; */
+    PImage imgWalker = loadImage("/static/Walker44.png");
+     
+    // Step in pixels.
+    int s = 17;
+    // Size of the grid.
+    int n = 360/s;
+    // The grid. 0 means the cell is blocked. >0 means the cell is open.
+    int grid[][];
+     
+    boolean showMap = true;
+     
+    // The starting point;
+    int sx = 0, sy = 0;
+    // The goal.
+    int gx = 0, gy = 0;
+     
+    void setup() {  // this is run once.     
+        // canvas size (Variable aren't evaluated. Integers only, please.)
+        size(360, 360); 
+        
+        // Display the background (labyrinth).
+        image(imgLabyrinth, 1, 1, 360, 360);
+        
+        // Allocate 2-dimensional array in 2 steps.
+        grid = new boolean[n][];
+        for (int i = 0; i < n; i++) {
+            grid[i] = new boolean[n];
+        }  
+    }
+     
+    // The loop counters that live across multiple mapStep invocations.
+    int i = 0, j = 0;
+                
+    void mapStep() {
+                color c = get(i*s+s/2, j*s+s/2);
+                if (brightness(c) > 200) {
+                    grid[i][j] = 999;
+                    if (showMap) {
+                        fill(255, 255, 255);
+                        rect(s*i, s*j, s/2, s/2);
+                    }
+                }
+                if (red(c) > 100 && green(c) < 100) {
+                    sx = i;
+                    sy = j;
+                    if (showMap) {
+                        fill(200, 0, 0);
+                        rect(s*i, s*j, s/2, s/2);
+                    }
+                } else if (green(c) > 100 & red(c) < 100) {
+                    gx = i;
+                    gy = j;
+                    if (showMap) {
+                        fill(0, 200, 0);
+                        rect(s*i, s*j, s/2, s/2);
+                    }
+                }
+         j++;
+         if (j >= n) {
+             j = 0;
+             i++;
+             if (i >= n) {
+                 noLoop();
+             }
+         }
+    }
+     
+     
+    int next = 0;
+    int step = 50;
+     
+    void draw() {
+        if (showMap) {
+            while (millis() <= next) return;
+            next = millis() + step;
+        }
+        mapStep();
+    }
+
+# LabyrinthSearch
+
+このプログラムは最短の道を探しています。
+
+    /* @pjs preload="/static/Labyrinth3a.png"; */
+    PImage imgLabyrinth = loadImage("/static/Labyrinth3a.png");
+    /* @pjs preload="/static/Walker44.png"; */
+    PImage imgWalker = loadImage("/static/Walker44.png");
+     
+    // Step in pixels.
+    int s = 17;
+    // Size of the grid.
+    int n = 360/s;
+    // The grid. 0 means the cell is blocked. >0 means the cell is open.
+    int grid[][];
+     
+    boolean showMap = true;
+     
+    // The starting point;
+    int sx = 0, sy = 0;
+    // The goal.
+    int gx = 0, gy = 0;
+     
+    void CreateMap() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                color c = get(i*s+s/2, j*s+s/2);
+                if (brightness(c) > 200) {
+                    grid[i][j] = 999;
+                }
+                if (red(c) > 100 && green(c) < 100) {
+                    sx = i;
+                    sy = j;
+                   
+                } else if (green(c) > 100 & red(c) < 100) {
+                    gx = i;
+                    gy = j;
+                    
+                }
+            }
+        }
+        // Show the starting point.
+        fill(200, 0, 0);
+        rect(s*sx, s*sy, s/2, s/2);
+        // Show the goal.
+        fill(0, 200, 0);
+        rect(s*i, s*j, s/2, s/2);
+    }
+     
+    // Fixed queue length for simplicity. The expected maximum queue size is
+    // the the size of the grid, so should be well below 500.
+    int queueLength = 500;
+    int qx[] = new int[queueLength];
+    int qy[] = new int[queueLength];
+    int qhead = 0;
+    int qtail = 0;
+     
+    void queuePush(int x, int y) {
+        qx[qtail] = x;
+        qy[qtail] = y;
+        qtail = (qtail+1) % queueLength;
+        // Note: in case of queue overflow, the queue contents will be lost
+        // (misinterpreted as empty queue).
+    }
+     
+    void queuePop() {
+        if (qtail != qhead) {
+            qhead = (qhead+1) % queueLength;
+        }
+    }
+     
+    boolean queueEmpty() {
+        return qtail == qhead;
+    }
+     
+    void visitCell(int x, int y, int distance) {
+        // Out of bounds checks.
+        if (x < 0 || x >= n) return;
+        if (y < 0 || y >= n) return;
+        // Wall check.
+        if (grid[x][y] == 0) return;
+        // Distance check. If we find a shorter distance,
+        // record it and return true. Note that all empty cells
+        // originally have 999 recorded.
+        if (grid[x][y] > distance) {
+            // Record the distance as shortest.
+            grid[x][y] = distance;
+            // Push the cell into the queue for further examination.
+            queuePush(x, y);
+            if (showMap) {
+                fill(0, 0, 0);
+            }
+        }
+    }
+     
+    void StartSearch() {
+        // Using Breadth-first search in rectangular grid.
+        // Put the goal position into the queue and search back towards
+        // the start position.
+        queuePush(gx, gy);
+        grid[gx][gy] = 1;
+    }
+     
+    void setup() {  // this is run once.     
+        // canvas size (Variable aren't evaluated. Integers only, please.)
+        size(360, 360); 
+        
+        // Display the background (labyrinth).
+        image(imgLabyrinth, 1, 1, 360, 360);
+        
+        // Allocate 2-dimensional array in 2 steps.
+        grid = new boolean[n][];
+        for (int i = 0; i < n; i++) {
+            grid[i] = new boolean[n];
+        }  
+            
+        CreateMap();
+        StartSearch();
+    }
+     
+    int next = 0;
+    int step = 250;
+    bool found = false;
+     
+    // The position during backtracing.
+    int bx, by;
+     
+    void searchStep() {
+        // While queue is not empty. Loop is implicit around draw().
+        if (!queueEmpty()) {
+            int x = qx[qhead];
+            int y = qy[qhead];
+            queuePop();
+     
+            fill(200, 200, 180);
+            rect(s*x, s*y, s/2, s/2);
+            int distance = grid[x][y];
+            fill(0,0,0);
+            text("" + distance, x*s, y*s);
+     
+            if (x == sx && y == sy) {            
+                exit();
+                return;
+            }
+            // Go and try 4 neighbors.
+            visitCell(x+1, y, distance+1);
+            visitCell(x-1, y, distance+1);
+            visitCell(x, y-1, distance+1);
+            visitCell(x, y+1, distance+1);
+            
+        } else {
+            // path not found.
+            noLoop();
+        }
+    }
+     
+    void draw() {
+        if (showMap) {
+            while (millis() <= next) return;
+            next = millis() + step;
+        }
+        
+        searchStep();
+    }
+
+# LabyrinthBacktrace
+
+このプログラムは最短のルートを見つけてから後ろから道を作り直します。
+
+    /* @pjs preload="/static/Labyrinth3a.png"; */
+    PImage imgLabyrinth = loadImage("/static/Labyrinth3a.png");
+    /* @pjs preload="/static/Walker44.png"; */
+    PImage imgWalker = loadImage("/static/Walker44.png");
+     
+    // Step in pixels.
+    int s = 17;
+    // Size of the grid.
+    int n = 360/s;
+    // The grid. 0 means the cell is blocked. >0 means the cell is open.
+    int grid[][];
+     
+    boolean showMap = true;
+     
+    // The starting point;
+    int sx = 0, sy = 0;
+    // The goal.
+    int gx = 0, gy = 0;
+     
+    void CreateMap() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                color c = get(i*s+s/2, j*s+s/2);
+                if (brightness(c) > 200) {
+                    grid[i][j] = 999;            
+                }
+                if (red(c) > 100 && green(c) < 100) {
+                    sx = i;
+                    sy = j;        
+                } else if (green(c) > 100 & red(c) < 100) {
+                    gx = i;
+                    gy = j;
+                }
+            }
+        }
+    }
+     
+    // Fixed queue length for simplicity. The expected maximum queue size is
+    // the the size of the grid, so should be well below 500.
+    int queueLength = 500;
+    int qx[] = new int[queueLength];
+    int qy[] = new int[queueLength];
+    int qhead = 0;
+    int qtail = 0;
+     
+    void queuePush(int x, int y) {
+        qx[qtail] = x;
+        qy[qtail] = y;
+        qtail = (qtail+1) % queueLength;
+        // Note: in case of queue overflow, the queue contents will be lost
+        // (misinterpreted as empty queue).
+    }
+     
+    void queuePop() {
+        if (qtail != qhead) {
+            qhead = (qhead+1) % queueLength;
+        }
+    }
+     
+    boolean queueEmpty() {
+        return qtail == qhead;
+    }
+     
+    void visitCell(int x, int y, int distance) {
+        // Out of bounds checks.
+        if (x < 0 || x >= n) return;
+        if (y < 0 || y >= n) return;
+        // Wall check.
+        if (grid[x][y] == 0) return;
+        // Distance check. If we find a shorter distance,
+        // record it and return true. Note that all empty cells
+        // originally have 999 recorded.
+        if (grid[x][y] > distance) {
+            // Record the distance as shortest.
+            grid[x][y] = distance;
+            // Push the cell into the queue for further examination.
+            queuePush(x, y);
+            if (showMap) {
+                fill(0, 0, 0);
+                text("" + distance, x*s, y*s);
+            }
+        }
+    }
+     
+    void StartSearch() {
+        // Using Breadth-first search in rectangular grid.
+        // Put the goal position into the queue and search back towards
+        // the start position.
+        queuePush(gx, gy);
+        grid[gx][gy] = 1;
+    }
+     
+    void setup() {  // this is run once.     
+        // canvas size (Variable aren't evaluated. Integers only, please.)
+        size(360, 360); 
+        
+        // Display the background (labyrinth).
+        image(imgLabyrinth, 1, 1, 360, 360);
+        
+        // Allocate 2-dimensional array in 2 steps.
+        grid = new boolean[n][];
+        for (int i = 0; i < n; i++) {
+            grid[i] = new boolean[n];
+        }  
+            
+        CreateMap();
+        StartSearch();
+    }
+     
+    int next = 0;
+    int step = 250;
+    bool found = false;
+     
+    // The position during backtracing.
+    int bx, by;
+     
+    void searchStep() {
+        // While queue is not empty. Loop is implicit around draw().
+        if (!queueEmpty()) {
+            int x = qx[qhead];
+            int y = qy[qhead];
+            queuePop();
+     
+            fill(200, 200, 180);
+            rect(s*x, s*y, s/2, s/2);
+            int distance = grid[x][y];
+     
+            if (x == sx && y == sy) {            
+                found = true;
+                fill(0,0,0);
+                bx = sx;
+                by = sy;
+                return;
+            }
+            // Go and try 4 neighbors.
+            visitCell(x+1, y, distance+1);
+            visitCell(x-1, y, distance+1);
+            visitCell(x, y-1, distance+1);
+            visitCell(x, y+1, distance+1);
+            
+        } else {
+            // path not found.
+            noLoop();
+        }
+    }
+     
+    boolean backTrace(int nx, int ny, int distance) {
+        if (nx < 0 || nx >= n) return false;
+        if (ny < 0 || ny >= n) return false;
+        if (grid[nx][ny] != distance) return false;
+        // Found the backtrace step.
+        if (showMap) {
+            stroke(255,0,0);
+            line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
+        }
+        bx = nx;
+        by = ny;
+        return true;
+    }
+     
+    void backTraceStep() {
+        fill(255, 255, 100);
+        rect(bx*s+s/4, by*s+s/4, s/2, s/2);
+        if (bx == gx && by == gy) {
+            noLoop();
+        }
+        int distance = grid[bx][by];
+        stroke(255, 255, 0);
+        if (backTrace(bx-1, by, distance-1));
+        else if (backTrace(bx+1, by, distance-1));
+        else if (backTrace(bx, by-1, distance-1));
+        else if (backTrace(bx, by+1, distance-1));
+    }
+     
+    void draw() {
+        if (found) {
+            while (millis() <= next) return;
+            next = millis() + step;
+        }
+        
+        if (found) {
+            backTraceStep();
+        } else {
+            searchStep();
+        }
+    }
