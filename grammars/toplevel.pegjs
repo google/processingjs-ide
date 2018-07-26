@@ -32,18 +32,19 @@ Decl = x:ClassDecl _ { return x; }
 ErrorLine
   = _ ( [^\n]* ) NL { return {kind: "error", location: location() }; }
   / _ ( [^\n]+ ) { return {kind: "error", location: location() }; }
-ClassDecl = Visibility "class" _ name:identifier _ TypeParameters? ("extends" _ TypeList)? ("implements" _ TypeList)? ClassBody
+ClassDecl = Visibility "class" _ name:identifier _ TypeParameters? ("extends" _ TypeList)? ("implements" _ TypeList)? b:ClassBody
   {
-    return {kind: "class", "name": name, location: location() };
+    return {"kind": "class", "name": name, "location": location(),
+	    "children": b};
   }
 Visibility = "public" _
   / "private" _
   / _
 ClassBody = "{" _ x:ClassBodyDecl* _ "}" _ { return x; }
 ClassBodyDecl
-  = ";" _
-  / "static" _ Block
-  / Modifier* ClassMemberDecl
+  = ";" _ { return null; }
+  / "static" _ b:Block { return b; }
+  / Modifier* b:ClassMemberDecl { return b; }
 
 ClassMemberDecl = MethodDecl
   / FieldDecl
