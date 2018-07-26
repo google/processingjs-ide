@@ -422,6 +422,8 @@
 * [RandomSentenceGenerator]
 * [Drawing]
 * [ChaseTheCircle]
+* [LabyrinthWalker]
+* [LabyrinthSolver]
 
 # Drawing
 
@@ -1201,3 +1203,303 @@ Wall: 壁
 # while
 
 「…」のうちに。繰り返しの命令です。`while(条件)`の中にはい
+
+# LabyrinthWalker
+
+    /* @pjs preload="/static/Labyrinth2a.png"; */
+    /* @pjs preload="/static/Walker44.png"; */
+     
+    PImage imgLabyrinth = loadImage("/static/Labyrinth2a.png");
+    PImage imgWalker = loadImage("/static/Walker44.png");
+     
+    int s = 44;
+     
+    int x = 190;
+    int y = 310;
+     
+    int dx = 0;
+    int dy = -1;
+     
+    void setup() {  // this is run once.     
+        // canvas size (Variable aren't evaluated. Integers only, please.)
+        size(360, 360); 
+        
+        // Display the background (labyrinth).
+        image(imgLabyrinth, 1, 1, 360, 360);
+        
+     
+        
+        // Use white fill color for drawing rectangles.
+        fill(255,255,255);
+        // Use white stroke color for drawing rectangles.
+        noStroke();
+        // Show image centered at (x,y).
+        imageMode(CENTER);
+        // Display the starting position of the walker.
+        image(imgWalker, x, y, s, s);
+    } 
+     
+    void turnLeft() {
+      int tmp = dx;
+      dx = dy;
+      dy = -tmp;
+    }
+     
+    boolean wallAhead() {
+        boolean wallFound = false;
+        int rx = -dy;
+        int ry = dx;
+        for (int i = -s/2-1; i <= s/2+1; i++) {
+            color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
+            wallFound = wallFound || brightness(c) < 50;
+        }
+        return wallFound;
+    }
+     
+    void moveForward() {
+      rect(x-s/2, y-s/2, s, s);
+      x += dx;
+      y += dy;
+      image(imgWalker, x, y, s, s);
+    }
+     
+    void turnRight() {
+      int tmp = dx;
+      dx = -dy;
+      dy = tmp;
+    }
+     
+    boolean wallRight() {
+      int rx = -dy;
+      int ry = dx;
+      boolean wallFound = false;
+      for (int i = -s/2-1; i <= s/2+1; i++) {
+          color c = get(x + rx*(s/2+3)+dx*i, y + ry*(s/2+3)+dy*i);
+          wallFound = wallFound || brightness(c) < 50;
+      }
+      return wallFound;
+    }
+     
+    boolean reachedGoal() {
+      color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
+      return red(c) < 50 && green(c) > 50;
+    }
+     
+    void draw() {
+      if (reachedGoal()) {
+          fill(0,0,0);  // black.
+          text("Finish!", x+s/2, y);
+          noLoop();
+      }
+      if (!wallRight()) {
+        turnRight();
+        moveForward();
+        moveForward();
+      } else if (wallAhead()) {
+        turnLeft();
+      }
+      moveForward();
+    }
+
+# LabyrinthSolver
+
+    /* @pjs preload="/static/Labyrinth2a.png"; */
+    /* @pjs preload="/static/Walker44.png"; */
+     
+    PImage imgLabyrinth = loadImage("/static/Labyrinth2a.png");
+    PImage imgWalker = loadImage("/static/Walker44.png");
+     
+    // Step in pixels.
+    int s = 17;
+    // Size of the grid.
+    int n = 360/s;
+    // The grid. 0 means the cell is blocked. >0 means the cell is open.
+    int grid[][];
+     
+    boolean showMap = true;
+     
+    // The starting point;
+    int sx = 0, sy = 0;
+    // The goal.
+    int gx = 0, gy = 0;
+     
+    void CreateMap() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                color c = get(i*s+s/2, j*s+s/2);
+                if (brightness(c) > 200) {
+                    grid[i][j] = 999;
+                    if (showMap) {
+                        fill(255, 255, 255);
+                        rect(s*i, s*j, s/2, s/2);
+                    }
+                }
+                if (red(c) > 100 && green(c) < 100) {
+                    sx = i;
+                    sy = j;
+                    if (showMap) {
+                        fill(200, 0, 0);
+                        rect(s*i, s*j, s/2, s/2);
+                    }
+                } else if (green(c) > 100 & red(c) < 100) {
+                    gx = i;
+                    gy = j;
+                    if (showMap) {
+                        fill(0, 200, 0);
+                        rect(s*i, s*j, s/2, s/2);
+                    }
+                }
+            }
+        }
+    }
+     
+    // Fixed queue length for simplicity. The expected maximum queue size is
+    // the the size of the grid, so should be well below 500.
+    int queueLength = 500;
+    int qx[] = new int[queueLength];
+    int qy[] = new int[queueLength];
+    int qhead = 0;
+    int qtail = 0;
+     
+    void queuePush(int x, int y) {
+        qx[qtail] = x;
+        qy[qtail] = y;
+        qtail = (qtail+1) % queueLength;
+        // Note: in case of queue overflow, the queue contents will be lost
+        // (misinterpreted as empty queue).
+    }
+     
+    void queuePop() {
+        if (qtail != qhead) {
+            qhead = (qhead+1) % queueLength;
+        }
+    }
+     
+    boolean queueEmpty() {
+        return qtail == qhead;
+    }
+     
+    void visitCell(int x, int y, int distance) {
+        // Out of bounds checks.
+        if (x < 0 || x >= n) return;
+        if (y < 0 || y >= n) return;
+        // Wall check.
+        if (grid[x][y] == 0) return;
+        // Distance check. If we find a shorter distance,
+        // record it and return true. Note that all empty cells
+        // originally have 999 recorded.
+        if (grid[x][y] > distance) {
+            // Record the distance as shortest.
+            grid[x][y] = distance;
+            // Push the cell into the queue for further examination.
+            queuePush(x, y);
+            if (showMap) {
+                fill(0, 0, 0);
+                text("" + distance, x*s, y*s);
+            }
+        }
+    }
+     
+    void StartSearch() {
+        // Using Breadth-first search in rectangular grid.
+        // Put the goal position into the queue and search back towards
+        // the start position.
+        queuePush(gx, gy);
+        grid[gx][gy] = 1;
+    }
+     
+    void setup() {  // this is run once.     
+        // canvas size (Variable aren't evaluated. Integers only, please.)
+        size(360, 360); 
+        
+        // Display the background (labyrinth).
+        image(imgLabyrinth, 1, 1, 360, 360);
+        
+        // Allocate 2-dimensional array in 2 steps.
+        grid = new boolean[n][];
+        for (int i = 0; i < n; i++) {
+            grid[i] = new boolean[n];
+        }  
+            
+        CreateMap();
+        StartSearch();
+    }
+     
+    int next = 0;
+    int step = 10;
+    bool found = false;
+     
+    // The position during backtracing.
+    int bx, by;
+     
+    void searchStep() {
+        // While queue is not empty. Loop is implicit around draw().
+        if (!queueEmpty()) {
+            int x = qx[qhead];
+            int y = qy[qhead];
+            queuePop();
+     
+            fill(200, 200, 180);
+            rect(s*x, s*y, s/2, s/2);
+            int distance = grid[x][y];
+     
+            if (x == sx && y == sy) {            
+                found = true;
+                fill(0,0,0);
+                bx = sx;
+                by = sy;
+                return;
+            }
+            // Go and try 4 neighbors.
+            visitCell(x+1, y, distance+1);
+            visitCell(x-1, y, distance+1);
+            visitCell(x, y-1, distance+1);
+            visitCell(x, y+1, distance+1);
+            
+        } else {
+            // path not found.
+            noLoop();
+        }
+    }
+     
+    boolean backTrace(int nx, int ny, int distance) {
+        if (nx < 0 || nx >= n) return false;
+        if (ny < 0 || ny >= n) return false;
+        if (grid[nx][ny] != distance) return false;
+        // Found the backtrace step.
+        if (showMap) {
+            stroke(255,0,0);
+            line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
+        }
+        bx = nx;
+        by = ny;
+        return true;
+    }
+     
+    void backTraceStep() {
+        fill(255, 255, 100);
+        rect(bx*s+s/4, by*s+s/4, s/2, s/2);
+        if (bx == gx && by == gy) {
+            noLoop();
+        }
+        int distance = grid[bx][by];
+        stroke(255, 255, 0);
+        if (backTrace(bx-1, by, distance-1));
+        else if (backTrace(bx+1, by, distance-1));
+        else if (backTrace(bx, by-1, distance-1));
+        else if (backTrace(bx, by+1, distance-1));
+    }
+     
+    void draw() {
+        if (showMap) {
+            while (millis() <= next) return;
+            next = millis() + step;
+        }
+        
+        if (found) {
+            backTraceStep();
+        } else {
+            searchStep();
+        }
+    }
+ 
