@@ -23,6 +23,6 @@ go_binary(
     deps = [
         "@com_github_PuerkitoBio_goquery//:go_default_library",
         "@com_github_golang_net//html:go_default_library",
-				"@com_github_russross_blackfriday//:go_default_library",
+        "@com_github_russross_blackfriday//:go_default_library",
     ],
 )

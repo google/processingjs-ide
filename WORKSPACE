@@ -64,19 +64,24 @@ new_http_archive(
 #
 http_archive(
     name = "io_bazel_rules_go",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.12.0/rules_go-0.12.0.tar.gz",
     sha256 = "c1f52b8789218bb1542ed362c4f7de7052abcf254d865d96fb7ba6d44bc15ee3",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.12.0/rules_go-0.12.0.tar.gz",
 )
+
 http_archive(
     name = "bazel_gazelle",
-    url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/0.12.0/bazel-gazelle-0.12.0.tar.gz",
     sha256 = "ddedc7aaeb61f2654d7d7d4fd7940052ea992ccdb031b8f9797ed143ac7e8d43",
+    url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/0.12.0/bazel-gazelle-0.12.0.tar.gz",
 )
+
 load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+
 go_rules_dependencies()
+
 go_register_toolchains()
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
+
 gazelle_dependencies()
 
 #
@@ -116,22 +121,22 @@ go_repository(
 # Import gopkg.in/russross/blackfriday.v2
 #
 go_repository(
-		name = "com_github_russross_blackfriday",
-		commit = "cadec560ec52d93835bf2f15bd794700d3a2473b",
-		importpath = "gopkg.in/russross/blackfriday.v2",
-		remote = "https://github.com/russross/blackfriday",
-		vcs = "git",
+    name = "com_github_russross_blackfriday",
+    commit = "cadec560ec52d93835bf2f15bd794700d3a2473b",
+    importpath = "gopkg.in/russross/blackfriday.v2",
+    remote = "https://github.com/russross/blackfriday",
+    vcs = "git",
 )
 
 #
 # Import github.com/shurcool/sanitized_anchor_name, a dependency of blackfriday.
 #
 go_repository(
-		name = "com_github_shurcool_sanitized_anchor_name",
-		commit = "86672fcb3f950f35f2e675df2240550f2a50762f",
-		importpath = "github.com/shurcooL/sanitized_anchor_name",
-		remote = "https://github.com/shurcooL/sanitized_anchor_name",
-		vcs = "git",
+    name = "com_github_shurcool_sanitized_anchor_name",
+    commit = "86672fcb3f950f35f2e675df2240550f2a50762f",
+    importpath = "github.com/shurcooL/sanitized_anchor_name",
+    remote = "https://github.com/shurcooL/sanitized_anchor_name",
+    vcs = "git",
 )
 
 #
@@ -140,9 +145,9 @@ go_repository(
 
 http_archive(
     name = "org_pubref_rules_node",
-    url = "https://github.com/pubref/rules_node/archive/v0.4.1.tar.gz",
-    strip_prefix = "rules_node-0.4.1",
     sha256 = "019cb4d3d96c90ac7fd92ebc7e1a86bb73e002a8c8b033d22704b179ac4250dc",
+    strip_prefix = "rules_node-0.4.1",
+    url = "https://github.com/pubref/rules_node/archive/v0.4.1.tar.gz",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
@@ -163,4 +168,3 @@ yarn_modules(
         "mocha": "^4.0.1",
     },
 )
-

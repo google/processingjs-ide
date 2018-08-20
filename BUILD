@@ -18,16 +18,16 @@ load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_deps")
 
 closure_js_library(
     name = "ide-js",
-    suppress = ["reportUnknownTypes"],
     srcs = [
         "codemirror-externs.js",
         "ide.js",
         "processing-externs.js",
+        "//grammars:toplevel-externs.js",
         "@closure_compiler//:contrib/externs/jquery-3.2.js",
-	"//grammars:toplevel-externs.js",
     ],
+    suppress = ["reportUnknownTypes"],
     deps = [
-	":lint-js",
+        ":lint-js",
     ],
 )
 
@@ -66,7 +66,7 @@ genrule(
     ],
     outs = ["ide-bin.html"],
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
-        """--edits_json='[
+          """--edits_json='[
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
             {"selector": "title", "content": "Processing.js IDE"},
             {"selector": "body > h1", "content": "Processing.js IDE"},
@@ -83,7 +83,10 @@ genrule(
             {"selector": "div#reference", "file": "$(location :docs-en.html)", "fileselector": "div"},
             {"selector": "div#help_div", "file": "$(location :docs-en.html)", "fileselector": "div#ref-help"}
         ]'""",
-    tools = ["//cmd/rewrite-html", ":docs-en.html"],
+    tools = [
+        ":docs-en.html",
+        "//cmd/rewrite-html",
+    ],
 )
 
 genrule(
@@ -93,7 +96,7 @@ genrule(
     ],
     outs = ["ide-ja.html"],
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
-        """--edits_json='[
+          """--edits_json='[
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
             {"selector": "title", "content": "Processing.js IDE"},
             {"selector": "body > h1", "content": "Processing.js IDE"},
@@ -110,7 +113,10 @@ genrule(
             {"selector": "div#reference", "file": "$(location :docs-ja.html)", "fileselector": "div"},
             {"selector": "div#help_div", "file": "$(location :docs-ja.html)", "fileselector": "div#ref-help"}
         ]'""",
-    tools = ["//cmd/rewrite-html", ":docs-ja.html"],
+    tools = [
+        ":docs-ja.html",
+        "//cmd/rewrite-html",
+    ],
 )
 
 genrule(
@@ -136,19 +142,22 @@ genrule(
 closure_js_library(
     name = "lint-js",
     srcs = [
-	"lint.js",
+        "lint.js",
     ],
-    suppress = ["reportUnknownTypes", "checkTypes"],
+    suppress = [
+        "reportUnknownTypes",
+        "checkTypes",
+    ],
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_module")
 
 node_module(
     name = "lint-module",
-    main = "lint.js",
     srcs = ["lint.js"],
-    version = "0.0.1",
     description = "Synthetic module for lint.js",
+    main = "lint.js",
+    version = "0.0.1",
     deps = [
     ],
 )
@@ -159,8 +168,8 @@ mocha_test(
     name = "lint_test",
     main = "lint_test.js",
     deps = [
-      "@yarn_modules//:_all_",
-      "//grammars:toplevel",
-      ":lint-module",
+        ":lint-module",
+        "//grammars:toplevel",
+        "@yarn_modules//:_all_",
     ],
 )
