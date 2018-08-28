@@ -361,8 +361,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
       },
     };
     // Parse and act on the fragment address.
+    var params = new Object();
     if (window.location.hash) {
-      var params = parseFragment();
+      params = parseFragment();
       //window.console.log(params);
       if (params['sketch']) {
         var id = params['sketch'];

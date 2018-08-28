@@ -256,6 +256,6 @@ func main() {
 	log.Printf("Edits: %#v\n", edits)
 	err = run(*inputHTMLFile, *outputHTMLFile, edits)
 	if err != nil {
-		log.Fatal("Could not rewrite %s to %s: %s", *inputHTMLFile, *outputHTMLFile, err)
+		log.Fatalf("Could not rewrite %s to %s: %s", *inputHTMLFile, *outputHTMLFile, err)
 	}
 }

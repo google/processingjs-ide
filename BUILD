@@ -67,6 +67,8 @@ genrule(
     outs = ["ide-bin.html"],
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
           """--edits_json='[
+            {"selector": "script[src$$=\\"base.js\\"]", "html": " "},
+            {"selector": "script[src=\\"lint.js\\"]", "html": " "},
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
             {"selector": "title", "content": "Processing.js IDE"},
             {"selector": "body > h1", "content": "Processing.js IDE"},
@@ -97,6 +99,8 @@ genrule(
     outs = ["ide-ja.html"],
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$<" --output_html_file="$@" """ +
           """--edits_json='[
+            {"selector": "script[src$$=\\"base.js\\"]", "html": " "},
+            {"selector": "script[src=\\"lint.js\\"]", "html": " "},
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
             {"selector": "title", "content": "Processing.js IDE"},
             {"selector": "body > h1", "content": "Processing.js IDE"},
