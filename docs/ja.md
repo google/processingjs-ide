@@ -48,7 +48,7 @@
 
 [ステップ1][step1]に戻る。
 
-次にコンピューターに自分の名前を覚えさせてみましょう。プログラムの中で「記憶する」という役割をするのを変数と呼びます。変数はプログラムの実行中で様々のことを記憶することができます。こちらのプログラムにあなたの名前を入れてみましょう。
+次にコンピューターに自分の名前を覚えさせてみましょう。プログラムの中で「記憶する」という役割をするのを[変数][Variable]と呼びます。変数はプログラムの実行中で様々のことを記憶することができます。こちらのプログラムにあなたの名前を入れてみましょう。
 
     // 変数を作ります。
     String namae = "太郎";
@@ -79,13 +79,13 @@
 
 [ステップ2][step2]に戻る。
 
-次にいくつかのことをコンピューターに覚えさせてみましょう。もちろん、いくつかのの変数を作れます。
+次にいくつかのことをコンピューターに覚えさせてみましょう。もちろん、いくつかのの[変数][Variable]を作れます。
 
     String sei = "ぷろぷろ";
     String mei = "太郎";
     speak("こんにちは、" + sei + mei);
 
-ただし、覚えさせたいことが多すぎたら、別の方法は必要になります。そこで、配列（はいれつ）というものが役に立ちます。
+ただし、覚えさせたいことが多すぎたら、別の方法は必要になります。そこで、[配列][Array]（はいれつ）というものが役に立ちます。
 
     // 配列を作る。
     String yotei[] = {"顔洗い", "朝ゴハン", "歯磨き", "登校"};
@@ -102,7 +102,7 @@
 
 次は[ステップ4][step4]に進みましょう。
 
-# ステップ4：配列（はいれつ）{#ref-step4}
+# ステップ4：「いつだれがどこでどうした」ゲーム {#ref-step4}
 
 [ステップ3][step3]に戻る。
 
@@ -132,7 +132,7 @@
 詳しく知りたい人へ：
 
 * 「random(...)」は乱数といい、実行するごとに違う数字を返します。例えば、「random(5)」は0から5までの数字を返します。
-* 「int(...)」は数字の整数部分を抽出します。例えば、「int(4.5)」= 4。「random」は整数ではない数字を返しますが、配列にアクセスするには整数は必要です。
+* 「int(...)」は数字の整数部分を抽出します。例えば、「int(4.5)」= 4。「random」は整数ではない数字を返しますが、[配列][Array]にアクセスするには整数は必要です。
 
 それでプログラミング体験のステップ終わりです。
 もし、時間の余裕と興味があったら、[補足][Addendum]を見てみてください。
@@ -240,6 +240,18 @@
 
 マウスイベントについてもっと詳しくは[マウス][Mouse]に参考ください。
 
+# マウス {#ref-Mouse}
+
+マウスの入力は[イベント][Events]によって行う。イベントのリスト:
+
+* [mouseClicked()] マウスはクリックされたとき
+* [mousePressed()] マウスのボタンが押されたとき
+* [mouseReleased()] マウスのボタンが話されたとき
+* [mouseOver()] マウスのカーソルはキャンバスに入ったとき
+* [mouseOut()] マウスのカーソルがキャンバスから離れたとき
+* [mouseX], [mouseY] マウスのXとY座標
+* [mouseButton] マウスイベントの関数の中は押されたボタンを表す
+
 # 形状ゲーム {#ref-ShapeGame}
 
 ここまでに勉強してきたことを合わせて簡単のゲームを作ってみましょう。
@@ -333,19 +345,22 @@
 
 こちらの関数はプログラムの中に定義しなければいけません。
 
-* [setup()] 設定するための関数
-* [draw()] アニメーションのなかにフレームを描くための関数
+* [void setup() {...}][setup] 設定するための関数
+* [void draw() {...}][draw] アニメーションのなかにフレームを描くための関数
+* [exit()] 実行を終了する
 
 ## アニメーション
 
-* [noLoop()] アニメーションの繰り返しを止めます
-* [loop()] アニメーションの繰り返しを再開します
-* [millis()] 実行時間はミリ秒単位で返します
+* [noLoop()] アニメーションの繰り返しを止める
+* [loop()] アニメーションの繰り返しを再開する
+* [millis()] 実行時間はミリ秒単位で返す
 
 ## キャンバス
 
-* [background()] キャンバスを色で塗ります
-* [size()] キャンバスの大きさを設定します
+* [background()] キャンバスを色で塗る
+* [size()] キャンバスの大きさを設定する
+* [dist()] 点と点の距離を計算する
+* [copy()] ピクセルで画像をコピーする
 
 ## 形状
 
@@ -353,6 +368,7 @@
 * [rect()] 四角
 * [triangle()] 三角
 * [line()] 直線
+* [arc()] 弧
 
 ## 筆の設定
 
@@ -370,11 +386,49 @@
 
 * [speak()] 声で話します
 
-## マウス
+## [マウス][Mouse]
 
-* [mouseClicked()] マウスはクリックされた時
-* [mouseOver()] マウスはキャンバス内に入った時
-* [mouseOut()] マウスはキャンバスから離れた時
+* [mouseClicked()] マウスはクリックされたとき
+* [mousePressed()] マウスのボタンが押されたとき
+* [mouseReleased()] マウスのボタンが話されたとき
+* [mouseOver()] マウスはキャンバス内に入ったとき
+* [mouseOut()] マウスはキャンバスから離れたとき
+* [mouseX], [mouseY] マウスのXとY座標
+* [mouseButton] マウスイベントの関数の中は押されたボタンを表す
+* [cursor()] マウスカーソルの形を変える
+
+## データ
+
+* 単純な型
+  * [int], [float], [boolean], [byte], [short], [double], [char]
+* [Array]
+  * [append()], [concat()]
+* [HashMap]
+  * [entrySet()]
+
+## 言語の基礎
+
+* 条件付き実行
+  * [if], [else]
+* [ループ][Loop]
+  * [for], [while], [do]
+  * [continue], [break]
+* switch文
+  * [switch], [case], [default]
+* クラス
+  * [class], [this]
+* [final]
+
+
+## 定数
+
+* [PI], [HALF_PI], [QUARTER_PI], [TWO_PI].
+
+## 数学の関数
+
+* [abs()]
+* [ceil()], [floor()], [round()]
+* [sin()], [cos()], [tan()]
 
 # size
 
@@ -834,15 +888,7 @@
 
 # ellipse
 
-円形またはエリプスを描きます。呼び方は
-
-    ellipse(x, y, width, height)
-    // x --- X座標
-    // y --- Y座標
-    // width --- 横幅
-    // height --- 高さ
-
-お手本のスケッチ
+円形またはエリプスを描きます。
 
     background(200); // 灰色
     fill(255, 0, 0); // 赤
@@ -853,6 +899,15 @@
     ellipse(10, 50, 20, 100);
     fill(255);  // 白
     ellipse(50, 50, 40, 40);
+
+呼び方: `ellipse(x, y, width, height)`
+
+* x --- X座標
+* y --- Y座標
+* width --- 横幅
+* height --- 高さ
+
+関連項目: [arc()].
 
 # speak
 
@@ -960,9 +1015,42 @@ Wall: 壁
 
 `void`は何も返さない関数の型です。関数は値を返す必要がなければ、`void`を気軽に使います。
 
+# char
+
+`char`は一つの文字のコードポイント(符号点)を保存する整数の型を表す。
+
+    char c = 'd'; // 100.
+
 # int
 
 変数の型を整数であるということを表します。整数は..., -3, -2, -1, 0, 1, 2, 3, 4, ...などの数です。
+
+# float
+
+変数が浮動小数点数であると表す。単精度を指定する。
+
+注意: Processing.jsでは、変数に付く型が倍精度(double)である。
+
+# double
+
+変数が浮動小数点数であると表す。倍精度を指定する。
+
+# byte
+
+変数の型を整数であって、値は-128から127までであると表す。
+
+注意: Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`byte()`で変換が必要である。
+
+    byte x = byte(257);
+    text(str(x), 10, 10);
+
+# short
+
+変数の型を整数であって、値は-32768から32767までであると表す。
+
+注意: Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`short()`で変換が必要である。
+
+
 
 # line
 
@@ -1000,6 +1088,7 @@ Wall: 壁
 ユーザはマウスをクリックした時にこの関数が呼ばれます。
 マウスの動きに反応するプロガルムを作るのためにこの関数を定義しなければなりません。
 カーソルの位置は`mouseX`と`mouseY`変数を使って調べることができます。
+クリックされたボタンは[mouseButton]を参照して区別できる。クリックされたボタンによって`mouseButton`の値は[LEFT]か[RIGHT]かになる。
 
     void setup() {
       background(255);
@@ -1063,17 +1152,23 @@ Wall: 壁
 
     bool pressed = false;
 
+    // キャンバスの中にマウスの右か左かのボタンを押しましょう。
     void mousePressed() {
       pressed = true;
+      if (mouseButton == LEFT) {
+        fill(0); stroke(0);
+      } else if (mouseButton == RIGHT) {
+        fill(255); stroke(255);
+      }
     }
 
     void mouseReleased() {
-      pressed = true;
+      pressed = false;
     }
 
     void draw() {
       if (pressed) {
-        ellipse(mouseX, mouseY, 10, 10);
+        ellipse(mouseX, mouseY, 5, 5);
       }
     }
 
@@ -1103,6 +1198,58 @@ Wall: 壁
       }
     }
 
+# mouseButton
+
+[マウスイベント][Mouse]の中に押されたボタンを表す。左ボタンが押されたとき、[LEFT]になる、右ボタンが押されたとき[RIGHT].
+
+    // キャンバスの中にクリックしましょう。
+    void mouseClicked() {
+      if (mouseButton == LEFT) {
+        background(0);
+      } else if (mouseButton == RIGHT) {
+        background(255);
+      } else {
+        background(150);
+      }
+    }
+
+# mouseX
+
+マウスのX座標。[draw()]からも[マウスイベント][Mouse]からも参照できる。
+
+    void draw() {
+      ellipse(mouseX, mouseY, 5, 5);
+    }
+
+関連項目: [mousePressed()], [mouseReleased()], [mouseClicked()].
+
+# mouseY
+
+マウスのX座標。[draw()]からも[マウスイベント][Mouse]からも参照できる。
+
+
+    void draw() {
+      ellipse(mouseX, mouseY, 5, 5);
+    }
+
+関連項目: [mousePressed()], [mouseReleased()], [mouseClicked()].
+
+# LEFT
+
+`LEFT`は[mouseButton]を参照するときにマウスの左ボタンを表す。
+
+関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
+
+# RIGHT
+
+`RIGHT`は[mouseButton]を参照するときにマウスの右ボタンを表す。
+
+関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
+
+
+
+
+
 # printNumbers
 
 数を表す。
@@ -1131,7 +1278,7 @@ Wall: 壁
 
 # str
 
-`str()`は任意の値を文字列（言葉）にします。
+`str()`は任意の値を文字列(言葉)にする。
 
 # stroke
 
@@ -1207,7 +1354,88 @@ Wall: 壁
 
 # while
 
-「…」のうちに。繰り返しの命令です。`while(条件)`の中にはい
+ループといい、「…」のうちに繰り返しの命令である。
+
+    int x = 0;
+    while (x < 10) {
+      text(str(x), 10, x*10);
+      x = x+1;
+    }
+
+# for
+
+ループといい、ある条件を満たすまでの繰り返し命令である。
+
+    for (int i = 0; i < 10; i++) {
+      text(str(i), 10, i*10);
+    }
+
+# do
+
+ループの一つの種類。[while]と違って、初めて条件を調べる前に一回ループの本体
+を実行する。
+
+    do {
+      text("一回だけ実行する!", 10, 10);
+    } while (false);
+
+# if
+
+条件付き実行する。条件が満たされたら、条件付きのブロックを実行する。
+条件は満たさなければ、[else]のブロックを実行する。[else]のブロックはなければ、
+何も実行しない。
+
+    if (10 > 5) {
+      text("10 > 5", 10, 10);
+    } else {
+      text("10 <= 5 ?!", 10, 10);
+    }
+
+# else
+
+条件付きの実行の[if]のブロックに条件が満たされないときに実行するブロック
+指定する。
+
+    if (10 < 5) {
+      text("10 < 5 ?!", 10, 10);
+    } else {
+      text("10 >= 5", 10, 10);
+    }
+
+# case
+
+`case`は、`switch`文の中で一つの値の分岐を表す。
+
+関連項目: [switch], [default].
+
+# switch
+
+`switch`文は一つの変数の値を検出して、複数の値に対して比べて多重分岐から
+一つの分岐を実行する。
+
+    int x = 2;
+    switch (x) {
+      case 0: text("〇", 10, 10); break;
+      case 1: text("一", 10, 10); break;
+      case 2: text("二", 10, 10); break;
+      default: text("他", 10, 10); break;
+    }
+
+関連項目: [case], [default].
+
+# default
+
+`default`は、[switch]文の中でどの値でも当たらなかった場合の分岐を表す。
+
+関連項目: [switch], [case].
+
+# ループ {#ref-Loop}
+
+ループは繰り返す実行の命令である。いくつの種類がある
+
+* [for]
+* [while]
+* [do]
 
 # LabyrinthWalker
 
@@ -1949,3 +2177,444 @@ Wall: 壁
             searchStep();
         }
     }
+
+# 配列 {#ref-Array}
+
+`Array`は配列といい、データのリストを持っている。複数のデータを保存するとき、
+番号を使って取り出せるのだ。
+
+    int x[] = {1, 2, 3};  // 配列をつくる
+    println(x[0]);
+    println(x[2]);
+    int y[] = new int[10]; // 別の配列を作る
+    println(y[0]);  // 最初は０が入っています。
+
+# HALF_PI
+
+`HALF_PI`は円周率の半分である。 `1.5707963267948966`.
+
+    arc(50, 50, 45, 45, 0, HALF_PI);
+
+関連項目: [PI], [QUARTER_PI], [TWO_PI].
+
+# QUARTER_PI
+
+`QUARTER_PI`は円周率の4分の1である。 `0.7853981633974483`.
+
+    arc(50, 50, 45, 45, 0, QUARTER_PI, HALF_PI);
+
+関連項目: [PI], [HALF_PI], [TWO_PI].
+
+# PI
+
+`PI`は円周率である。`3.141592653589793`.
+
+    size(150, 150);
+    println(PI);
+    float ps = 0;
+    for (float x = 1; x < 150; x += 1) {
+      float s = sin(x/150*2*PI);
+      line(x-1, 50+40*ps, x, 50+40*s);
+      ps = s;
+    }
+
+関連項目: [HALF_PI], [QUARTER_PI], [TWO_PI].
+
+# TWO_PI
+
+`TWO_PI`は円周率の二倍である。`6.283185307179586`.
+
+    arc(50, 50, 45, 45, HALF_PI, TWO_PI);
+
+関連項目: [PI], [HALF_PI], [QUARTER_PI].
+
+# HashMap
+
+`HashMap`はハッシュテーブルデータ構造である。データはキーと値の組で保存され、
+キーに対して値を素早く参照できる。
+
+    HashMap<Integer, String> map = new HashMap();
+    map.put(123, "XYZ");
+    text(map.get(123), 10, 10);
+
+関連項目：[get], [put], [entrySet].
+
+# get
+
+`get`は複数の意味持っている。
+
+* [HashMap]の場合、キーに対して値を取り出す。
+
+# put
+
+`put`は複数の意味を持っている。
+
+* [HashMap]の場合、キーに対して与えられた値を保存する。
+
+# entrySet
+
+[HashMap]の場合、キーと値の組のセットを返す。そのセットはイテレータによって全ての組を取り出せる。
+
+    size(300, 200); fill(0);
+    HashMap hm = new HashMap();
+    hm.put(1, "one");
+    hm.put(12, "one two");
+    hm.put(123, "one two three");
+    for (it = hm.entrySet().iterator(); it.hasNext(); ) {
+      Map.Entry en = it.next();
+      int y = en.getKey();
+      text("" + en.getKey() + ": " + en.getValue(), 10, y+10);
+    }
+
+関連項目: [iterator].
+
+# iterator
+
+`iterator`は[entrySet]などのデート構造から全ての値の組を取り出せる。
+
+関連項目: [entrySet], [getKey], [getValue].
+
+# getKey
+
+[iterator]の場合、キーを返す。
+
+# getValue
+
+[iterator]の場合、値を返す。
+
+# next
+
+[iterator]の場合、次の組に進む命令する。
+
+# hasNext
+
+[iterator]の場合、次の組が存在するかどうか判別する。
+
+# 変数 {#ref-Variable}
+
+変数はプログラムの中に様々なデートを覚える仕組みである。
+
+    int nenrei = 12;
+    String namae = "たろう";
+    fill(0); textSize(12);
+    text(namae + nenrei + "才", 20, 20);
+
+# オブジェクト {#ref-Object}
+
+`Object`は関連するデータを束ね、複雑のデータ構造を表現できる。[変数][Variable]に`Object`の型を付けられたら、
+
+    Object[] arr = {1, "abc"};
+    for (int i = 0; i < arr.length; i++) {
+      text(str(arr[i]), 10, 10+i*10);
+    }
+
+# String
+
+`String`は文字列の型を表し、言葉を覚える変数を作る。
+
+    String namae = "たろう";
+    text(namae, 20, 20);
+
+# PFont
+
+`PFont`はフォントのデートを保存できる。
+
+関連項目: [loadFont()].
+
+# loadFont
+
+`loadFont`は書体データ(フォント)を読み込みする。
+
+    textFont(loadFont("Courier New"), 15);
+    text("Courier New", 10, 20);
+    textFont(loadFont("Verdana"), 15);
+    text("Verdana", 10, 40);
+    textFont(loadFont("Arial"), 15);
+    text("Arial", 10, 60);
+
+# color
+
+`color`は色を表す。
+
+    color red = color(255, 0, 0);
+    color blue = color(0, 0, 255);
+    fill(red);
+    stroke(blue);
+    rect(10, 10, 80, 80);
+
+関連項目: [fill()], [background()], [red()], [green()], [blue()], [hue()], [saturation()], [brightness()], [colorMode()].
+
+# abs
+
+`abs`は数の絶対値を返す。
+
+# alpha
+
+`alpha`は色から透明度を抽出する。
+
+    color opaque = color(255, 0, 0);
+    color transparent = color(255, 0, 0, 10);
+    println(alpha(opaque)); // 255
+    println(alpha(transparent)); // 10
+    fill(opaque);
+    ellipse(50, 50, 20, 20);
+    fill(transparent);
+    rect(10, 10, 40, 40);
+
+# append
+
+`append()`は配列にもう一つの要素分を追加する。
+
+    String[] namae = {"たろう", "花子"};
+    append(namae, "次郎");
+    fill(0); textSize(20);
+    for (int i = 0; i < namae.length; i++) {
+      text(namae[i], 10, 30+i*20);
+    }
+
+# concat
+
+`concat()`は２つの配列を結合する。
+
+# arc
+
+`arc`は弧を描く。
+
+    arc(50, 50, 40, 20, PI/4, 2*PI);
+
+呼び方:`arc(x, y, width, height, start, stop)`
+
+* x, y --- 楕円の中心の座標。
+* width, height --- 楕円の横幅と縦幅。
+* start, stop --- 弧の角度を指定する。
+
+関連項目: [ellipse()].
+
+
+# break
+
+ループ([while], [for], [do])や[switch]から脱出する命令。
+
+# continue
+
+ループ([while], [for], [do])の実行を一旦止めて、ループの頭から実行再開する。
+
+    int i = 0;
+    while (i < 10) {
+      text(str(i), 10, i*10);
+      continue;
+      text("絶対実行しない", 50, 50);
+    }
+
+# binary
+
+`binary`は数を２進法(バイナリー)で表現する。返す値は文字列([String]).
+
+    x = 1023; // Binary 1111111111.
+    text(binary(x), 10, 10);
+    text(binary(x, 5), 10, 40);
+
+呼び方: `binary(input, num_digits)`
+
+* `input` --- 二進法で表現する数
+* `num_digits` --- 最大返す数字の上限
+
+# blue
+
+`blue()`は色に対して青色の値を返す。
+
+関連項目: [color], [red()], [green()], [alpha()].
+
+# green
+
+`green()`は色に対して緑色の値を返す。
+
+関連項目: [color], [red()], [blue()], [alpha()].
+
+# red
+
+`red()`は色に対して赤色の値を返す。
+
+関連項目: [color], [green()], [blue()], [alpha()].
+
+# hue
+
+`hue()`は色に対して色相を返す。
+
+関連項目: [color], [saturation()], [brightness()].
+
+# saturation
+
+`saturation()`は色に対して彩度を返す。
+
+関連項目: [color], [hue()], [brightness()].
+
+# brightness
+
+`brightness()`は色に対して明度を返す。
+
+関連項目: [color], [saturation()], [hue()].
+
+# ceil
+
+`ceil()`は数に対してそれ以上である最も近い整数を返す。
+
+    float x = 9.3;
+    float c = ceil(x); // 10.0
+
+# floor
+
+`floor()`は数に対してそれ以下である最も近い整数を返す。
+
+    float x = 9.3;
+    float c = floor(x);  // 9.0
+
+# round
+
+`round()`は数に対して最も近い整数を返す。
+
+    float x = 9.3;
+    float c = round(x);  // 9.0
+
+# sin
+
+`sin()`は角度のサイン関数を計算する。
+
+# cos
+
+`cos()`は角度のコサイン関数を計算する。
+
+# tan
+
+`tan()`は角度のサインとコサインの比率を計算する。
+
+# class
+
+`class`はオブジェクト指向のクラスの定義を表す。
+
+    class Doubutsu {
+      Doubutsu(String namae, int nenrei) {
+        this.namae = namae;
+        this.nenrei = nenrei;
+      }
+
+      String toString() {
+        return this.namae + ", " + this.nenrei + "才";
+      }
+    }
+
+    Doubutsu wanwan = new Doubutsu("ワンワン", 3);
+    text(wanwan, 10, 30);
+
+# this
+
+[class]の定義の中に自分自身のオブジェクトに参照する方法。
+
+関連項目: [class].
+
+# toString
+
+オブジェクトに対して、文字列を期待する文脈で呼ばれるメソッド。
+例えば、`str()`にオブジェクトを渡されたとき。
+
+    class Inu {
+      Inu(String namae) {
+        this.namae = namae;
+      }
+      String toString() {
+        return "犬、名前:" + this.namae;
+      }
+    }
+
+    size(150, 100); fill(0);
+    text(str(new Inu("ワンワン")), 10, 30);
+
+# final
+
+`final`は変数の値が固定して変えられないことを表す。
+
+# dist
+
+`dist()`は２つの点に対して距離を計算する。
+
+    void draw() {
+      background(255); fill(0);
+      text(dist(50, 50, mouseX, mouseY), 50, 50);
+    }
+
+# cursor
+
+`cursor()`はマウスのカーソルの形を指定する。
+
+    void setup() {
+      frameRate(2);
+    }
+    // マウスのカーソルをキャンバス内に置きましょう。
+    int i = 0;
+    void draw() {
+      i++;
+      switch(i%6) {
+        case 0: cursor(HAND); break;
+        case 1: cursor(CROSS); break;
+        case 2: cursor(ARROW); break;
+        case 3: cursor(MOVE); break;
+        case 4: cursor(TEXT); break;
+        case 5: cursor(WAIT); break;
+      }
+    }
+
+関連項目: [ARROW], [CROSS], [HAND], [MOVE], [TEXT], [WAIT].
+
+# ARROW
+
+マウスカーソルの矢印の形を表す。
+
+関連項目: [cursor()].
+
+# CROSS
+
+マウスカーソルの十字の形を表す。
+
+関連項目: [cursor()].
+
+# HAND
+
+マウスカーソルの手の形を表す。
+
+関連項目: [cursor()].
+
+# MOVE
+
+マウスカーソルの移動矢印の形を表す。
+
+関連項目: [cursor()].
+
+# TEXT
+
+マウスカーソルの縦線の形を表す。
+
+関連項目: [cursor()].
+
+# WAIT
+
+マウスカーソルの砂時計の形を表す。
+
+関連項目: [cursor()].
+
+# exit
+
+`exit()`はスケッチの実行を終了する。
+
+# copy
+
+`copy()`画像の指定された部分をキャンバスの別のところでコピーする。
+
+    ellipse(50, 50, 40, 40);
+    copy(50, 50, 24, 24, 0, 0, 50, 50);
+
+呼び方: `copy(x, y, w, h, dx, dy, dw, dh)`
+
+* x, y --- コピーの元の四角の左上の角のX,Y座標
+* w, h --- コピーする資格の横幅と縦幅
+* dx, dy --- コピーの目的地の四角の左上の角のX,Y座標
+* dw, dh --- コピーの目的地の横幅と縦幅
