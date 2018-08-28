@@ -69,7 +69,7 @@ func run() error {
 	}
 	// First render the markdown into a first-pass HTML.
 	rendered := blackfriday.Run(cont,
-		blackfriday.WithExtensions(blackfriday.HeadingIDs|blackfriday.Titleblock),
+		blackfriday.WithExtensions(blackfriday.HeadingIDs|blackfriday.Titleblock|blackfriday.FencedCode),
 		blackfriday.WithRefOverride(refOverride))
 	// Parse the
 	root, err := html.Parse(bytes.NewBuffer(rendered))

@@ -101,6 +101,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
     } catch(/** @type{!Error} */e) {
       window.console.error(e);
       ide.canvasDiv.innerHTML = 'Error: ' + e;
+      return;
     }
     // Isolate the running Processing sketch in an iframe.
     var iframe = /** @type {!HTMLIFrameElement} */(document.createElement("iframe"));
@@ -202,6 +203,54 @@ var ide = (/** @type {function(): !Object} */ (function() {
       }
       ide.helpDiv.appendChild(doc);
       updateFragment('help', refkey.substr(4));
+      $(doc).find('code.language-prerender').each(function(i, code) {
+        //console.log(code);
+        var pre = code.parentNode;
+        $(pre).addClass('prerender');
+        var source = /** @type {string} */($(code).text());
+        //code[0].style.border = 'solid 2px red';
+        $(pre).find('iframe').remove();
+        // Add a fresh iframe.
+        var iframe = /** @type {!HTMLIFrameElement} */(document.createElement("iframe"));
+        // Find out the links to processing.js library from the current
+        // page.
+        /** @type {string} */
+        var processing_js;
+        try {
+          processing_js = /** @type {string} */ ($("script[src*='processing.']")[0].src);
+        } catch(e) {
+          processing_js = '/static/processing.min.js';
+        }
+        /** @type{string} */
+        var style_css;
+        try {
+          style_css = $("link[href*='style']")[0].href.replace('style.css', 'inner.css');
+        } catch(e) {
+          style_css = '/static/inner.css';
+        }
+        // Create the iframe HTML.
+        var iframeHtml = '<!DOCTYPE html>\n' +
+          '<link rel="stylesheet" type="text/css" href="'+ style_css + '">'+
+          '<script src="' + processing_js + '"></script>' + 
+          '<script type="application/processing" data-processing-target="pjs">' + source + '</script>'+
+          '<canvas id="pjs"></canvas>';
+        pre.appendChild(iframe);
+        var contentWindow = /** @type {!Window} */(iframe.contentWindow);
+        contentWindow.document.open();
+        contentWindow.document.write(iframeHtml);
+        contentWindow.document.close();
+        var m = source.match(/[\r\n \t]*size[ \t]*\([ \t]*([0-9]+)[ \t]*,[ \t]*([0-9]+)[ \t]*\)/);
+        if (m) {
+          iframe.style.height = '' + m[2] + 'px';
+          iframe.style.width = '' + m[1] + 'px';
+          $(pre).css('min-height', '' + (parseInt(m[2], 10) + 16) + 'px');
+        } else {
+          iframe.style.height = '100px';
+          iframe.style.width = '100px';
+          $(pre).css('min-height', '116px');
+        }
+        console.log("created a prerender iframe");
+      });
     } else {
       var keyword = refkey.substr(4);
       ide.helpDiv.innerHTML =
@@ -362,6 +411,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
     };
     // Parse and act on the fragment address.
     var params = new Object();
+    params['help'] = 'help'; // default page to show.
     if (window.location.hash) {
       params = parseFragment();
       //window.console.log(params);

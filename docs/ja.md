@@ -12,14 +12,16 @@
 たとえば、こちらのスケッチを試してみましょう。「読み込み」にクリックしてから、
 「実行」を押してください。
 
-    // キャンバスの大きさを設定する。
-    size(300, 300);
-    // キャンバスをホワイトで塗る
-    background(255);
-    // 今度描く色は黒に設定する。
-    fill(0);
-    // 四角を描く。
-    rect(90, 90, 120, 120);
+``` prerender
+// キャンバスの大きさを設定する。
+size(150, 150);
+// キャンバスをホワイトで塗る
+background(255);
+// 今度描く色は黒に設定する。
+fill(0);
+// 四角を描く。
+rect(25, 25, 100, 100);
+```
 
 # ステップ1 {#ref-step1}
 
@@ -153,65 +155,76 @@
 絵や形状を描けます。位置を指定のために座標を使います。左上は(0,0)です。
 座標の最初の数は左右を表して、最後の数は上下を表しています。
 
-    size(200, 200);
-    fill(0);
-    textSize(10);
+```prerender
+size(200, 200);
+fill(0);
+textSize(10);
 
-    ellipse(0, 0, 10, 10);
-    text("(0, 0)", 10, 10);
+ellipse(0, 0, 10, 10);
+text("(0, 0)", 10, 10);
 
-    ellipse(200, 0, 10, 10);
-    text("(200, 0)", 160, 10);
+ellipse(200, 0, 10, 10);
+text("(200, 0)", 160, 10);
 
-    ellipse(0, 200, 10, 10);
-    text("(0, 200)", 10, 190);
+ellipse(0, 200, 10, 10);
+text("(0, 200)", 10, 190);
+```
 
 では、丸を描きましょう。丸を描くために`ellipse()`という関数を使います。
 `ellipse()`を呼ぶときは4つの数を指定します。最初2つの数は中心の座標を表します。
 最後の2つの数は横幅と高さを表しています。例えば、縦の長い丸を描いてみましょう。
 顔に似ているでしょうか？
 
-    size(200, 200);
-    fill(255, 200, 180); // 肌色
-    ellipse(100, 100, 150, 180);
+```prerender
+size(200, 200);
+fill(255, 200, 180); // 肌色
+ellipse(100, 100, 150, 180);
+```
 
 鼻を描くために三角を使いましょう。三角を描くために`triangle()`という関数を使います。
 この関数を呼ぶときに数を6つを指定しなければなりません。それは三角の3つの点は各2つづつの座標です。
 
-    fill(100, 255, 100); // 緑
-    size(200, 200);
-    triangle(100, 90, 90, 120, 110, 120);
+```prerender
+fill(100, 255, 100); // 緑
+size(200, 200);
+triangle(100, 90, 90, 120, 110, 120);
+```
 
 口と目を前と同じように`ellipse()`を使いましょう。次の見本のプログラムに進む前に
 自分で目と口を描いてみましょう。
 
-    size(200, 200);
-    fill(255, 200, 180); // 肌色
-    ellipse(100, 100, 150, 180);  // 顔
-    fill(100, 255, 100); // 緑
-    triangle(100, 90, 90, 120, 110, 120); // 鼻
-    fill(0, 0, 150); // 青
-    ellipse(60, 75, 30, 5); // 左目
-    ellipse(140, 75, 30, 5); // 右目
-    fill(255, 130, 120); // 赤
-    ellipse(100, 160, 60, 15); // 口
-
+```prerender
+size(200, 200);
+fill(255, 200, 180); // 肌色
+ellipse(100, 100, 150, 180);  // 顔
+fill(100, 255, 100); // 緑
+triangle(100, 90, 90, 120, 110, 120); // 鼻
+fill(0, 0, 150); // 青
+ellipse(60, 75, 30, 5); // 左目
+ellipse(140, 75, 30, 5); // 右目
+fill(255, 130, 120); // 赤
+ellipse(100, 160, 60, 15); // 口
+```
 
 # 補足：繰り返し（ループ） {#ref-Loop}
 
 同じ命令を何回も繰り返すためにループを使います。
 
-    for (int i = 1; i <= 5; i++) {　// 1から5まで数えます。
-      speak(str(i));
-    }
+```prerender
+for (int i = 1; i <= 5; i++) {　// 1から5まで数えます。
+  text(str(i), 10, 10+i*10);
+}
+```
 
 条件を調べることは「if」文でできます。
 
-    for (int i = 1; i <= 5; i++) {　// 1から5まで数えます。
-      if (i % 2 == 1) {  // 奇数かどうか調べます
-        speak(str(i));
-      }
-    }
+```prerender
+for (int i = 1; i <= 5; i++) {　// 1から5まで数えます。
+  if (i % 2 == 1) {  // 奇数かどうか調べます
+    text(str(i), 10, 10+i*10);
+  }
+}
+```
 
 # 補足：イベント {#ref-Events}
 
@@ -319,18 +332,20 @@
 一回の`draw()`の呼びで一回のフレームを描くと過程しています。
 呼ばれる頻度は[frameRate()]で設定できます。
 
-    int i = 0;
-    void draw() {
-      background(200);
-      text(str(int(millis()/1000)), 10, 30);
-      i++;
-    }
+```prerender
+int i = 0;
+void draw() {
+  background(200);
+  text(str(int(millis()/1000)), 10, 30);
+  i++;
+}
 
-    void setup() {
-      frameRate(1);
-      fill(0);  // 黒。
-      textSize(30);
-    }
+void setup() {
+  frameRate(1);
+  fill(0);  // 黒。
+  textSize(30);
+}
+```
 
 # frameRate
 
@@ -434,23 +449,29 @@
 
 `size(x_size, y_size)`はキャンバスの大きさを定めています。スケッチの実行の最初に一回だけ呼ばなければ行けない関数です。
 
-    // キャンバスを300×200に設定します。
-    size(300, 200);
-    // キャンバスをピンクに塗ります。
-    background(250, 200, 200);
+```prerender
+// キャンバスを300×200に設定します。
+size(300, 200);
+// キャンバスをピンクに塗ります。
+background(250, 200, 200);
+```
 
 # background
 
 キャンバスを一つの色で塗ります。色は2つの方法で指定来ます。
 一つの数字を指定すれば、黒→灰色→白の中から明るさを指定します。例えば
 
-    // キャンバスを灰色に塗ります。
-    background(150);
+```prerender
+// キャンバスを灰色に塗ります。
+background(150);
+```
 
 または、3つの数字を指定すれば、RGBモデルで任意の色を指定できます。
 
-    // キャンバスを赤で塗ります。
-    background(255, 0, 0);
+```prerender
+// キャンバスを赤で塗ります。
+background(255, 0, 0);
+```
 
 # loop
 
@@ -890,15 +911,21 @@
 
 円形またはエリプスを描きます。
 
-    background(200); // 灰色
-    fill(255, 0, 0); // 赤
-    // 横に細長い赤いエリプスを描きます。
-    ellipse(50, 10, 100, 20);
-    fill(0, 0, 255); // 青
-    // 縦の細長いエリプスを描きます。
-    ellipse(10, 50, 20, 100);
-    fill(255);  // 白
-    ellipse(50, 50, 40, 40);
+```prerender
+size(100, 50);
+ellipse(50, 25, 90, 20);
+```
+
+```prerender
+fill(255, 0, 0); // 赤
+// 横に細長い赤いエリプスを描きます。
+ellipse(50, 10, 100, 20);
+fill(0, 0, 255); // 青
+// 縦の細長いエリプスを描きます。
+ellipse(10, 50, 20, 100);
+fill(255);  // 白
+ellipse(50, 50, 40, 40);
+```
 
 呼び方: `ellipse(x, y, width, height)`
 
@@ -907,7 +934,7 @@
 * width --- 横幅
 * height --- 高さ
 
-関連項目: [arc()].
+関連項目: [arc()], [triangle()], [rect()], [ellipse()].
 
 # speak
 
@@ -981,8 +1008,10 @@ Wall: 壁
 `fill()`は筆の中の色を設定する。筆には２つの色が設定できます。中の色は形状の中に塗ります。
 端の色は形状の堺麺を描く時に使います。
 
-    fill(0, 255, 0);  // 緑
-    ellipse(50, 50, 50, 25);
+```prerender
+fill(0, 255, 0);  // 緑
+ellipse(50, 50, 50, 25);
+```
 
 他に[stroke()]を見てみてください。
 
@@ -1041,8 +1070,11 @@ Wall: 壁
 
 注意: Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`byte()`で変換が必要である。
 
-    byte x = byte(257);
-    text(str(x), 10, 10);
+```prerender
+fill(0); textSize(20);
+byte x = byte(257);
+text(str(x), 10, 30);
+```
 
 # short
 
@@ -1056,9 +1088,13 @@ Wall: 壁
 
 `line()`はキャンバスに直線を描きます。使い方は
 
-    int x1 = 10, y1 = 10, y2 = 100, x2 = 50;
-    // (x1, y1)から(x2, y2)までの直線を描きます。
-    line(x1, y1, x2, y2);
+```prerender
+int x1 = 10, y1 = 10, y2 = 100, x2 = 50;
+// (x1, y1)から(x2, y2)までの直線を描きます。
+line(x1, y1, x2, y2);
+```
+
+関連項目: [triangle], [rect], [ellipse], [arc].
 
 # millis
 
@@ -1067,21 +1103,24 @@ Wall: 壁
 
 例えば、このプログラムは実行初めてから2秒後で赤い丸を描きます。
 
-    void setup() {
-      background(255);  // キャンバスを白で塗ります
-      fill(0);
-      textSize(20);
-      text("2秒を待って", 10, 50);
-    }
+```prerender
+void setup() {
+  size(150, 100);
+  background(255);  // キャンバスを白で塗ります
+  fill(0);
+  textSize(20);
+  text("2秒を待って", 10, 50);
+}
 
-    void draw() {
-      if (millis() > 2000) {  // 2000ミリ秒=2秒
-        background(255);
-        fill(255, 0, 0); // 赤
-        ellipse(50, 50, 55, 55);
-        noLoop(); // アニメーションを止めます。
-      }
-    }
+void draw() {
+  if (millis() > 2000) {  // 2000ミリ秒=2秒
+    background(255);
+    fill(255, 0, 0); // 赤
+    ellipse(75, 50, 55, 55);
+    noLoop(); // アニメーションを止めます。
+  }
+}
+```
 
 # mouseClicked
 
@@ -1202,24 +1241,35 @@ Wall: 壁
 
 [マウスイベント][Mouse]の中に押されたボタンを表す。左ボタンが押されたとき、[LEFT]になる、右ボタンが押されたとき[RIGHT].
 
-    // キャンバスの中にクリックしましょう。
-    void mouseClicked() {
-      if (mouseButton == LEFT) {
-        background(0);
-      } else if (mouseButton == RIGHT) {
-        background(255);
-      } else {
-        background(150);
-      }
-    }
+```prerender
+// キャンバスの中にクリックしましょう。
+void mousePressed() {
+  if (mouseButton == LEFT) {
+    fill(0);
+    rect(5,5,40,90);
+  } else if (mouseButton == RIGHT) {
+    fill(0);
+    rect(55,5,40,90);
+  } else {
+    fill(0);
+    rect(45,5,10,90);
+  }
+}
+
+void mouseReleased() {
+  background(200);
+}
+```
 
 # mouseX
 
 マウスのX座標。[draw()]からも[マウスイベント][Mouse]からも参照できる。
 
-    void draw() {
-      ellipse(mouseX, mouseY, 5, 5);
-    }
+```prerender
+void draw() {
+  ellipse(mouseX, mouseY, 5, 5);
+}
+```
 
 関連項目: [mousePressed()], [mouseReleased()], [mouseClicked()].
 
@@ -1227,10 +1277,11 @@ Wall: 壁
 
 マウスのX座標。[draw()]からも[マウスイベント][Mouse]からも参照できる。
 
-
-    void draw() {
-      ellipse(mouseX, mouseY, 5, 5);
-    }
+```prerender
+void draw() {
+  ellipse(mouseX, mouseY, 5, 5);
+}
+```
 
 関連項目: [mousePressed()], [mouseReleased()], [mouseClicked()].
 
@@ -1247,9 +1298,6 @@ Wall: 壁
 関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
 
 
-
-
-
 # printNumbers
 
 数を表す。
@@ -1261,8 +1309,10 @@ Wall: 壁
 
 `rect()`は四角を描きます。四角の位置は2つの角の座標で指定できます。
 
-    fill(0);
-    rect(20, 30, 60, 40);
+```prerender
+fill(0);
+rect(20, 30, 60, 40);
+```
 
 # remove
 
@@ -1284,18 +1334,26 @@ Wall: 壁
 
 `stroke()`は筆の端色を設定します。次の線や形状を描く命令に反映されます。
 
-    stroke(255, 180, 0);  // オレンジ
-    strokeWeight(5);
-    line(20, 20, 80, 80);
-    rect(20, 55, 60, 25);
+```prerender
+stroke(255, 180, 0);  // オレンジ
+strokeWeight(5);
+line(20, 20, 80, 80);
+rect(20, 55, 60, 25);
+```
+
+関連項目: [strokeCap], [fill].
 
 # strokeCap
 
 `strokeCap()`は線の先端の形を設定します。この関数を呼んでから次の[line()]の命令に反映します。
 
-    strokeCap(ROUND);
-    strokeWeight(20);
-    line(20, 20, 80, 80);
+```prerender
+strokeCap(ROUND);
+strokeWeight(20);
+line(20, 20, 80, 80);
+```
+
+関連項目: [stroke], [fill], [ROUND], [SQUARE], [PROJECT].
 
 選択できる形は
 
@@ -1308,42 +1366,88 @@ Wall: 壁
 線を描く筆を丸い形に設定します。
 [strokeCap()]を見てください。
 
+```prerender
+strokeCap(ROUND);
+strokeWeight(20);
+line(20, 20, 80, 80);
+```
+
+関連項目: [strokeCap], [strokeWeight], [stroke], [SQUARE], [PROJECT].
+
 # SQUARE
 
 線を描く筆を四角い形に設定します。
 [strokeCap()]を見てください。
+
+```prerender
+strokeCap(SQUARE);
+strokeWeight(20);
+line(20, 20, 80, 80);
+```
+
+関連項目: [strokeCap], [strokeWeight], [stroke], [ROUND], [PROJECT].
 
 # PROJECT
 
 線を描く筆を四角い形に設定します。[SQUARE]と比べて、筆の大きさは線の先端に出ています。
 [strokeCap()]を見てください。
 
+```prerender
+strokeCap(PROJECT);
+strokeWeight(20);
+line(20, 20, 80, 80);
+```
+
+関連項目: [strokeCap], [strokeWeight], [stroke], [ROUND], [SQUARE].
+
 # strokeWeight
 
 `strokeWeight()`は筆の大きさを設定します。この関数を呼んでから次の線や形状を描く命令に反映します。
 
-    strokeWeight(10);
-    line(20, 20, 80, 80);
+```prerender
+strokeCap(SQUARE);
+strokeWeight(5);
+line(15, 20, 85, 20);
+strokeWeight(10);
+line(15, 40, 85, 40);
+strokeWeight(20);
+line(15, 70, 85, 70);
+```
 
+関連項目: [stroke], [strokeWeight], [SQUARE].
 
 # text
 
 `text()`はキャンバスに言葉を表します。表す位置を座標で指定します。
 
-    text("こんにちは", 20, 30);
+```prerender
+size(150, 100); fill(0); textSize(20);
+text("こんにちは", 20, 50);
+```
+
+関連項目: [textSize], [fill], [textFont].
 
 # textSize
 
 `textSize()`は文字の大きさを設定します。この関数を呼んでから次の[text()]の命令に反映します。
 
-    textSize(50);
-    text("あ", 20, 80);
+```prerender
+fill(0);
+textSize(50);
+text("あ", 20, 80);
+textSize(20);
+text("か", 70, 30);
+```
+
+関連項目: [text], [textFont].
 
 # triangle
 
 `triangle()`は三角を描きます。3つの角点を座標で指定します。
 
-    triangle(50, 10, 10, 80, 90, 80);
+```prerender
+triangle(50, 10, 10, 80, 90, 80);
+```
 
 三角の端は端色の筆で描きます。[stroke()]と[strokeWeigth()]を見てください。
 三角の中身を中色で塗ります。[fill()]を見てっください。
@@ -1356,28 +1460,43 @@ Wall: 壁
 
 ループといい、「…」のうちに繰り返しの命令である。
 
-    int x = 0;
-    while (x < 10) {
-      text(str(x), 10, x*10);
-      x = x+1;
-    }
+```prerender
+fill(0);
+int x = 0;
+while (x < 10) {
+  text(str(x), 10+x*7, 15+x*8);
+  x = x+1;
+}
+```
+
+関連項目: [for], [do], [break], [continue].
 
 # for
 
 ループといい、ある条件を満たすまでの繰り返し命令である。
 
-    for (int i = 0; i < 10; i++) {
-      text(str(i), 10, i*10);
-    }
+```prerender
+fill(0);
+for (int i = 0; i < 10; i++) {
+  text(str(i), 10, i*10);
+}
+```
+
+関連項目: [while], [do], [break], [continue].
 
 # do
 
 ループの一つの種類。[while]と違って、初めて条件を調べる前に一回ループの本体
 を実行する。
 
-    do {
-      text("一回だけ実行する!", 10, 10);
-    } while (false);
+```prerender
+do {
+  fill(0);
+  text("一回だけ実行する!", 5, 50);
+} while (false);
+```
+
+関連項目: [while], [for], [break], [continue].
 
 # if
 
@@ -1385,22 +1504,32 @@ Wall: 壁
 条件は満たさなければ、[else]のブロックを実行する。[else]のブロックはなければ、
 何も実行しない。
 
-    if (10 > 5) {
-      text("10 > 5", 10, 10);
-    } else {
-      text("10 <= 5 ?!", 10, 10);
-    }
+```prerender
+fill(0);
+if (10 > 5) {
+  text("10 > 5", 10, 50);
+} else {
+  text("10 <= 5 ?!", 10, 50);
+}
+```
+
+関連項目: [else]
 
 # else
 
 条件付きの実行の[if]のブロックに条件が満たされないときに実行するブロック
 指定する。
 
-    if (10 < 5) {
-      text("10 < 5 ?!", 10, 10);
-    } else {
-      text("10 >= 5", 10, 10);
-    }
+```prerender
+fill(0);
+if (10 < 5) {
+  text("10 < 5 ?!", 10, 50);
+} else {
+  text("10 >= 5", 10, 50);
+}
+```
+
+関連項目: [if]
 
 # case
 
@@ -1413,13 +1542,16 @@ Wall: 壁
 `switch`文は一つの変数の値を検出して、複数の値に対して比べて多重分岐から
 一つの分岐を実行する。
 
-    int x = 2;
-    switch (x) {
-      case 0: text("〇", 10, 10); break;
-      case 1: text("一", 10, 10); break;
-      case 2: text("二", 10, 10); break;
-      default: text("他", 10, 10); break;
-    }
+```prerender
+fill(0); textSize(30);
+int x = 2;
+switch (x) {
+  case 0: text("〇", 10, 50); break;
+  case 1: text("一", 10, 50); break;
+  case 2: text("二", 10, 50); break;
+  default: text("他", 10, 50); break;
+}
+```
 
 関連項目: [case], [default].
 
@@ -2183,17 +2315,21 @@ Wall: 壁
 `Array`は配列といい、データのリストを持っている。複数のデータを保存するとき、
 番号を使って取り出せるのだ。
 
-    int x[] = {1, 2, 3};  // 配列をつくる
-    println(x[0]);
-    println(x[2]);
-    int y[] = new int[10]; // 別の配列を作る
-    println(y[0]);  // 最初は０が入っています。
+```prerender
+int x[] = {1, 2, 3};  // 配列をつくる
+fill(0); text(x[0], 10, 20);
+text(x[2], 10, 40);
+int y[] = new int[10]; // 別の配列を作る
+text(y[0], 10, 80);  // 最初は０が入っています。
+```
 
 # HALF_PI
 
 `HALF_PI`は円周率の半分である。 `1.5707963267948966`.
 
-    arc(50, 50, 45, 45, 0, HALF_PI);
+```prerender
+arc(50, 50, 45, 45, 0, HALF_PI);
+```
 
 関連項目: [PI], [QUARTER_PI], [TWO_PI].
 
@@ -2201,7 +2337,9 @@ Wall: 壁
 
 `QUARTER_PI`は円周率の4分の1である。 `0.7853981633974483`.
 
-    arc(50, 50, 45, 45, 0, QUARTER_PI, HALF_PI);
+```prerender
+arc(50, 50, 45, 45, 0, QUARTER_PI, HALF_PI);
+```
 
 関連項目: [PI], [HALF_PI], [TWO_PI].
 
@@ -2209,14 +2347,15 @@ Wall: 壁
 
 `PI`は円周率である。`3.141592653589793`.
 
-    size(150, 150);
-    println(PI);
-    float ps = 0;
-    for (float x = 1; x < 150; x += 1) {
-      float s = sin(x/150*2*PI);
-      line(x-1, 50+40*ps, x, 50+40*s);
-      ps = s;
-    }
+```prerender
+size(150, 150);
+float ps = 0;
+for (float x = 1; x < 150; x += 1) {
+  float s = sin(x/150*2*PI);
+  line(x-1, 50+40*ps, x, 50+40*s);
+  ps = s;
+}
+```
 
 関連項目: [HALF_PI], [QUARTER_PI], [TWO_PI].
 
@@ -2224,7 +2363,9 @@ Wall: 壁
 
 `TWO_PI`は円周率の二倍である。`6.283185307179586`.
 
-    arc(50, 50, 45, 45, HALF_PI, TWO_PI);
+```prerender
+arc(50, 50, 45, 45, HALF_PI, TWO_PI);
+```
 
 関連項目: [PI], [HALF_PI], [QUARTER_PI].
 
@@ -2233,9 +2374,11 @@ Wall: 壁
 `HashMap`はハッシュテーブルデータ構造である。データはキーと値の組で保存され、
 キーに対して値を素早く参照できる。
 
-    HashMap<Integer, String> map = new HashMap();
-    map.put(123, "XYZ");
-    text(map.get(123), 10, 10);
+```prerender
+HashMap<Integer, String> map = new HashMap();
+map.put(123, "XYZ");
+fill(0); text(map.get(123), 10, 30);
+```
 
 関連項目：[get], [put], [entrySet].
 
@@ -2255,16 +2398,18 @@ Wall: 壁
 
 [HashMap]の場合、キーと値の組のセットを返す。そのセットはイテレータによって全ての組を取り出せる。
 
-    size(300, 200); fill(0);
-    HashMap hm = new HashMap();
-    hm.put(1, "one");
-    hm.put(12, "one two");
-    hm.put(123, "one two three");
-    for (it = hm.entrySet().iterator(); it.hasNext(); ) {
-      Map.Entry en = it.next();
-      int y = en.getKey();
-      text("" + en.getKey() + ": " + en.getValue(), 10, y+10);
-    }
+```prerender
+size(90, 200); fill(0);
+HashMap hm = new HashMap();
+hm.put(1, "one");
+hm.put(12, "one two");
+hm.put(123, "one two three");
+for (it = hm.entrySet().iterator(); it.hasNext(); ) {
+  Map.Entry en = it.next();
+  int y = en.getKey();
+  text("" + en.getKey() + ": " + en.getValue(), 1, y+10);
+}
+```
 
 関連項目: [iterator].
 
@@ -2294,26 +2439,32 @@ Wall: 壁
 
 変数はプログラムの中に様々なデートを覚える仕組みである。
 
-    int nenrei = 12;
-    String namae = "たろう";
-    fill(0); textSize(12);
-    text(namae + nenrei + "才", 20, 20);
+```prerender
+int nenrei = 12;
+String namae = "たろう";
+fill(0); textSize(12);
+text(namae + nenrei + "才", 20, 20);
+```
 
 # オブジェクト {#ref-Object}
 
 `Object`は関連するデータを束ね、複雑のデータ構造を表現できる。[変数][Variable]に`Object`の型を付けられたら、
 
-    Object[] arr = {1, "abc"};
-    for (int i = 0; i < arr.length; i++) {
-      text(str(arr[i]), 10, 10+i*10);
-    }
+```prerender
+Object[] arr = {1, "abc"};
+for (int i = 0; i < arr.length; i++) {
+  fill(0); text(str(arr[i]), 10, 20+i*20);
+}
+```
 
 # String
 
 `String`は文字列の型を表し、言葉を覚える変数を作る。
 
-    String namae = "たろう";
-    text(namae, 20, 20);
+```prerender
+String namae = "たろう";
+fill(0); text(namae, 20, 20);
+```
 
 # PFont
 
@@ -2325,22 +2476,46 @@ Wall: 壁
 
 `loadFont`は書体データ(フォント)を読み込みする。
 
-    textFont(loadFont("Courier New"), 15);
-    text("Courier New", 10, 20);
-    textFont(loadFont("Verdana"), 15);
-    text("Verdana", 10, 40);
-    textFont(loadFont("Arial"), 15);
-    text("Arial", 10, 60);
+```prerender
+fill(0);
+textFont(loadFont("Courier New"), 12);
+text("Courier New", 10, 20);
+textFont(loadFont("Verdana"), 15);
+text("Verdana", 10, 40);
+textFont(loadFont("Arial"), 15);
+text("Arial", 10, 60);
+```
+
+関連項目: [textFont], [textSize], [text].
+
+# textFont
+
+`textFont`は書体デート(フォント)を設定する。すぐは見える効果はないが、
+次の[text]の呼び出しに影響を与える。
+
+```prerender
+fill(0);
+textFont(loadFont("Courier New"), 12);
+text("Courier New", 10, 20);
+textFont(loadFont("Verdana"), 15);
+text("Verdana", 10, 40);
+textFont(loadFont("Arial"), 15);
+text("Arial", 10, 60);
+```
+
+関連項目: [text], [loadFont], [textSize].
 
 # color
 
 `color`は色を表す。
 
-    color red = color(255, 0, 0);
-    color blue = color(0, 0, 255);
-    fill(red);
-    stroke(blue);
-    rect(10, 10, 80, 80);
+```prerender
+color red = color(255, 0, 0);
+color blue = color(0, 0, 255);
+fill(red);
+stroke(blue);
+rect(10, 10, 80, 80);
+```
 
 関連項目: [fill()], [background()], [red()], [green()], [blue()], [hue()], [saturation()], [brightness()], [colorMode()].
 
@@ -2352,25 +2527,29 @@ Wall: 壁
 
 `alpha`は色から透明度を抽出する。
 
-    color opaque = color(255, 0, 0);
-    color transparent = color(255, 0, 0, 10);
-    println(alpha(opaque)); // 255
-    println(alpha(transparent)); // 10
-    fill(opaque);
-    ellipse(50, 50, 20, 20);
-    fill(transparent);
-    rect(10, 10, 40, 40);
+```prerender
+color opaque = color(255, 0, 0);
+color transparent = color(255, 0, 0, 10);
+fill(0); text(alpha(opaque), 10, 20); // 255
+text(alpha(transparent), 20, 40); // 10
+fill(opaque);
+ellipse(50, 50, 20, 20);
+fill(transparent);
+rect(10, 10, 40, 40);
+```
 
 # append
 
 `append()`は配列にもう一つの要素分を追加する。
 
-    String[] namae = {"たろう", "花子"};
-    append(namae, "次郎");
-    fill(0); textSize(20);
-    for (int i = 0; i < namae.length; i++) {
-      text(namae[i], 10, 30+i*20);
-    }
+```prerender
+String[] namae = {"たろう", "花子"};
+append(namae, "次郎");
+fill(0); textSize(20);
+for (int i = 0; i < namae.length; i++) {
+  text(namae[i], 10, 30+i*20);
+}
+```
 
 # concat
 
@@ -2380,7 +2559,9 @@ Wall: 壁
 
 `arc`は弧を描く。
 
-    arc(50, 50, 40, 20, PI/4, 2*PI);
+```prerender
+arc(50, 50, 40, 20, PI/4, 2*PI);
+```
 
 呼び方:`arc(x, y, width, height, start, stop)`
 
@@ -2399,20 +2580,25 @@ Wall: 壁
 
 ループ([while], [for], [do])の実行を一旦止めて、ループの頭から実行再開する。
 
-    int i = 0;
-    while (i < 10) {
-      text(str(i), 10, i*10);
-      continue;
-      text("絶対実行しない", 50, 50);
-    }
+```prerender
+int i = 0;
+while (i < 10) {
+  fill(0); text(str(i), 10, i*10);
+  i++;
+  continue;
+  text("絶対実行しない", 50, 50);
+}
+```
 
 # binary
 
 `binary`は数を２進法(バイナリー)で表現する。返す値は文字列([String]).
 
-    x = 1023; // Binary 1111111111.
-    text(binary(x), 10, 10);
-    text(binary(x, 5), 10, 40);
+```prerender
+x = 1023; // Binary 1111111111.
+fill(0); text(binary(x), 10, 20);
+text(binary(x, 5), 10, 40);
+```
 
 呼び方: `binary(input, num_digits)`
 
@@ -2492,19 +2678,21 @@ Wall: 壁
 
 `class`はオブジェクト指向のクラスの定義を表す。
 
-    class Doubutsu {
-      Doubutsu(String namae, int nenrei) {
-        this.namae = namae;
-        this.nenrei = nenrei;
-      }
+```prerender
+class Doubutsu {
+  Doubutsu(String namae, int nenrei) {
+    this.namae = namae;
+    this.nenrei = nenrei;
+  }
 
-      String toString() {
-        return this.namae + ", " + this.nenrei + "才";
-      }
-    }
+  String toString() {
+    return this.namae + ", " + this.nenrei + "才";
+  }
+}
 
-    Doubutsu wanwan = new Doubutsu("ワンワン", 3);
-    text(wanwan, 10, 30);
+Doubutsu wanwan = new Doubutsu("ワンワン", 3);
+fill(0); text(wanwan, 10, 30);
+```
 
 # this
 
@@ -2517,17 +2705,19 @@ Wall: 壁
 オブジェクトに対して、文字列を期待する文脈で呼ばれるメソッド。
 例えば、`str()`にオブジェクトを渡されたとき。
 
-    class Inu {
-      Inu(String namae) {
-        this.namae = namae;
-      }
-      String toString() {
-        return "犬、名前:" + this.namae;
-      }
-    }
+```prerender
+class Inu {
+  Inu(String namae) {
+    this.namae = namae;
+  }
+  String toString() {
+    return "犬、名前:" + this.namae;
+  }
+}
 
-    size(150, 100); fill(0);
-    text(str(new Inu("ワンワン")), 10, 30);
+size(150, 100); fill(0);
+fill(0); text(str(new Inu("ワンワン")), 10, 30);
+```
 
 # final
 
@@ -2537,31 +2727,35 @@ Wall: 壁
 
 `dist()`は２つの点に対して距離を計算する。
 
-    void draw() {
-      background(255); fill(0);
-      text(dist(50, 50, mouseX, mouseY), 50, 50);
-    }
+```prerender
+void draw() {
+  background(255); fill(0);
+  text(dist(50, 50, mouseX, mouseY), 50, 50);
+}
+```
 
 # cursor
 
 `cursor()`はマウスのカーソルの形を指定する。
 
-    void setup() {
-      frameRate(2);
-    }
-    // マウスのカーソルをキャンバス内に置きましょう。
-    int i = 0;
-    void draw() {
-      i++;
-      switch(i%6) {
-        case 0: cursor(HAND); break;
-        case 1: cursor(CROSS); break;
-        case 2: cursor(ARROW); break;
-        case 3: cursor(MOVE); break;
-        case 4: cursor(TEXT); break;
-        case 5: cursor(WAIT); break;
-      }
-    }
+```prerender
+void setup() {
+  frameRate(2);
+}
+// マウスのカーソルをキャンバス内に置きましょう。
+int i = 0;
+void draw() {
+  i++;
+  switch(i%6) {
+    case 0: cursor(HAND); break;
+    case 1: cursor(CROSS); break;
+    case 2: cursor(ARROW); break;
+    case 3: cursor(MOVE); break;
+    case 4: cursor(TEXT); break;
+    case 5: cursor(WAIT); break;
+  }
+}
+```
 
 関連項目: [ARROW], [CROSS], [HAND], [MOVE], [TEXT], [WAIT].
 
@@ -2609,8 +2803,10 @@ Wall: 壁
 
 `copy()`画像の指定された部分をキャンバスの別のところでコピーする。
 
-    ellipse(50, 50, 40, 40);
-    copy(50, 50, 24, 24, 0, 0, 50, 50);
+```prerender
+ellipse(50, 50, 40, 40);
+copy(50, 50, 24, 24, 0, 0, 50, 50);
+```
 
 呼び方: `copy(x, y, w, h, dx, dy, dw, dh)`
 
