@@ -365,7 +365,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
     });
     // Add the [Load] buttons to code snippets.
     $('pre').each(function(index, elt) {
-      var code = $(elt).find('code');
+      var code = $(elt).find('code.language-example, code.language-prerender, code.language-hidden');
       if (code.length == 1) {
         var source = /** @type {string} */(code.text());
         var button = document.createElement("button");
@@ -379,6 +379,20 @@ var ide = (/** @type {function(): !Object} */ (function() {
           updateFragment('sketch', null);
         });
         $(elt).prepend($('<br>'));
+        $(elt).prepend(button);
+      }
+      if ($(code).hasClass('language-hidden')) {
+        // Add show button to the parent <pre>.
+        $(code).hide();
+        var $loadButton = $(elt).find('button');
+        $loadButton.hide();
+        var button = document.createElement('button');
+        $(button).text('表示');
+        $(button).click(function(ev) {
+          $(button).hide();
+          $(code).show();
+          $loadButton.show();
+        });
         $(elt).prepend(button);
       }
     });
