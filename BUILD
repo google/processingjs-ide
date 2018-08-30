@@ -63,15 +63,16 @@ genrule(
     name = "ide-html-bin",
     srcs = [
         "ide.html",
+        "ga.html",
     ],
     outs = ["ide-bin.html"],
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$(location ide.html)" --output_html_file="$@" """ +
           """--edits_json='[
-            {"selector": "script[src$$=\\"base.js\\"]"},
+            {"selector": "script[src$$=\\"base.js\\"]", "file": "$(location ga.html)", "fileselector": "script"},
             {"selector": "script[src=\\"lint.js\\"]"},
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
-						{"selector": "title:content", "html": "Processing.js IDE"},
-						{"selector": "body > h1 :content", "html": "Processing.js IDE"},
+            {"selector": "title:content", "html": "Processing.js IDE"},
+            {"selector": "body > h1 :content", "html": "Processing.js IDE"},
             {"selector": "script[src$$=\\"jquery.js\\"]", "attr": {"src": "jquery.min.js"}},
             {"selector": "script[src$$=\\"codemirror.js\\"]", "attr": {"src": "codemirror.js"}},
             {"selector": "script[src$$=\\"/lint.js\\"]", "attr": {"src": "lint.js"}},
@@ -82,8 +83,8 @@ genrule(
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
             {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.pegjs.js"}},
             {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
-						{"selector": "div#reference:content", "file": "$(location :docs-en.html)", "fileselector": "body:content"},
-						{"selector": "div#help_div:content", "file": "$(location :docs-en.html)", "fileselector": "div#ref-help"}
+            {"selector": "div#reference:content", "file": "$(location :docs-en.html)", "fileselector": "body:content"},
+            {"selector": "div#help_div:content", "file": "$(location :docs-en.html)", "fileselector": "div#ref-help"}
         ]'""",
     tools = [
         ":docs-en.html",
@@ -95,15 +96,16 @@ genrule(
     name = "ide-html-ja",
     srcs = [
         "ide.html",
+        "ga.html",
     ],
     outs = ["ide-ja.html"],
     cmd = """./$(location //cmd/rewrite-html) --input_html_file="$(location ide.html)" --output_html_file="$@" """ +
           """--edits_json='[
-            {"selector": "script[src$$=\\"base.js\\"]"},
+            {"selector": "script[src$$=\\"base.js\\"]", "file": "$(location ga.html)", "fileselector": "script"},
             {"selector": "script[src=\\"lint.js\\"]"},
             {"selector": "script[src=\\"ide.js\\"]", "attr": {"src": "ide-bin.js"}},
-						{"selector": "title:content", "html": "Processing.js IDE"},
-						{"selector": "body > h1 :content", "html": "Processing.js IDE"},
+            {"selector": "title:content", "html": "Processing.js IDE"},
+            {"selector": "body > h1 :content", "html": "Processing.js IDE"},
             {"selector": "script[src$$=\\"jquery.js\\"]", "attr": {"src": "jquery.min.js"}},
             {"selector": "script[src$$=\\"codemirror.js\\"]", "attr": {"src": "codemirror.js"}},
             {"selector": "script[src$$=\\"/lint.js\\"]", "attr": {"src": "lint.js"}},
@@ -114,8 +116,8 @@ genrule(
             {"selector": "link[href$$=\\"style.css\\"]", "attr": {"href": "style.css"}},
             {"selector": "script[src$$=\\"grammars/toplevel.js\\"]", "attr": {"src": "toplevel.pegjs.js"}},
             {"selector": "a[href$$=\\"terms.html\\"]", "attr": {"href": "terms.html"}}, 
-						{"selector": "div#reference:content", "file": "$(location :docs-ja.html)", "fileselector": "body:content"},
-						{"selector": "div#help_div:content", "file": "$(location :docs-ja.html)", "fileselector": "div#ref-help"}
+            {"selector": "div#reference:content", "file": "$(location :docs-ja.html)", "fileselector": "body:content"},
+            {"selector": "div#help_div:content", "file": "$(location :docs-ja.html)", "fileselector": "div#ref-help"}
         ]'""",
     tools = [
         ":docs-ja.html",
