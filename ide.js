@@ -203,10 +203,16 @@ var ide = (/** @type {function(): !Object} */ (function() {
       }
       ide.helpDiv.appendChild(doc);
       updateFragment('help', refkey.substr(4));
-      $(doc).find('code.language-prerender').each(function(i, code) {
+      // TODO(salikh): Extract the iframe creation code into a function.
+      $(doc).find('code.language-prerender, code.language-render').
+          each(function(i, code) {
         //console.log(code);
         var pre = code.parentNode;
-        $(pre).addClass('prerender');
+        if ($(code).hasClass('language-prerender')) {
+          $(pre).addClass('prerender');
+        } else {
+          $(pre).addClass('render');
+        }
         var source = /** @type {string} */($(code).text());
         //code[0].style.border = 'solid 2px red';
         $(pre).find('iframe').remove();
@@ -234,7 +240,18 @@ var ide = (/** @type {function(): !Object} */ (function() {
           '<script src="' + processing_js + '"></script>' + 
           '<script type="application/processing" data-processing-target="pjs">' + source + '</script>'+
           '<canvas id="pjs"></canvas>';
-        pre.appendChild(iframe);
+        if ($(code).hasClass('language-render')) {
+          /*
+          $(pre).removeChild(code);
+          $(code).hide();
+          $(pre).prepend(iframe);
+          */
+          var div = document.createElement('div');
+          $(div).addClass('render').append(iframe);
+          $(pre).replaceWith(div);
+        } else {
+          pre.appendChild(iframe);
+        }
         var contentWindow = /** @type {!Window} */(iframe.contentWindow);
         contentWindow.document.open();
         contentWindow.document.write(iframeHtml);
