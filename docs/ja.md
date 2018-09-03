@@ -1,4 +1,59 @@
-# プロセシング {#ref-help}
+# Processing.js {#ref-help}
+
+* 夏期ワークショップ
+  * [はじめに][SummerStep0]
+  * [ステップ1][SummerStep1]
+* [索引][index]
+* [デモ][Demos]
+* [ゲーム][Games]
+
+# はじめに {#ref-SummerStep0}
+
+今回は Scratch のようにブロックでコードを書くプログラミング言語ではなく、文字で書かれたプログラミング言語で、簡単なゲームを作ってみましょう。
+
+このゲームは午前中に Scratch で作った「猫たたき」のように◯が現れたり消えたりして、◯をクリックできたら得点がもらえるゲームです。
+
+```render
+void circle(int x, int y, int r) {
+}
+int width = 300;
+int margin = 50;
+int radius = 50;
+int step = (width - 2*margin)/2;
+void maru(int col, int row) {
+  fill(0, 255, 0);
+  stroke(255, 0, 0);
+  strokeWeight(3);
+  ellipse(margin + col*step, margin + row*step, radius, radius);
+}
+void setup() {
+  size(300, 300);
+  maru(0, 0);
+  maru(1, 0);
+  maru(1, 1);
+  maru(2, 1);
+  maru(0, 2);
+  maru(2, 2);
+}
+void draw() {
+  exit();
+}
+```
+
+## Processing って何？
+
+Processing は絵などを描けるプログラミング言語です。アプリ開発などで広く使われている Java というプログラミング言語に近いので、Processing をマスターできたらあと一歩で Java でプログラムを書いて実際のエンジニアになれます。
+Processing で作る「◯たたき」
+では、本番に入って Processing のコードを書いてみましょう！
+
+[ステップ1][SummerStep1]
+
+
+# ステップ1 {#ref-SummerStep1}
+
+
+
+# プログラミング体験ワークショップ {#ref-tts-workshop}
 
 * プログラミング体験ワークショップ
   * [ステップ1][step1]
@@ -34,7 +89,7 @@ speak("こんにちは");
 
 ここに書いてある2行のうち、「//」 から初めの行は人間への説明です。コンピュータはこちらを無視しますので入力を省略しても大丈夫です。コンピューターへの命令は２行目のみです。
 
-```hidden
+```
 speak("こんにちは");
 ```
 
