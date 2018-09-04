@@ -1,13 +1,21 @@
 # Processing.js {#ref-help}
 
 * 夏期ワークショップ
-  * [はじめに][SummerStep0]
-  * [ステップ1][SummerStep1]
+  * [はじめに][WhackACircle0]
+  * [◯たたき1][WhackACircle1]
+  * [◯たたき1][WhackACircle2]
+* 迷路を解く
+  * [キャラクタを表示][Maze1]
+  * [キャラクターを動かす][Maze2]
+  * [壁の検出][Maze3]
+  * [右手法][Maze4]
+  * [ゴールの検出][Maze5]
+  * [完成プログラム][Maze6]
 * [索引][index]
 * [デモ][Demos]
 * [ゲーム][Games]
 
-# はじめに {#ref-SummerStep0}
+# はじめに {#ref-WhackACircle0}
 
 今回は Scratch のようにブロックでコードを書くプログラミング言語ではなく、文字で書かれたプログラミング言語で、簡単なゲームを作ってみましょう。
 
@@ -46,12 +54,806 @@ Processing は絵などを描けるプログラミング言語です。アプリ
 Processing で作る「◯たたき」
 では、本番に入って Processing のコードを書いてみましょう！
 
-[ステップ1][SummerStep1]
+[◯たたき1][WhackACircle1]
 
 
-# ステップ1 {#ref-SummerStep1}
+# ステップ1 {#ref-WhackACircle1}
+
+[前に戻る][WhackACircle0]
+[◯たたき2][WhackACircle2]
+
+# ステップ1 {#ref-WhackACircle2}
+
+[前に戻る][WhackACircle1]
+
+# キャラクターを表示 {#ref-Maze1}
+
+まずは迷路を表示しましょう。 
+下にある「読み込む」ボタンを押してから画面の左上にある
+「実行」ボタンをおしましょう。
+
+```example
+/* @pjs preload="/static/Labyrinth1.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+size(360, 360);  // キャンバスの大きさの設定
+image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+```
+
+そして、キャラクターを表示しましょう。キャラクターはマウスのカーソル
+のところに表示されます。Processing.jsでは画像はスクラッチのスプライトのよう
+ではなく、スタンプのようなものです。なので、もともとの背景を壊さないように
+[get()]を使って画像を保存して、あと背景を回復をしなければなりません。
+
+```example
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+// キャラクターの座標。
+int x = 176, y = 314;
+PImage imgSave = null;
+void draw() {
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  x = mouseX;
+  y = mouseY;
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y, s, s);
+}
+```
+
+次は[キャラクターを動かす][Maze2]
+
+# キャラクターを動かす {#ref-Maze2}
+
+[前に戻る][Maze1]
+
+キャラクターを動かすために、次のコードを足してみましょう。
+
+    // 進む方向
+    int dx = 0;
+    int dy = -1;
+
+    void draw() {  // この関数は繰り返し呼ばれている.  
+      image(imgWalker, x, y);
+      x += dx;
+      y += dy;
+    }
+
+結果はこのようなスケッチになります。
+
+```hidden
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  x += dx;
+  y += dy;
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+```
+
+キャラクターは壁を無視して動いてます。
+`imgSave = get(...)`や`image(imgSave,...)`をしなければ、キャラクターは壁に当たると壁を消して穴を開けてしまいます。
+これは、実際には壁ではなくてただの背景画像が表示されているだけだからです。壁が実際にあるように見せるのが、プログラマの仕事です。
+
+次は[壁の検出][Maze3]
+
+# 壁の検出 {#ref-Maze3}
+
+[前に戻る][Maze2]
+
+壁を検出するには[get()]関数を利用して、指定した位置のピクセルの色を調べます。[imageMode]([CENTER])の設定によって、キャラクターの位置はスタンプの中心を示すようになるので、キャラクターの進行方向の前の位置を調べましょう。
+
+その前に、dx, dyには常に０か１の値しか与えないようにします。たとえば、下は（０，１）、上は（０，−１）、右は（１，０）、左は（−１，０）です。最初の設定では上方向にしましょう。
+
+    int dx = 0;
+    int dy = -1;
+
+こうしておくと、 `(x+(s/2)*dx, y+(s/2)*dy)`
+は常にキャラクターのちょうど前のピクセルを指すようになります。ここに３ピクセル足せば、キャラクターの少し前の位置になります。これが壁に当たったら[noLoop()]によってプログラムの実行を止めましょう。
+
+    boolean wallAhead() {
+      // キャラクターの３ピクセル前に調べよう.
+      color c = get(x+dx*(s/2+3), y+dy*(s/2+3)); 
+    　// 黒を検出しよう。
+      return brightness(c) < 50;
+    }
+
+    void draw() {
+      ...
+      if (wallAhead()) {
+        noLoop(); // 実行を停止する
+      }
+      ...
+    }
+
+スケッチこんな漢字になったでしょうか？
+
+```hidden
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  if (wallAhead()) {
+    noLoop(); // 実行を停止する
+  }
+  x += dx;
+  y += dy;
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+
+boolean wallAhead() {
+  // キャラクターの３ピクセル前に調べよう.
+  color c = get(x+dx*(s/2+3), y+dy*(s/2+3)); 
+　// 黒を検出しよう。
+  return brightness(c) < 50;
+}
+```
+
+止まる代わりにその場で回ってみましょう。
+
+    void turnLeft() {
+      int tmp = dx;
+      dx = dy;
+      dy = -tmp;
+    }
+
+    void draw() {
+      ...
+      if (wallAhead()) {
+        turnLeft();
+      }
+      ...
+    }
+
+ついでなので、前に動かす指示を関数としてまとめましょう。
+
+    void moveForward() {
+      x += dx;
+      y += dy;
+    }
+
+    void draw() {
+      ...
+      if (wallAhead()) {
+        turnLeft();
+      }
+      moveForward();
+      ...
+    }
+
+完成スケッチはこちらです。
+
+```hidden
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  if (wallAhead()) {
+    turnLeft();
+  }
+  moveForward();
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+
+boolean wallAhead() {
+  // キャラクターの３ピクセル前に調べよう.
+  color c = get(x+dx*(s/2+3), y+dy*(s/2+3)); 
+　// 黒を検出しよう。
+  return brightness(c) < 50;
+}
+
+void moveForward() {
+  x += dx;
+  y += dy;
+}
+
+void turnLeft() {
+  int tmp = dx;
+  dx = dy;
+  dy = -tmp;
+}
+```
+
+これだけでもキャラクターが少しは賢くみえてきましたが、動かしているとすぐに無限ループに入ってしまいます。
+
+次は[右手法][Maze4]
+
+# 右手法 {#ref-Maze4}
+
+[前に戻る][Maze3]
+
+右手法を実装するには、右側の壁を検出し、壁がない場合は右側に曲がることが必要になります。だいたいこのような感じでしょうか。
+
+    void turnRight() {
+      int tmp = dx;
+      dx = -dy;
+      dy = tmp;
+    }
+
+    boolean wallRight() {
+      int rx = -dy;
+      int ry = dx;
+      color c = get(x + rx*(s/2+4), y + ry*(s/2+4));
+      return brightness(c) < 50;
+    }
+
+    void draw() {
+      ...
+      if (!wallRight()) {
+        turnRight();
+      } else if (wallAhead()) {
+        turnLeft();
+      }
+      moveForward();
+      ...
+    }
 
 
+完成スケッチこちらです。
+```hidden
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  if (!wallRight()) {
+    turnRight();
+  } else if (wallAhead()) {
+    turnLeft();
+  }
+  moveForward();
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+
+boolean wallAhead() {
+  // キャラクターの３ピクセル前に調べよう.
+  color c = get(x+dx*(s/2+3), y+dy*(s/2+3)); 
+　// 黒を検出しよう。
+  return brightness(c) < 50;
+}
+
+void moveForward() {
+  x += dx;
+  y += dy;
+}
+
+void turnLeft() {
+  int tmp = dx;
+  dx = dy;
+  dy = -tmp;
+}
+
+void turnRight() {
+  int tmp = dx;
+  dx = -dy;
+  dy = tmp;
+}
+
+boolean wallRight() {
+  int rx = -dy;
+  int ry = dx;
+  color c = get(x + rx*(s/2+4), y + ry*(s/2+4));
+  return brightness(c) < 50;
+}
+```
+
+上のプログラムは一回右に曲がってしまうと、キャラクターが無限ループに入ってしまうため上手く動きません。原因は右側を検出する関数が1ピクセルしか確認していないため、キャラクター全体が曲がった先に入れないときにも
+true を返してしまうからです。
+
+キャラクターのサイズに合わせて検出してみましょう。
+
+    boolean wallAhead() {
+      boolean wallFound = false;
+      int rx = -dy;
+      int ry = dx;
+      for (int i = -s/2-1; i < s/2+1; i++) {
+        color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
+        wallFound = wallFound || brightness(c) < 50;
+      }
+      return wallFound;
+    }
+
+    boolean wallRight() {
+      int rx = -dy;
+      int ry = dx;
+      boolean wallFound = false;
+      for (int i = -s/2-1; i <= s/2+1; i++) {
+        color c = get(x + rx*(s/2+3)+dx*i, y + ry*(s/2+3)+dy*i);
+        wallFound = wallFound || brightness(c) < 50;
+      }
+      return wallFound;
+    }
+
+完成スケッチこちらです。
+
+```hidden
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  if (!wallRight()) {
+    turnRight();
+  } else if (wallAhead()) {
+    turnLeft();
+  }
+  moveForward();
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+
+boolean wallAhead() {
+  boolean wallFound = false;
+  int rx = -dy;
+  int ry = dx;
+  for (int i = -s/2-1; i < s/2+1; i++) {
+    color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+boolean wallRight() {
+  int rx = -dy;
+  int ry = dx;
+  boolean wallFound = false;
+  for (int i = -s/2-1; i <= s/2+1; i++) {
+    color c = get(x + rx*(s/2+3)+dx*i, y + ry*(s/2+3)+dy*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+void moveForward() {
+  x += dx;
+  y += dy;
+}
+
+void turnLeft() {
+  int tmp = dx;
+  dx = dy;
+  dy = -tmp;
+}
+
+void turnRight() {
+  int tmp = dx;
+  dx = -dy;
+  dy = tmp;
+}
+```
+
+他にも問題が残ってます。右に空き通路を検出すると、キャラクターはまた無限ループに入ってしまいます。今度の原因は、右に曲がったすぐ後に右側に壁がないとキャラクターがすぐにまた右に曲がってしまうことです。これを直すには、曲がってから数ピクセルはまっすぐに進む必要があります。
+
+    void draw() {
+      if (!wallRight()) {
+        turnRight();
+        moveForward();
+        moveForward();
+      } else if (wallAhead()) {
+        turnLeft();
+      }
+      moveForward();
+    }
+
+完成スケッチこちらです。
+
+```hidden
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  if (!wallRight()) {
+    turnRight();
+    moveForward();
+    moveForward();
+  } else if (wallAhead()) {
+    turnLeft();
+  }
+  moveForward();
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+
+boolean wallAhead() {
+  boolean wallFound = false;
+  int rx = -dy;
+  int ry = dx;
+  for (int i = -s/2-1; i < s/2+1; i++) {
+    color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+boolean wallRight() {
+  int rx = -dy;
+  int ry = dx;
+  boolean wallFound = false;
+  for (int i = -s/2-1; i <= s/2+1; i++) {
+    color c = get(x + rx*(s/2+3)+dx*i, y + ry*(s/2+3)+dy*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+void moveForward() {
+  x += dx;
+  y += dy;
+}
+
+void turnLeft() {
+  int tmp = dx;
+  dx = dy;
+  dy = -tmp;
+}
+
+void turnRight() {
+  int tmp = dx;
+  dx = -dy;
+  dy = tmp;
+}
+```
+
+ここまでのプログラムで、キャラクターは迷路の中をうまく動くはずです。まだ問題がある場合、以下の点を確認しましょう。
+
+* `dx`, `dy`には-1/0/1の以外の値を与えない。
+* 右側に空き通路を検出する関数はキャラクターが確実に入れる広さか確認する。
+
+次は[ゴールの判定][Maze5]
+
+# ゴールの判定 {#ref-Maze5}
+
+[前に戻る][Maze4]
+
+最後にゴールの判定をする機能を加えてみましょう。ゴールの判定は壁の検出に似ていますが、黒の代わりに緑か調べなければなりません。
+
+    boolean reachedGoal() {
+      color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
+      return red(c) < 50 && green(c) > 50;
+    }
+
+    void draw() {
+      ...
+      if (reachedGoal()) {
+        fill(0,0,0);  // black.
+        text("Finish!", x+s/2, y);
+        exit();
+      }
+      ...
+    }
+
+完成スケッチこちらです。
+
+```hidden
+/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  if (reachedGoal()) {
+    fill(0,0,0);  // black.
+    text("Finish!", x+s/2, y);
+    exit();
+  }
+  if (!wallRight()) {
+    turnRight();
+    moveForward();
+    moveForward();
+  } else if (wallAhead()) {
+    turnLeft();
+  }
+  moveForward();
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+
+boolean reachedGoal() {
+  color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
+  return red(c) < 50 && green(c) > 50;
+}
+
+boolean wallAhead() {
+  boolean wallFound = false;
+  int rx = -dy;
+  int ry = dx;
+  for (int i = -s/2-1; i < s/2+1; i++) {
+    color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+boolean wallRight() {
+  int rx = -dy;
+  int ry = dx;
+  boolean wallFound = false;
+  for (int i = -s/2-1; i <= s/2+1; i++) {
+    color c = get(x + rx*(s/2+3)+dx*i, y + ry*(s/2+3)+dy*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+void moveForward() {
+  x += dx;
+  y += dy;
+}
+
+void turnLeft() {
+  int tmp = dx;
+  dx = dy;
+  dy = -tmp;
+}
+
+void turnRight() {
+  int tmp = dx;
+  dx = -dy;
+  dy = tmp;
+}
+```
+
+次は[完成プログラム][Maze6]
+
+# 完成プログラム {#ref-Maze6}
+
+[前に戻る][Maze5]
+
+```example
+/* @pjs preload="/static/Labyrinth4.png"; */
+/* @pjs preload="/static/Walker44.png"; */
+PImage imgLabyrinth = loadImage("/static/Labyrinth4.png");
+PImage imgWalker = loadImage("/static/Walker44.png");
+void setup() {
+  size(360, 360);  // キャンバスの大きさの設定
+  image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
+  imageMode(CENTER);
+}
+
+// キャラクターの大きさ、ピクセル単位
+int s = 44;
+
+// キャラクターの座標
+int x = 176, y = 314;
+
+// 進む方向
+int dx = 0;
+int dy = -1;
+
+PImage imgSave = null;
+void draw() {  // この関数は繰り返し呼ばれている.  
+  if (imgSave != null) {
+    image(imgSave, x, y, s, s);
+  }
+  if (reachedGoal()) {
+    fill(0,0,0);  // black.
+    text("Finish!", x+s/2, y);
+    exit();
+  }
+  if (!wallRight() && !wallAhead()) {
+    turnRight();
+    boolean hitWall = false;
+    for (int i = 0; i < 2; i++) {
+      if (!wallAhead() && !wallRight()) {
+	    moveForward(1);
+      } else {
+        hitWall = true;
+        break;
+      }
+    }
+    if (!hitWall) {
+      //moveForward(-2);
+      turnLeft(); 
+    }
+  } else if (wallAhead()) {
+    turnLeft();
+  }
+  moveForward(1);
+  imgSave = get(x-s/2, y-s/2, s, s);
+  image(imgWalker, x, y);
+}
+
+boolean reachedGoal() {
+  color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
+  return red(c) < 50 && green(c) > 50;
+}
+
+boolean wallAhead() {
+  boolean wallFound = false;
+  int rx = -dy;
+  int ry = dx;
+  for (int i = -s/2-1; i < s/2+1; i++) {
+    color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+boolean wallRight() {
+  int rx = -dy;
+  int ry = dx;
+  boolean wallFound = false;
+  for (int i = -s/2-1; i <= s/2+1; i++) {
+    color c = get(x + rx*(s/2+3)+dx*i, y + ry*(s/2+3)+dy*i);
+    wallFound = wallFound || brightness(c) < 50;
+  }
+  return wallFound;
+}
+
+void moveForward(int c) {
+  x += c*dx;
+  y += c*dy;
+}
+
+void turnLeft() {
+  int tmp = dx;
+  dx = dy;
+  dy = -tmp;
+}
+
+void turnRight() {
+  int tmp = dx;
+  dx = -dy;
+  dy = tmp;
+}
+```
 
 # プログラミング体験ワークショップ {#ref-tts-workshop}
 
@@ -919,9 +1721,9 @@ void shuffle() {
       int x = int(random(N));
       int y = int(random(N));
       if (x != i || y != j) {
-	int tmp = numbers[i][j];
-	numbers[i][j] = numbers[x][y];
-	numbers[x][y] = tmp;
+        int tmp = numbers[i][j];
+        numbers[i][j] = numbers[x][y];
+        numbers[x][y] = tmp;
       }
     }
   }
@@ -1723,8 +2525,8 @@ boolean wallAhead() {
     int rx = -dy;
     int ry = dx;
     for (int i = -s/2-1; i <= s/2+1; i++) {
-	color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
-	wallFound = wallFound || brightness(c) < 50;
+        color c = get(x+dx*(s/2+3)+rx*i, y+dy*(s/2+3)+ry*i);
+        wallFound = wallFound || brightness(c) < 50;
     }
     return wallFound;
 }
@@ -1800,31 +2602,31 @@ int gx = 0, gy = 0;
  
 void CreateMap() {
     for (int i = 0; i < n; i++) {
-	for (int j = 0; j < n; j++) {
-	    color c = get(i*s+s/2, j*s+s/2);
-	    if (brightness(c) > 200) {
-		grid[i][j] = 999;
-		if (showMap) {
-		    fill(255, 255, 255);
-		    rect(s*i, s*j, s/2, s/2);
-		}
-	    }
-	    if (red(c) > 100 && green(c) < 100) {
-		sx = i;
-		sy = j;
-		if (showMap) {
-		    fill(200, 0, 0);
-		    rect(s*i, s*j, s/2, s/2);
-		}
-	    } else if (green(c) > 100 & red(c) < 100) {
-		gx = i;
-		gy = j;
-		if (showMap) {
-		    fill(0, 200, 0);
-		    rect(s*i, s*j, s/2, s/2);
-		}
-	    }
-	}
+        for (int j = 0; j < n; j++) {
+            color c = get(i*s+s/2, j*s+s/2);
+            if (brightness(c) > 200) {
+                grid[i][j] = 999;
+                if (showMap) {
+                    fill(255, 255, 255);
+                    rect(s*i, s*j, s/2, s/2);
+                }
+            }
+            if (red(c) > 100 && green(c) < 100) {
+                sx = i;
+                sy = j;
+                if (showMap) {
+                    fill(200, 0, 0);
+                    rect(s*i, s*j, s/2, s/2);
+                }
+            } else if (green(c) > 100 & red(c) < 100) {
+                gx = i;
+                gy = j;
+                if (showMap) {
+                    fill(0, 200, 0);
+                    rect(s*i, s*j, s/2, s/2);
+                }
+            }
+        }
     }
 }
  
@@ -1846,7 +2648,7 @@ void queuePush(int x, int y) {
  
 void queuePop() {
     if (qtail != qhead) {
-	qhead = (qhead+1) % queueLength;
+        qhead = (qhead+1) % queueLength;
     }
 }
  
@@ -1864,14 +2666,14 @@ void visitCell(int x, int y, int distance) {
     // record it and return true. Note that all empty cells
     // originally have 999 recorded.
     if (grid[x][y] > distance) {
-	// Record the distance as shortest.
-	grid[x][y] = distance;
-	// Push the cell into the queue for further examination.
-	queuePush(x, y);
-	if (showMap) {
-	    fill(0, 0, 0);
-	    text("" + distance, x*s, y*s);
-	}
+        // Record the distance as shortest.
+        grid[x][y] = distance;
+        // Push the cell into the queue for further examination.
+        queuePush(x, y);
+        if (showMap) {
+            fill(0, 0, 0);
+            text("" + distance, x*s, y*s);
+        }
     }
 }
  
@@ -1893,9 +2695,9 @@ void setup() {  // this is run once.
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
-	grid[i] = new boolean[n];
+        grid[i] = new boolean[n];
     }  
-	
+        
     CreateMap();
     StartSearch();
 }
@@ -1910,30 +2712,30 @@ int bx, by;
 void searchStep() {
     // While queue is not empty. Loop is implicit around draw().
     if (!queueEmpty()) {
-	int x = qx[qhead];
-	int y = qy[qhead];
-	queuePop();
+        int x = qx[qhead];
+        int y = qy[qhead];
+        queuePop();
  
-	fill(200, 200, 180);
-	rect(s*x, s*y, s/2, s/2);
-	int distance = grid[x][y];
+        fill(200, 200, 180);
+        rect(s*x, s*y, s/2, s/2);
+        int distance = grid[x][y];
  
-	if (x == sx && y == sy) {            
-	    found = true;
-	    fill(0,0,0);
-	    bx = sx;
-	    by = sy;
-	    return;
-	}
-	// Go and try 4 neighbors.
-	visitCell(x+1, y, distance+1);
-	visitCell(x-1, y, distance+1);
-	visitCell(x, y-1, distance+1);
-	visitCell(x, y+1, distance+1);
-	
+        if (x == sx && y == sy) {            
+            found = true;
+            fill(0,0,0);
+            bx = sx;
+            by = sy;
+            return;
+        }
+        // Go and try 4 neighbors.
+        visitCell(x+1, y, distance+1);
+        visitCell(x-1, y, distance+1);
+        visitCell(x, y-1, distance+1);
+        visitCell(x, y+1, distance+1);
+        
     } else {
-	// path not found.
-	noLoop();
+        // path not found.
+        noLoop();
     }
 }
  
@@ -1943,8 +2745,8 @@ boolean backTrace(int nx, int ny, int distance) {
     if (grid[nx][ny] != distance) return false;
     // Found the backtrace step.
     if (showMap) {
-	stroke(255,0,0);
-	line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
+        stroke(255,0,0);
+        line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
     }
     bx = nx;
     by = ny;
@@ -1955,7 +2757,7 @@ void backTraceStep() {
     fill(255, 255, 100);
     rect(bx*s+s/4, by*s+s/4, s/2, s/2);
     if (bx == gx && by == gy) {
-	noLoop();
+        noLoop();
     }
     int distance = grid[bx][by];
     stroke(255, 255, 0);
@@ -1967,14 +2769,14 @@ void backTraceStep() {
  
 void draw() {
     if (showMap) {
-	while (millis() <= next) return;
-	next = millis() + step;
+        while (millis() <= next) return;
+        next = millis() + step;
     }
     
     if (found) {
-	backTraceStep();
+        backTraceStep();
     } else {
-	searchStep();
+        searchStep();
     }
 }
 ```
@@ -2013,44 +2815,44 @@ void setup() {  // this is run once.
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
-	grid[i] = new boolean[n];
+        grid[i] = new boolean[n];
     }  
 }
  
 // The loop counters that live across multiple mapStep invocations.
 int i = 0, j = 0;
-	    
+            
 void mapStep() {
-	    color c = get(i*s+s/2, j*s+s/2);
-	    if (brightness(c) > 200) {
-		grid[i][j] = 999;
-		if (showMap) {
-		    fill(255, 255, 255);
-		    rect(s*i, s*j, s/2, s/2);
-		}
-	    }
-	    if (red(c) > 100 && green(c) < 100) {
-		sx = i;
-		sy = j;
-		if (showMap) {
-		    fill(200, 0, 0);
-		    rect(s*i, s*j, s/2, s/2);
-		}
-	    } else if (green(c) > 100 & red(c) < 100) {
-		gx = i;
-		gy = j;
-		if (showMap) {
-		    fill(0, 200, 0);
-		    rect(s*i, s*j, s/2, s/2);
-		}
-	    }
+            color c = get(i*s+s/2, j*s+s/2);
+            if (brightness(c) > 200) {
+                grid[i][j] = 999;
+                if (showMap) {
+                    fill(255, 255, 255);
+                    rect(s*i, s*j, s/2, s/2);
+                }
+            }
+            if (red(c) > 100 && green(c) < 100) {
+                sx = i;
+                sy = j;
+                if (showMap) {
+                    fill(200, 0, 0);
+                    rect(s*i, s*j, s/2, s/2);
+                }
+            } else if (green(c) > 100 & red(c) < 100) {
+                gx = i;
+                gy = j;
+                if (showMap) {
+                    fill(0, 200, 0);
+                    rect(s*i, s*j, s/2, s/2);
+                }
+            }
      j++;
      if (j >= n) {
-	 j = 0;
-	 i++;
-	 if (i >= n) {
-	     noLoop();
-	 }
+         j = 0;
+         i++;
+         if (i >= n) {
+             noLoop();
+         }
      }
 }
  
@@ -2060,8 +2862,8 @@ int step = 50;
  
 void draw() {
     if (showMap) {
-	while (millis() <= next) return;
-	next = millis() + step;
+        while (millis() <= next) return;
+        next = millis() + step;
     }
     mapStep();
 }
@@ -2093,21 +2895,21 @@ int gx = 0, gy = 0;
  
 void CreateMap() {
     for (int i = 0; i < n; i++) {
-	for (int j = 0; j < n; j++) {
-	    color c = get(i*s+s/2, j*s+s/2);
-	    if (brightness(c) > 200) {
-		grid[i][j] = 999;
-	    }
-	    if (red(c) > 100 && green(c) < 100) {
-		sx = i;
-		sy = j;
-	       
-	    } else if (green(c) > 100 & red(c) < 100) {
-		gx = i;
-		gy = j;
-		
-	    }
-	}
+        for (int j = 0; j < n; j++) {
+            color c = get(i*s+s/2, j*s+s/2);
+            if (brightness(c) > 200) {
+                grid[i][j] = 999;
+            }
+            if (red(c) > 100 && green(c) < 100) {
+                sx = i;
+                sy = j;
+               
+            } else if (green(c) > 100 & red(c) < 100) {
+                gx = i;
+                gy = j;
+                
+            }
+        }
     }
     // Show the starting point.
     fill(200, 0, 0);
@@ -2135,7 +2937,7 @@ void queuePush(int x, int y) {
  
 void queuePop() {
     if (qtail != qhead) {
-	qhead = (qhead+1) % queueLength;
+        qhead = (qhead+1) % queueLength;
     }
 }
  
@@ -2153,13 +2955,13 @@ void visitCell(int x, int y, int distance) {
     // record it and return true. Note that all empty cells
     // originally have 999 recorded.
     if (grid[x][y] > distance) {
-	// Record the distance as shortest.
-	grid[x][y] = distance;
-	// Push the cell into the queue for further examination.
-	queuePush(x, y);
-	if (showMap) {
-	    fill(0, 0, 0);
-	}
+        // Record the distance as shortest.
+        grid[x][y] = distance;
+        // Push the cell into the queue for further examination.
+        queuePush(x, y);
+        if (showMap) {
+            fill(0, 0, 0);
+        }
     }
 }
  
@@ -2181,9 +2983,9 @@ void setup() {  // this is run once.
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
-	grid[i] = new boolean[n];
+        grid[i] = new boolean[n];
     }  
-	
+        
     CreateMap();
     StartSearch();
 }
@@ -2198,36 +3000,36 @@ int bx, by;
 void searchStep() {
     // While queue is not empty. Loop is implicit around draw().
     if (!queueEmpty()) {
-	int x = qx[qhead];
-	int y = qy[qhead];
-	queuePop();
+        int x = qx[qhead];
+        int y = qy[qhead];
+        queuePop();
  
-	fill(200, 200, 180);
-	rect(s*x, s*y, s/2, s/2);
-	int distance = grid[x][y];
-	fill(0,0,0);
-	text("" + distance, x*s, y*s);
+        fill(200, 200, 180);
+        rect(s*x, s*y, s/2, s/2);
+        int distance = grid[x][y];
+        fill(0,0,0);
+        text("" + distance, x*s, y*s);
  
-	if (x == sx && y == sy) {            
-	    exit();
-	    return;
-	}
-	// Go and try 4 neighbors.
-	visitCell(x+1, y, distance+1);
-	visitCell(x-1, y, distance+1);
-	visitCell(x, y-1, distance+1);
-	visitCell(x, y+1, distance+1);
-	
+        if (x == sx && y == sy) {            
+            exit();
+            return;
+        }
+        // Go and try 4 neighbors.
+        visitCell(x+1, y, distance+1);
+        visitCell(x-1, y, distance+1);
+        visitCell(x, y-1, distance+1);
+        visitCell(x, y+1, distance+1);
+        
     } else {
-	// path not found.
-	noLoop();
+        // path not found.
+        noLoop();
     }
 }
  
 void draw() {
     if (showMap) {
-	while (millis() <= next) return;
-	next = millis() + step;
+        while (millis() <= next) return;
+        next = millis() + step;
     }
     
     searchStep();
@@ -2260,19 +3062,19 @@ int gx = 0, gy = 0;
  
 void CreateMap() {
     for (int i = 0; i < n; i++) {
-	for (int j = 0; j < n; j++) {
-	    color c = get(i*s+s/2, j*s+s/2);
-	    if (brightness(c) > 200) {
-		grid[i][j] = 999;            
-	    }
-	    if (red(c) > 100 && green(c) < 100) {
-		sx = i;
-		sy = j;        
-	    } else if (green(c) > 100 & red(c) < 100) {
-		gx = i;
-		gy = j;
-	    }
-	}
+        for (int j = 0; j < n; j++) {
+            color c = get(i*s+s/2, j*s+s/2);
+            if (brightness(c) > 200) {
+                grid[i][j] = 999;            
+            }
+            if (red(c) > 100 && green(c) < 100) {
+                sx = i;
+                sy = j;        
+            } else if (green(c) > 100 & red(c) < 100) {
+                gx = i;
+                gy = j;
+            }
+        }
     }
 }
  
@@ -2294,7 +3096,7 @@ void queuePush(int x, int y) {
  
 void queuePop() {
     if (qtail != qhead) {
-	qhead = (qhead+1) % queueLength;
+        qhead = (qhead+1) % queueLength;
     }
 }
  
@@ -2312,14 +3114,14 @@ void visitCell(int x, int y, int distance) {
     // record it and return true. Note that all empty cells
     // originally have 999 recorded.
     if (grid[x][y] > distance) {
-	// Record the distance as shortest.
-	grid[x][y] = distance;
-	// Push the cell into the queue for further examination.
-	queuePush(x, y);
-	if (showMap) {
-	    fill(0, 0, 0);
-	    text("" + distance, x*s, y*s);
-	}
+        // Record the distance as shortest.
+        grid[x][y] = distance;
+        // Push the cell into the queue for further examination.
+        queuePush(x, y);
+        if (showMap) {
+            fill(0, 0, 0);
+            text("" + distance, x*s, y*s);
+        }
     }
 }
  
@@ -2341,9 +3143,9 @@ void setup() {  // this is run once.
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
-	grid[i] = new boolean[n];
+        grid[i] = new boolean[n];
     }  
-	
+        
     CreateMap();
     StartSearch();
 }
@@ -2358,30 +3160,30 @@ int bx, by;
 void searchStep() {
     // While queue is not empty. Loop is implicit around draw().
     if (!queueEmpty()) {
-	int x = qx[qhead];
-	int y = qy[qhead];
-	queuePop();
+        int x = qx[qhead];
+        int y = qy[qhead];
+        queuePop();
  
-	fill(200, 200, 180);
-	rect(s*x, s*y, s/2, s/2);
-	int distance = grid[x][y];
+        fill(200, 200, 180);
+        rect(s*x, s*y, s/2, s/2);
+        int distance = grid[x][y];
  
-	if (x == sx && y == sy) {            
-	    found = true;
-	    fill(0,0,0);
-	    bx = sx;
-	    by = sy;
-	    return;
-	}
-	// Go and try 4 neighbors.
-	visitCell(x+1, y, distance+1);
-	visitCell(x-1, y, distance+1);
-	visitCell(x, y-1, distance+1);
-	visitCell(x, y+1, distance+1);
-	
+        if (x == sx && y == sy) {            
+            found = true;
+            fill(0,0,0);
+            bx = sx;
+            by = sy;
+            return;
+        }
+        // Go and try 4 neighbors.
+        visitCell(x+1, y, distance+1);
+        visitCell(x-1, y, distance+1);
+        visitCell(x, y-1, distance+1);
+        visitCell(x, y+1, distance+1);
+        
     } else {
-	// path not found.
-	noLoop();
+        // path not found.
+        noLoop();
     }
 }
  
@@ -2391,8 +3193,8 @@ boolean backTrace(int nx, int ny, int distance) {
     if (grid[nx][ny] != distance) return false;
     // Found the backtrace step.
     if (showMap) {
-	stroke(255,0,0);
-	line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
+        stroke(255,0,0);
+        line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
     }
     bx = nx;
     by = ny;
@@ -2403,7 +3205,7 @@ void backTraceStep() {
     fill(255, 255, 100);
     rect(bx*s+s/4, by*s+s/4, s/2, s/2);
     if (bx == gx && by == gy) {
-	noLoop();
+        noLoop();
     }
     int distance = grid[bx][by];
     stroke(255, 255, 0);
@@ -2415,14 +3217,14 @@ void backTraceStep() {
  
 void draw() {
     if (found) {
-	while (millis() <= next) return;
-	next = millis() + step;
+        while (millis() <= next) return;
+        next = millis() + step;
     }
     
     if (found) {
-	backTraceStep();
+        backTraceStep();
     } else {
-	searchStep();
+        searchStep();
     }
 }
 ```
