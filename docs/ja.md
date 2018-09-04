@@ -2371,7 +2371,7 @@ switch (x) {
 # LabyrinthWalker
 
 ```example
-/* @pjs preload="/static/labyrinth2a.png"; */
+/* @pjs preload="/static/Labyrinth2a.png"; */
 /* @pjs preload="/static/Walker44.png"; */
  
 PImage imgLabyrinth = loadImage("/static/Labyrinth2a.png");
