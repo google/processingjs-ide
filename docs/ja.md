@@ -73,8 +73,8 @@ Processing で作る「◯たたき」
 「実行」ボタンをおしましょう。
 
 ```example
-/* @pjs preload="/static/Labyrinth1.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+/* @pjs preload="/static/labyrinth1.png"; */
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 size(360, 360);  // キャンバスの大きさの設定
 image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
 ```
@@ -85,9 +85,9 @@ image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
 [get()]を使って画像を保存して、あと背景を回復をしなければなりません。
 
 ```example
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -132,9 +132,9 @@ void draw() {
 結果はこのようなスケッチになります。
 
 ```hidden
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -201,9 +201,9 @@ void draw() {  // この関数は繰り返し呼ばれている.
 スケッチこんな漢字になったでしょうか？
 
 ```hidden
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -278,9 +278,9 @@ boolean wallAhead() {
 完成スケッチはこちらです。
 
 ```hidden
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -367,9 +367,9 @@ void turnLeft() {
 
 完成スケッチこちらです。
 ```hidden
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -464,9 +464,9 @@ true を返してしまうからです。
 完成スケッチこちらです。
 
 ```hidden
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -555,9 +555,9 @@ void turnRight() {
 完成スケッチこちらです。
 
 ```hidden
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -663,9 +663,9 @@ void turnRight() {
 完成スケッチこちらです。
 
 ```hidden
-/* @pjs preload="/static/Labyrinth1.png"; */
+/* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth1.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -757,9 +757,9 @@ void turnRight() {
 [前に戻る][Maze5]
 
 ```example
-/* @pjs preload="/static/Labyrinth4.png"; */
+/* @pjs preload="/static/labyrinth4.png"; */
 /* @pjs preload="/static/Walker44.png"; */
-PImage imgLabyrinth = loadImage("/static/Labyrinth4.png");
+PImage imgLabyrinth = loadImage("/static/labyrinth4.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
 void setup() {
   size(360, 360);  // キャンバスの大きさの設定
@@ -1474,110 +1474,11 @@ void draw() {
 
 # ゲーム {#ref-Games}
 
-* [JumpingBall (未完成)][JumpingBallTemplate]
-* [JumpingBall (完成)][JumpingBallCompleted]
+* [JumpingBall]
 * [TouchTheNumber]
 * [形状ゲーム][ShapeGame]
 
-
-# JumpingBall (未完成) {#ref-JumpingBallTemplate}
-
-```example
-// JumpingBallTemplate
-
-int width = 512;
-int skyHeight = 256;
-int groundHeight = 10;
-
-// ボール
-// 壁
-
-void setup() {
-  // サイズの設定
-  // ボールを作る
-  // 壁のコンテイナーを作る
-}
-
-void draw() {
-  // 背景を設定
-
-  // 壁を作る
-
-  // 壁を更新
-  // 壁を描く
-
-  // ぶつかるのを判定
-
-  // 地面を描く
-
-  // ボールを更新
-  // ボールを描く
-}
-
-void mouseClicked() {
-  // ボールに速度を与える
-}
-
-void drawGround() {
-  for (int start = -(4 * frameCount % 11); start < width; start += 11) {
-    fill(100, 100, 100);
-    rect(start, skyHeight, 11, groundHeight);
-  }
-}
-
-class Ball {
-  int x, y, r;
-  int v;
-
-  Ball(int init_x, int init_y, int init_r) {
-    x = init_x;
-    y = init_y;
-    r = init_r;
-    v = 0;
-  }
-
-  void update() {
-    if (v < 0 && y - r <= 0) {
-      v = 0;
-      y = r;
-    } else {
-      y += v;
-      v--;
-    }
-  }
-
-  bool hit(Wall w) {
-    if (w.x > x + r || w.x < x - r) return false;
-    return y - r < w.y;
-  }
-
-  void draw() {
-    fill(0, 0, 0);
-    ellipse(x, skyHeight - 1 - y, r*2, r*2);
-  }
-}
-
-class Wall {
-  int x, y;
-
-  Wall(int init_x, int init_y) {
-    x = init_x;
-    y = init_y;
-  }
-
-  void update() {
-    x -= 4;
-  }
-
-  void draw() {
-    fill(0, 255, 0);
-    rect(x, skyHeight - 1 - y, 5, y);
-  }
-}
-```
-
-
-# JumpingBall (完成) {#ref-JumpingBallCompleted}
+# JumpingBall
 
 ```example
 // JumpingBall
@@ -1605,7 +1506,6 @@ void draw() {
   for (int i = 0; i < walls.size(); ++i) {
    walls.get(i).update();
     if (ball.hit(walls.get(i))) {
-      alert("ゲームオーバー");
       speak("ゲームオーバー");
       noLoop();
     }
@@ -1852,31 +1752,21 @@ speak("Hello!", "en-US");
 # RandomSentenceGenerator
 
 ```example
-// RandomSentenceGenerator
-
-String names[] = {
-  "太郎", "花子"
-};
-
-String how[] = {
-  "早く", "とつぜん", "外で"
-};
-
-String verbs[] = {
-  "叫びました",
-  "きのこになりました",
-  "ふられました"
-};
+String itsu[] = {"昨日", "2年前", "今朝"};
+String darega[] = {"太郎が", "花子が"};
+String dokode[] = {"外で", "学校で", "とつぜん", "大きく"};
+String doushita[] = {"起きました",  "叫びました",  "転びました",  "輝きました"};
 
 size(400, 200);
 fill(0);
 textSize(25);
 
-int nameIndex = int(random(names.length));
-int howIndex = int(random(how.length));
-int verbIndex = int(random(verbs.length));
+int itsuIndex = int(random(itsu.length));
+int daregaIndex = int(random(darega.length));
+int dokodeIndex = int(random(dokode.length));
+int doushitaIndex = int(random(doushita.length));
 
-String phrase = names[nameIndex] + how[howIndex] + verbs[verbIndex];
+String phrase = itsu[itsuIndex] + darega[daregaIndex] + dokode[dokodeIndex] + doushita[doushitaIndex];
 text(phrase, 10, 100);
 speak(phrase);
 ```
@@ -2481,7 +2371,7 @@ switch (x) {
 # LabyrinthWalker
 
 ```example
-/* @pjs preload="/static/Labyrinth2a.png"; */
+/* @pjs preload="/static/labyrinth2a.png"; */
 /* @pjs preload="/static/Walker44.png"; */
  
 PImage imgLabyrinth = loadImage("/static/Labyrinth2a.png");
