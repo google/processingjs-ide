@@ -240,17 +240,10 @@ var ide = (/** @type {function(): !Object} */ (function() {
           '<script src="' + processing_js + '"></script>' + 
           '<script type="application/processing" data-processing-target="pjs">' + source + '</script>'+
           '<canvas id="pjs"></canvas>';
+        pre.appendChild(iframe);
         if ($(code).hasClass('language-render')) {
-          /*
-          $(pre).removeChild(code);
+          // Hide the code for code blocks marked with 'render'.
           $(code).hide();
-          $(pre).prepend(iframe);
-          */
-          var div = document.createElement('div');
-          $(div).addClass('render').append(iframe);
-          $(pre).replaceWith(div);
-        } else {
-          pre.appendChild(iframe);
         }
         var contentWindow = /** @type {!Window} */(iframe.contentWindow);
         contentWindow.document.open();

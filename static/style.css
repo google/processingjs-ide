@@ -107,7 +107,11 @@ pre.prerender iframe {
   top: 10px;
   right: 10px;
 }
-div.render {
+pre.render {
   width: 100%;
   text-align: center;
+  background: none;
+  border: none;
+  margin: 4px;
+  padding: none;
 }
