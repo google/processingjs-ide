@@ -1271,10 +1271,19 @@ void setup() {
 * [strokeCap()] ペンの端の形を設定する
 * [strokeWeight()] ペンの太さを設定する
 
+## 画像
+
+* [image()] 画像を写す
+* [loadImage()], [@pjs preload][preload] 画像データを読み込む
+* [createImage()] 空画像を作る
+* [get()] 画像データをキャンバスから抽出する
+
 ## 文字
 
 * [textSize()] 文字の大きさを設定する
 * [text()] 文字を表示する
+* [textFont()] 字体を設定する
+* [loadFont()] 字体を読み込みする
 
 ## スピーチ
 
@@ -1305,6 +1314,7 @@ void setup() {
   * [append()], [concat()]
 * [HashMap]
   * [entrySet()]
+* [PImage] 画像
 
 ## 言語の基礎
 
@@ -1810,10 +1820,6 @@ ellipse(50, 50, 50, 25);
 ```
 
 他に[stroke()]を見てみてください。
-
-# get
-
-取る、獲得する、取得する。
 
 # hit
 
@@ -3246,9 +3252,26 @@ fill(0); text(map.get(123), 10, 30);
 
 # get
 
-`get`は複数の意味持っている。
+`get()`は複数の意味持っている。
 
 * [HashMap]の場合、キーに対して値を取り出す。
+* 画像の場合は、ピクセルデートを読み込みます。
+
+```prerender
+/* @pjs preload="/static/Walker44.png" */
+PImage img = loadImage("/static/Walker44.png")
+image(img, 28, 28);
+
+// 画像データを抽出する。
+PImage frag = get(50, 50, 22, 22);
+// 画像データ写す
+image(frag, 72, 72, 28, 28);
+
+// ピクセルの色を抽出する。
+color c = get(50, 50);
+// 抽出された色で四角を描く。
+rect(72, 0, 28, 28);
+```
 
 # put
 
@@ -3948,3 +3971,79 @@ void draw() {
 詳しく[keyCodes]に参照。
 
 関連項目: [key], [keyCodes].
+
+# loadImage
+
+`loadImage()`は画像のデートを読み込んでいます。ないProcessing.jsでは
+ファイルシステムにアクセスできないので、画像データはサーバからダウンロード
+されます。ダウンロードは時間かかる場合があるので、`@pjs preload`の命令が
+必要です。
+
+```prerender
+/* @pjs preload="/static/Walker44.png"; */
+PImage walker = loadImage("/static/Walker44.png");
+image(walker, 10, 10, 80, 80);
+```
+
+関連項目: [@pjs preload][preload], [image()], [createImage()].
+
+# PImage
+
+画像の形。
+
+関連項目: [loadImage()], [image()].
+
+# pixels
+
+**画像データ**: [PImage]のフィルドとして画像データを保存します。
+
+```prerender
+PImage img = createImage(60, 60, RGB);
+for (int i = 0; i < img.pixels.length; i++) {
+  int x = int(i/60);
+  int y = int(i % 60);
+  img.pixels[i] = color(dist(x, y, 0, 0)/sqrt(2*60*60)*255);
+}
+image(img, 20, 20);
+```
+
+# @pjs preload {#ref-preload}
+
+`@pjs preload`はProcessing.jsでは画像データを予めダウンロードするような
+命令です。[loadImage()]で読み込む画像のファイルが全て`@pjs preload`で
+ファイル名の記述が必要です。
+
+関連項目: [loadImage()], [image()].
+
+```prerender
+/* @pjs preload="/static/Walker44.png"; */
+PImage walker = loadImage("/static/Walker44.png");
+image(walker, 10, 10, 80, 80);
+```
+
+# @pjs {#ref-pjs}
+
+Processing.jsのコンパイラーへの命令。
+
+* [@pjs preload][preload]
+
+# image
+
+`image()`は画像データをキャンバスにスタンプのように写します。
+
+関連項目: [loadImage()], [createImage()].
+
+# createImage
+
+`createImage()`は新しい空画像を作ります。
+
+```prerender
+PImage img = createImage(60, 60, RGB);
+for (int i = 0; i < img.pixels.length; i++) {
+  int x = int(i/60);
+  int y = int(i % 60);
+  img.pixels[i] = color(dist(x, y, 0, 0)/sqrt(2*60*60)*255);
+}
+image(img, 20, 20);
+```
+
