@@ -113,9 +113,15 @@ There are 4 ways to render code snippets:
   specifier will get a similar button, and additionally will also 
   get a rendered sketch floating in the right-hand side of the block.
 
+* Triple-tick fenced code blocks annotated with `render` language
+  specifier will be shown as a centered rendered sketch, with the
+  code hidden.
+
 * Triple-tick fenced code blocks annotated with `hidden` language
-  specifier will get a load button, and will be put into a collapsible
-  zipper that is closed by default.
+  specifier will get a load button, and will be put into a collapsed
+  zipper that is closed by default, and that becomes an `example`
+  code block once opened. Note: collapsing a block that has been
+  open is not supported at the moment.
 
 ## License
 
