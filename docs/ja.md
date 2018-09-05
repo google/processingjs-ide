@@ -1133,6 +1133,8 @@ void setup() {
 * [mouseClicked()] マウスはクリックされたとき
 * [mousePressed()] マウスのボタンが押されたとき
 * [mouseReleased()] マウスのボタンが話されたとき
+* [mouseMoved()] マウスが動いたとき
+* [mouseDragged()] マウスが押されたままに動いたとき
 * [mouseOver()] マウスのカーソルはキャンバスに入ったとき
 * [mouseOut()] マウスのカーソルがキャンバスから離れたとき
 * [mouseX], [mouseY] マウスのXとY座標
@@ -1285,9 +1287,15 @@ void setup() {
 * [mouseReleased()] マウスのボタンが離されたとき
 * [mouseOver()] マウスがキャンバス内に入ったとき
 * [mouseOut()] マウスがキャンバスの外に出たとき
-* [mouseX], [mouseY] マウスのX座標とY座標
+* [mouseX], [mouseY], [pmouseX], [pmouseY] マウスのX座標とY座標
 * [mouseButton] マウスイベント関数の中で押されたボタンを表す
 * [cursor()] マウスカーソルの形を変える
+
+## キーボード
+
+* [keyPressed()], [keyReleased()], [keyTyped()] キーボードのイベント関数
+* [key], [keyCode], [keyPressed] 押されたキーの変数
+* [keyCodes] キーコードの一覧
 
 ## データ
 
@@ -1848,7 +1856,7 @@ char c = 'd'; // 100.
 
 単精度浮動小数点数の型です。
 
-注意: Processing.jsでは、変数に付く型が倍精度(double)である。
+**注意:** Processing.jsでは、変数に付く型が倍精度(double)である。
 
 # double
 
@@ -1858,7 +1866,7 @@ char c = 'd'; // 100.
 
 -128以上127以下の整数の型です。
 
-注意: Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`byte()`で変換が必要である。
+**注意:** Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`byte()`で変換が必要である。
 
 ```prerender
 fill(0); textSize(20);
@@ -1870,7 +1878,7 @@ text(str(x), 10, 30);
 
 -32768以上32767以下の整数の型です。
 
-注意: Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`short()`で変換が必要である。
+**注意:** Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`short()`で変換が必要である。
 
 
 
@@ -1929,6 +1937,17 @@ void mouseClicked() {
 }
 ```
 
+# mouseMoved
+
+**マウスイベント**: `mouseMoved()`を定義すれば、マウスカーソルが動いたときに呼ばれる関数。
+
+関連項目: [mouseClicked()], [mouseDragged()], [mouseOver()], [mouseOut()].
+
+# mouseDragged
+
+**マウスイベント**: `mouseDragged()`を定義すれば、マウスが押されたままに動いたときに呼ばれる関数。
+
+関連項目: [mouseClicked()], [mouseMoved()], [mouseOver()], [mouseOut()].
 
 # mouseOver
 
@@ -2064,38 +2083,72 @@ void mouseReleased() {
 
 マウスのX座標。[draw()]からも[マウスイベント][Mouse]からも参照できます。
 
+関連項目: [mouseX], [pmouseX], [pmouseY], [mousePressed()], [mouseReleased()], [mouseClicked()].
+
 ```prerender
 void draw() {
   ellipse(mouseX, mouseY, 5, 5);
 }
 ```
 
-関連項目: [mousePressed()], [mouseReleased()], [mouseClicked()].
+# pmouseX
+
+前のフレームでの[mouseX]の値。
+
+関連項目: [mouseX], [mouseY], [pmouseY].
+
+```prerender
+void draw() {
+  line(pmouseX, pmouseY, mouseX, mouseY);
+}
+```
+
+# pmouseY
+
+前のフレームでの[mouseY]の値。
+
+関連項目: [mouseX], [mouseY], [pmouseX].
 
 # mouseY
 
 マウスのY座標。[draw()]からも[マウスイベント][Mouse]からも参照できます。
 
+関連項目: [mouseX], [pmouseX], [pmouseY], [mousePressed()], [mouseReleased()], [mouseClicked()].
+
 ```prerender
 void draw() {
   ellipse(mouseX, mouseY, 5, 5);
 }
 ```
 
-関連項目: [mousePressed()], [mouseReleased()], [mouseClicked()].
-
 # LEFT
 
-`LEFT`は[mouseButton]を参照するときにマウスの左ボタンを表す。
+**マウス**: `LEFT`は[mouseButton]を参照するときにマウスの左ボタンを表す。
+
+関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
+
+**キーボード**: 左の矢印キーのコード。一覧は[keyCodes]に参照。
+`keyCode == LEFT`を調べる先に`key == CODED`を確かめなければなりません。
+
+関連項目: [keyCode], [keyCodes].
+
+
+# CENTER
+
+**マウス**: `CENTER`は[mouseButton]を参照するときにマウスの真ん中ボタンを表す。
 
 関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
 
 # RIGHT
 
-`RIGHT`は[mouseButton]を参照するときにマウスの右ボタンを表す。
+**マウス**: `RIGHT`は[mouseButton]を参照するときにマウスの右ボタンを表す。
 
 関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
 
+**キーボード**: 右の矢印キーのコード。一覧は[keyCodes]に参照。
+`keyCode == RIGHT`を調べる先に`key == CODED`を確かめなければなりません。
+
+関連項目: [keyCode], [keyCodes].
 
 # printNumbers
 
@@ -3629,3 +3682,269 @@ copy(50, 50, 24, 24, 0, 0, 50, 50);
 * w, h --- コピーする資格の横幅と縦幅
 * dx, dy --- コピーの目的地の四角の左上の角のX,Y座標
 * dw, dh --- コピーの目的地の横幅と縦幅
+
+# key
+
+最後に押された文字または記号を文字列として保存している変数。
+矢印などの文字ではないキーの判断
+
+関連項目: [keyReleased()], [keyTyped()], [key], [keyCode], [keyCodes].
+
+```example
+void setup() {
+  size(200, 200);
+  fill(0);
+  textSize(30);
+}
+void draw() {
+  text("key " + str(key), 10, 60);
+}
+```
+
+# keyCode
+
+最後に押されたキーのコード。通常イベント関数で使います。
+コードの一覧は[keyCodes]に参照。
+
+関連項目: [keyPressed()], [keyReleased()], [keyTyped()].
+
+```example
+void setup() {
+  size(400, 200);
+  fill(0);
+  textSize(30);
+}
+void draw() {
+  background(220);
+  text("keyCode " + keyCode, 10, 60);
+}
+```
+
+# keyPressed
+
+**関数**: `keyPressed()`を定義すれば、キーが押されたたび
+に呼ばれる関数です。
+
+**変数**: `keyPressed`は最後に押されたキーのコードです。
+
+関連項目: [keyReleased()], [keyTyped()], [key], [keyCode], [keyCodes].
+
+```example
+void setup() {
+  size(400, 200);
+  fill(0);
+  textSize(20);
+}
+void draw() {
+  background(220);
+  text("keyPressed " + keyPressed, 10, 60);
+}
+```
+
+```example
+void setup() {
+  size(400, 200);
+  fill(0);
+  textSize(10);
+  background(220);
+}
+int y = 10;
+void keyPressed() {
+  text("keyPressed() key " + str(key) + " keyCode " + keyCode, 10, y);
+  y += 10;
+  if (y > 200) {
+    background(220);
+    y = 10;
+  }
+}
+```
+
+# keyTyped
+
+`keyTyped()`を定義すれば、キーボードの文字または数字や記号のキー
+押されたときに呼ばれる関数です。
+
+関連項目: [keyPressed()], [keyReleased()], [key], [keyCode], [keyCodes].
+
+```example
+void setup() {
+  size(400, 200);
+  fill(0);
+  textSize(10);
+  background(220);
+}
+int y = 10;
+void keyTyped() {
+  text("keyTyped() key " + str(key) + " keyCode " + keyCode, 10, y);
+  y += 10;
+  if (y > 200) {
+    background(220);
+    y = 10;
+  }
+}
+```
+
+# keyReleased
+
+`keyReleased()`を定義すれば、キーが話されたたびに
+呼ばれる関数です。
+
+関連項目: [keyPressed()], [keyTyped()], [key], [keyCode], [keyCodes].
+
+```example
+void setup() {
+  size(400, 200);
+  fill(0);
+  textSize(10);
+  background(220);
+}
+int y = 10;
+void keyReleased() {
+  text("keyReleased() key " + str(key) + " keyCode " + keyCode, 10, y);
+  y += 10;
+  if (y > 200) {
+    background(220);
+    y = 10;
+  }
+}
+```
+
+# keyCodes
+
+[keyCode]の値を調べるときに次のキーコードを使えます。
+
+* [BACKSPACE], [TAB], [ENTER], [RETURN], [ESC], [DELETE].
+
+以下のキーの条件を調べるときに先に`key == CODED`を確かめなければなりません。
+[CODED]に参照。
+
+* 矢印キー: [UP], [DOWN], [RIGHT], [LEFT].
+* [ALT], [CONTROL], [SHIFT].
+
+**注意**: Processing.jsではブラウザの環境によって使えないキーコードがあります。
+以下のスケッチで確認ください。
+
+```example
+// Keycodes
+void setup() {
+  size(400, 200);
+  textSize(30);
+  textFont(loadFont("fixed"));
+  fill(0);
+}
+
+void draw() {
+  background(220);
+  if (keyPressed) {
+    text("keyPressed", 10, 30);
+    String label;
+    if (key == CODED) {
+      label = "keyCode " + str(keyCode) + " ";
+      switch (keyCode) {
+        case UP: label = label + "UP"; break;
+        case DOWN: label = label + "DOWN"; break;
+        case LEFT: label = label + "LEFT"; break;
+        case RIGHT: label = label + "RIGHT"; break;
+        case ESC: label = label + "ESC"; break;
+        case ENTER: label = label + "ENTER"; break;
+        case SHIFT: label = label + "SHIFT"; break;
+        case ALT: label = label + "ALT"; break;
+        case CONTROL: label = label + "CONTROL"; break;
+        case RETURN: label = label + "RETURN"; break;
+        case ENTER: label = label + "ENTER"; break;
+        case DELETE: label = label + "DELETE"; break;
+        case BACKSPACE: label = label + "BACKSPACE"; break;
+      }
+      text(label, 10, 100);
+ 	} else {
+      label = "key " + str(key) + " ";
+      switch (keyCode) {
+        case RETURN: label = label + "RETURN"; break;
+        case ENTER: label = label + "ENTER"; break;
+        case DELETE: label = label + "DELETE"; break;
+        case BACKSPACE: label = label + "BACKSPACE"; break;
+      }
+      text(label, 10, 100);
+    }
+    return;
+  }
+}
+```
+
+# UP
+
+上の矢印キーのコード。一覧は[keyCodes]に参照。
+`keyCode == UP`を調べる先に`key == CODED`を確かめなければなりません。
+
+関連項目: [keyCode], [keyCodes].
+
+# DOWN
+
+下の矢印キーのコード。一覧は[keyCodes]に参照。
+`keyCode == DOWN`を調べる先に`key == CODED`を確かめなければなりません。
+
+関連項目: [keyCode], [keyCodes].
+
+# ALT
+
+「Alt」キーのコード。
+`keyCode == ALT`を調べる先に`key == CODED`を確かめなければなりません。
+
+関連項目: [keyCode], [keyCodes].
+
+# CONTROL
+
+「Ctrl」キーのコード。
+`keyCode == CONTROL`を調べる先に`key == CODED`を確かめなければなりません。
+
+関連項目: [keyCode], [keyCodes].
+
+# SHIFT
+
+「Shift」キーのコード。
+`keyCode == SHIFT`を調べる先に`key == CODED`を確かめなければなりません。
+
+関連項目: [keyCode], [keyCodes].
+
+# BACKSPACE
+
+「Backspace」キーのコード。
+
+関連項目: [keyCode], [keyCodes].
+
+# TAB
+
+「Tab」キーのコード。
+
+関連項目: [keyCode], [keyCodes].
+
+# ENTER
+
+「Enter」キーのコード。
+
+関連項目: [keyCode], [keyCodes].
+
+# RETURN
+
+「Return」キーのコード。
+
+関連項目: [keyCode], [keyCodes].
+
+# ESC
+
+「Esc」キーのコード。
+
+関連項目: [keyCode], [keyCodes].
+
+# DELETE
+
+「Delete」キーのコード。
+
+関連項目: [keyCode], [keyCodes].
+
+# CODED
+
+[keyCode]の値を調べるときに先`key == CODED`を確かめる必要なときがあります。
+詳しく[keyCodes]に参照。
+
+関連項目: [key], [keyCodes].
