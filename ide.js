@@ -267,6 +267,8 @@ var ide = (/** @type {function(): !Object} */ (function() {
           ('<div>No help on <code>' + keyword + '</code>.' +
      '<p>Put the cursor on a function name and press [Help] button</div>');
     }
+    // Scroll to top.
+    $('#help_section').scrollTop(0);
   }
 
   function showHelp() {
