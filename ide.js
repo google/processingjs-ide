@@ -427,13 +427,23 @@ var ide = (/** @type {function(): !Object} */ (function() {
     var validator = function(text, options) {
       return processingjs.lint.validator(text, options, toplevelGrammar.parse);
     };
+    var keywords = [
+"ALT","ARROW","BACKSPACE","CENTER","CODED","CONTROL","CROSS","DELETE","DOWN","ENTER","ESC","HALF_PI","HAND","HashMap","LEFT","MOVE","PFont","PI","PImage","PROJECT","QUARTER_PI","RETURN","RIGHT","ROUND","SHIFT","SQUARE","String","TAB","TEXT","TWO_PI","UP","WAIT","abs","add","alert","alpha","append","arc","background","binary","boolean","break","brightness","byte","case","ceil","char","class","color","concat","continue","copy","cos","createImage","cursor","default","dist","do","double","draw","drawGround","ellipse","else","entrySet","exit","false","fill","final","float","floor","for","frameRate","get","getKey","getValue","green","hasNext","hit","hue","if","image","int","iterator","key","keyCode","keyCodes","keyPressed","keyReleased","keyTyped","line","loadFont","loadImage","loop","millis","mouseButton","mouseClicked","mouseDragged","mouseMoved","mouseOut","mouseOver","mousePressed","mouseReleased","mouseX","mouseY","next","noLoop","pixels","pmouseX","pmouseY","printNumbers","put","random","rect","red","remove","round","saturation","setup","short","shuffle","sin","size","speak","sqrt","str","stroke","strokeCap","strokeWeight","switch","tan","text","textFont","textSize","this","toString","triangle","true","update","void","while"];
     var codemirror_options = {
-      value: ide.textarea.value,
-      mode: 'clike',
-      lint: validator,
-      extraKeys: {
+      'value': ide.textarea.value,
+      'mode': {
+        'name': 'clike',
+        'keywords': keywords.reduce(function(x, k) {
+          x[k] = true;
+          return x;
+        }, new Object()),
+      },
+      'lint': validator,
+      'extraKeys': {
         'F1': showHelp,
       },
+      'theme': 'eclipse',
+      'lineNumbers': true,
     };
     // Parse and act on the fragment address.
     var params = new Object();
