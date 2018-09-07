@@ -115,3 +115,6 @@ pre.render {
   margin: 4px;
   padding: none;
 }
+p > code {
+  color: green;
+}
