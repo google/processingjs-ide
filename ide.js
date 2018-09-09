@@ -451,8 +451,13 @@ var ide = (/** @type {function(): !Object} */ (function() {
     if (window.location.hash) {
       params = parseFragment();
       //window.console.log(params);
-      if (params['sketch']) {
+      if (params['sketch'] || params['load']) {
         var id = params['sketch'];
+        if (!id) {
+          id = params['load'];
+          // Drop the sketch id from the fragment.
+          updateFragment('load', null);
+        }
         $.ajax('/sketch/' + id, {
           success:
           /**
