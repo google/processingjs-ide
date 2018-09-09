@@ -386,7 +386,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
           ev.preventDefault();
           ide.codemirror.setValue(source);
           // Avoid autosaving unless there were changes.
-          ide.saved = source;
+          ide.saved = ide.codemirror.getValue();
           // Forget the previous sketch id.
           updateFragment('sketch', null);
         });
@@ -466,9 +466,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
           function(data) {
             window.console.log("Loaded /sketch/" + id);
             // Reset the saved state.
-            ide.saved = data;
             ide.textarea.value = data;
             ide.codemirror.setValue(data);
+            ide.saved = ide.codemirror.getValue();
           },
           error:
           /**
