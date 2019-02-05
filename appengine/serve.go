@@ -156,7 +156,7 @@ func sketchPostHandler(w http.ResponseWriter, req *http.Request) error {
 		sketch.Source = []byte(req.FormValue("source"))
 	}
 	// Extract the sketch name.
-	re := regexp.MustCompile("// *([a-zA-Z_-]*)")
+	re := regexp.MustCompile("//[ \t\\p{P}\\p{Z}]*([\\p{L}\\p{M}\\p{N}_-]*)")
 	if m := re.FindSubmatch(sketch.Source); m != nil {
 		sketch.Title = string(m[1])
 	}

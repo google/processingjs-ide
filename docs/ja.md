@@ -1,36 +1,36 @@
 # Processing.js 夏期ワークショップ {#ref-help}
 
-* [はじめに][WhackACircle0]
-* Step 1: 円が１個
-  * [Step 1.1: 円を描いてみる][WhackACircle11]
-  * [Step 1.2: コメントを書きましょう][WhackACircle12]
-  * [Step 1.3: 様々な色][WhackACircle13]
-  * [Step 1.4: ◯をランダムに表示][WhackACircle14]
-  * [Step 1.5: 円を「動かす」][WhackACircle15]
-  * [Step 1.6: クリックして文字を表示する][WhackACircle16]
-  * [Step 1.7: クリック回数を表示する][WhackACircle17]
-  * [Step 1.8: コードを整理しよう][WhackACircle18]
-  * [Step 1.9: 円をクリックしたらスコアを増やす][WhackACircle19]
-* Step 2: 円が 9 個
-  * [Step 2.1: 9 個の円を一定の場所に表示する][WhackACircle21]
-  * [Step 2.2: 各円を表示するかどうかをランダムに決める][WhackACircle22]
-  * [Step 2.3: 課題][WhackACircle23]
-* 迷路を右手法で解く
-  * [1. キャラクタを表示][Maze1]
-  * [2. キャラクターを動かす][Maze2]
-  * [3. 壁の検出][Maze3]
-  * [4. 右手法][Maze4]
-  * [5. ゴールの検出][Maze5]
-  * [6. 完成プログラム][Maze6]
-* 最短ルート探し
-  * [1. 空迷路][LabyrinthBlank]
-  * [2. 地図作り][LabyrinthMapper]
-  * [3. 最短の道][LabyrinthSearch]
-  * [4. 道の作り直し][LabyrinthBacktrace]
-  * [5. 完成版][LabyrinthSolver]
-* [索引][index]
-* [デモ][Demos]
-* [ゲーム][Games]
+*   [はじめに][WhackACircle0]
+*   Step 1: 円が１個
+    *   [Step 1.1: 円を描いてみる][WhackACircle11]
+    *   [Step 1.2: コメントを書きましょう][WhackACircle12]
+    *   [Step 1.3: 様々な色][WhackACircle13]
+    *   [Step 1.4: ◯をランダムに表示][WhackACircle14]
+    *   [Step 1.5: 円を「動かす」][WhackACircle15]
+    *   [Step 1.6: クリックして文字を表示する][WhackACircle16]
+    *   [Step 1.7: クリック回数を表示する][WhackACircle17]
+    *   [Step 1.8: コードを整理しよう][WhackACircle18]
+    *   [Step 1.9: 円をクリックしたらスコアを増やす][WhackACircle19]
+*   Step 2: 円が 9 個
+    *   [Step 2.1: 9 個の円を一定の場所に表示する][WhackACircle21]
+    *   [Step 2.2: 各円を表示するかどうかをランダムに決める][WhackACircle22]
+    *   [Step 2.3: 課題][WhackACircle23]
+*   迷路を右手法で解く
+    *   [1. キャラクタを表示][Maze1]
+    *   [2. キャラクターを動かす][Maze2]
+    *   [3. 壁の検出][Maze3]
+    *   [4. 右手法][Maze4]
+    *   [5. ゴールの検出][Maze5]
+    *   [6. 完成プログラム][Maze6]
+*   最短ルート探し
+    *   [1. 空迷路][LabyrinthBlank]
+    *   [2. 地図作り][LabyrinthMapper]
+    *   [3. 最短の道][LabyrinthSearch]
+    *   [4. 道の作り直し][LabyrinthBacktrace]
+    *   [5. 完成版][LabyrinthSolver]
+*   [索引][index]
+*   [デモ][Demos]
+*   [ゲーム][Games]
 
 # はじめに {#ref-WhackACircle0}
 
@@ -39,6 +39,7 @@
 このゲームは午前中に Scratch で作った「猫たたき」のように円が現れたり消えたりして、円をクリックできたら得点がもらえるゲームです。
 
 ```render
+// WhackACircle0
 void circle(int x, int y, int r) {
 }
 int width = 300;
@@ -71,11 +72,12 @@ void draw() {
 
 ## Processing って何？
 
-Processing は絵などを描けるプログラミング言語です。アプリ開発などで広く使われている Java というプログラミング言語に近いので、Processing をマスターできたらあと一歩で Java でプログラムを書いて実際のエンジニアになれます。
+Processing は絵などを描けるプログラミング言語です。アプリ開発などで広く使われている Java
+というプログラミング言語に近いので、Processing をマスターできたらあと一歩で Java でプログラムを書いて実際のエンジニアになれます。
 
 ## Processing で作る <strike>「猫たたき」</strike> 「◯たたき」
-では、本番に入って Processing のコードを書いてみましょう！
 
+では、本番に入って Processing のコードを書いてみましょう！
 
 ## Step 1: 円が１個
 
@@ -90,16 +92,24 @@ Processing は絵などを描けるプログラミング言語です。アプリ
 まず円を描いてみましょう！以下のコードを入力して実行したら、円が描かれます。
 
 ```prerender
+// Circle
 size(100, 100);
 ellipse(50, 50, 10, 10);
 ```
 
-このプログラムには命令が２つ含まれています。最初の命令は `size(100, 100);` です。これはキャンバスの大きさを 100 × 100 にする命令です。これを指定して実行すると、四角いキャンバスが現れます。括弧の中に数字が 2 つ入っています。この数字を引数と呼びます。値を変えて実行すると、違うサイズのキャンバスが現れます。例えば、`size(500, 300);` にすると、横長のキャンバスができたり、`size(200, 600);` にすると、縦長のキャンバスができます。
+このプログラムには命令が２つ含まれています。最初の命令は `size(100, 100);` です。これはキャンバスの大きさを 100 × 100
+にする命令です。これを指定して実行すると、四角いキャンバスが現れます。括弧の中に数字が 2
+つ入っています。この数字を引数と呼びます。値を変えて実行すると、違うサイズのキャンバスが現れます。例えば、`size(500, 300);`
+にすると、横長のキャンバスができたり、`size(200, 600);` にすると、縦長のキャンバスができます。
 
+次の命令は `ellipse(50, 50, 10, 10);` です。これはキャンバスに円を描く命令です。この命令には 4 つの引数が必要です。最初の 2
+つは円の中心点の位置を指定します。値を変えて実行し、円の位置を動かしてみましょう。最後の 2
+つの引数は円の横と縦の直径を指定します。英語がわかる人は気づいたかもしれませんが、ellipse
+という単語は円という意味ではなくて、楕円という意味です。円は必ず横と縦の直径が等しいですが、この命令で 2
+つの値を違う大きさにすると円ではなく、楕円が描かれます。値を変えて実行してみましょう。
 
-次の命令は `ellipse(50, 50, 10, 10);` です。これはキャンバスに円を描く命令です。この命令には 4 つの引数が必要です。最初の 2 つは円の中心点の位置を指定します。値を変えて実行し、円の位置を動かしてみましょう。最後の 2 つの引数は円の横と縦の直径を指定します。英語がわかる人は気づいたかもしれませんが、ellipse という単語は円という意味ではなくて、楕円という意味です。円は必ず横と縦の直径が等しいですが、この命令で 2 つの値を違う大きさにすると円ではなく、楕円が描かれます。値を変えて実行してみましょう。
-
-この 2 つの命令には行の最後に `;` **セミコロン** があります。セミコロンは命令が終わったことを意味します。これがないと実行できたり、できなかったり、またはプログラムが思った通りに動かない場合があります。また、セミコロンを書き忘れると、赤い線が出てきます。この赤い線はコードの中でどこかで書き間違えているという意味なので、赤い線を見たら間違いを探してコードを修正してください。
+この 2 つの命令には行の最後に `;` **セミコロン**
+があります。セミコロンは命令が終わったことを意味します。これがないと実行できたり、できなかったり、またはプログラムが思った通りに動かない場合があります。また、セミコロンを書き忘れると、赤い線が出てきます。この赤い線はコードの中でどこかで書き間違えているという意味なので、赤い線を見たら間違いを探してコードを修正してください。
 
 ![Missing semicolon warning](/static/missing_semicolon.png)
 
@@ -112,6 +122,7 @@ ellipse(50, 50, 10, 10);
 以下のコードを入力して実行してみましょう。
 
 ```example
+// WhackACircle11
 // キャンバスの大きさを 300 x 300 にする
 size(300, 300);
 // 中心座標が (150, 150)、直径が 10 の円を描く
@@ -129,11 +140,12 @@ ellipse(150, 150, 10, 10);
 色を変えてみましょう。以下のコードを入力して実行してみましょう。
 
 ```example
+// WhackACircle12
 // キャンバスの大きさを 300 × 300 にする
 size(300, 300);
 // キャンバスを白で塗ります
 background(255, 255, 255);
-// 円の中身を緑色にする 
+// 円の中身を緑色にする
 fill(0, 255, 0);
 // 円周を赤にする
 stroke(255, 0, 0);
@@ -143,7 +155,10 @@ strokeWeight(2);
 ellipse(150, 150, 40, 40);
 ```
 
-各命令の意味はコメントで説明されています。ここで注目してほしいのは色の指定方法です。すべての色に関する命令は 3 つの数値を必要とします。これはパソコンやTVで使用される画面の色の表示のしかたに由来します。画面で表示される色は３つの原色から表現されています。この原色は光の原色で、**赤**、**緑**、**青**で、RGB (Red, Green, Blue) と呼ばれています。それぞれの値は0 から 255 まで指定できます。すべての値が 0 の場合は黒で、すべての値が 255 の場合は白になります。
+各命令の意味はコメントで説明されています。ここで注目してほしいのは色の指定方法です。すべての色に関する命令は 3
+つの数値を必要とします。これはパソコンやTVで使用される画面の色の表示のしかたに由来します。画面で表示される色は３つの原色から表現されています。この原色は光の原色で、**赤**、**緑**、**青**で、RGB
+(Red, Green, Blue) と呼ばれています。それぞれの値は0 から 255 まで指定できます。すべての値が 0 の場合は黒で、すべての値が 255
+の場合は白になります。
 
 ![Color chart](/static/colors.png)
 
@@ -156,11 +171,12 @@ ellipse(150, 150, 40, 40);
 円をランダムな場所に表示します。以下のコードを入力して数回実行してみましょう。
 
 ```example
+// RandomCircle
 // キャンバスの大きさを 300 × 300 にする
 size(300, 300);
 // キャンバスを白で塗る
 background(255, 255, 255);
-// 円の中身を緑色にする 
+// 円の中身を緑色にする
 fill(0, 255, 0);
 // 円周を赤にする
 stroke(255, 0, 0);
@@ -175,26 +191,30 @@ int y = random(0, 300);
 ellipse(x, y, 40, 40);
 ```
 
-実行される度に円の場所が変わることがわかります。そこで `int x = random(0, 300);` という命令に注目してください。この命令は変数を定義します。変数はデータを一時的に保存するものです。Scratch ではこのように変数を作って様々なブロックが現れますね。
+実行される度に円の場所が変わることがわかります。そこで `int x = random(0, 300);`
+という命令に注目してください。この命令は変数を定義します。変数はデータを一時的に保存するものです。Scratch
+ではこのように変数を作って様々なブロックが現れますね。
 
 ![Scratch variable](/static/scratch_variable.png)
-
 
 変数を初めて使うときには、変数を「**定義**」して、変数の名前・型・初期値を決めます。名前と型は定義した後で変更できませんが、値は後から変更できます。
 
     int x = random(0, 300);
 
-上記の文は、 `int`（整数）型の変数 `x` を定義し、初期値を `random(0, 300)`、つまり 0 から 300 までの乱数とします。`x` と `y` の変数は円を描く命令に使われます。円の中心座標が今までの 150, 150 のかわりに `x`, `y` となり、命令が `ellipse(x, y, 40, 40);` になっています。
+上記の文は、 `int`（整数）型の変数 `x` を定義し、初期値を `random(0, 300)`、つまり 0 から 300 までの乱数とします。`x` と
+`y` の変数は円を描く命令に使われます。円の中心座標が今までの 150, 150 のかわりに `x`, `y` となり、命令が `ellipse(x, y,
+40, 40);` になっています。
 
 [Step 1.5: 円を「動かす」][WhackACircle15]
 
-# Step 1.5: 円を「動かす」{#ref-WhackACircle15}
+# Step 1.5: 円を「動かす」 {#ref-WhackACircle15}
 
 [前に戻る][WhackACircle14]
 
 今までは円を一回描くだけですが、次は円を繰り返しランダムな場所に描いてみます。以下のコードを入力して実行してみましょう。
 
 ```example
+// WhackACircle15
 // 初期化・一回だけ実行される
 void setup() {
   // キャンバスの大きさを 300 × 300 にする
@@ -225,21 +245,27 @@ void draw() {
 }
 ```
 
-実行すると、円が高速でランダムな場所で現れます。今回のプログラムには、`void setup() { ... }` と `void draw() { ... }` という書き方が出てきます。これらは**メソッド**と呼びます。メソッドは複数の命令をまとめて、１個の命令として使えるようにします。
+実行すると、円が高速でランダムな場所で現れます。今回のプログラムには、`void setup() { ... }` と `void draw() { ...
+}` という書き方が出てきます。これらは**メソッド**と呼びます。メソッドは複数の命令をまとめて、１個の命令として使えるようにします。
 
-Scratch では、各ブロック（例：ペンを下ろす）がメソッドだと考えても間違いではないでしょう。Processing でメソッドを定義することは、Scratch でブロック定義を使用して他のブロックをまとめるのに似ています。次の例を見てみましょう。
+Scratch では、各ブロック（例：ペンを下ろす）がメソッドだと考えても間違いではないでしょう。Processing
+でメソッドを定義することは、Scratch でブロック定義を使用して他のブロックをまとめるのに似ています。次の例を見てみましょう。
 
 ![Scratch method](/static/scratch_method.png)
 
 Scratch と同様、Processing でも `size(300, 300);` などの命令がメソッドの呼び出しです。
 
+Step 1.5 の Processing のプログラムでは、`setup` と `draw`
+というメソッドを定義しています。これは特別なメソッドです。`setup` はプログラムが始まったらすぐに 1 回だけ実行されます。`draw` は
+`setup` が実行されたあとに、ずっと実行されます。定義文の構成を説明します。最初の `void`
+はこのメソッドを実行しても何の値も返さないという意味を宣言しています。値を返すメソッドもあり、`random` はその例の 1
+つで指定された範囲からランダムな値を返します。
 
-Step 1.5 の Processing のプログラムでは、`setup` と `draw` というメソッドを定義しています。これは特別なメソッドです。`setup` はプログラムが始まったらすぐに 1 回だけ実行されます。`draw` は `setup` が実行されたあとに、ずっと実行されます。定義文の構成を説明します。最初の `void` はこのメソッドを実行しても何の値も返さないという意味を宣言しています。値を返すメソッドもあり、`random` はその例の 1 つで指定された範囲からランダムな値を返します。
+これから、値の返すメソッドを定義していきます。メソッド名のあとの括弧には何も入っていない `setup()`
+のようなメソッドは引数を取りません。引数を取るメソッドも続きのステップで定義します。
 
-
-これから、値の返すメソッドを定義していきます。メソッド名のあとの括弧には何も入っていない `setup()` のようなメソッドは引数を取りません。引数を取るメソッドも続きのステップで定義します。
-
-さて、問題です。今のプログラムでは円が高速で動いています。もっとゆっくり動かすことができるでしょうか？コードとコメントを読んで、表示の頻度を 1 秒に 1 回に変えましょう。
+さて、問題です。今のプログラムでは円が高速で動いています。もっとゆっくり動かすことができるでしょうか？コードとコメントを読んで、表示の頻度を 1 秒に 1
+回に変えましょう。
 
 [Step 1.6: クリックして文字を表示する][WhackACircle16]
 
@@ -250,6 +276,7 @@ Step 1.5 の Processing のプログラムでは、`setup` と `draw` という�
 以下のコードを入力して実行してみましょう。
 
 ```example
+// WhackACircle16
 void setup() {
   size(300,300);
   framerate(1);
@@ -266,8 +293,8 @@ void mouseClicked() {
 }
 ```
 
-
-上記のプログラムでは `mouseClicked()` というメソッドが定義されています。これも特別なメソッドで、キャンバスにマウスでクリックした際にだけこのメソッドが実行されます。このようなきっかけを**イベント**と呼びます。そして、イベントが起こると実行されるメソッドを**イベントハンドラ**と呼びます。
+上記のプログラムでは `mouseClicked()`
+というメソッドが定義されています。これも特別なメソッドで、キャンバスにマウスでクリックした際にだけこのメソッドが実行されます。このようなきっかけを**イベント**と呼びます。そして、イベントが起こると実行されるメソッドを**イベントハンドラ**と呼びます。
 
 [Step 1.7: クリック回数を表示する][WhackACircle17]
 
@@ -278,6 +305,7 @@ void mouseClicked() {
 以下のコードを入力して実行してみましょう。
 
 ```example
+// WhackACircle17
 int score = 0;
 
 void setup() {
@@ -304,7 +332,9 @@ void mouseClicked() {
 }
 ```
 
-上記のプログラムはメソッドの外で `score` という変数を定義しています。そして、マウスをクリックするたびにその値を 1 ずつ増やして表示します。値を増やす命令は、`score = score + 1` と数学的にはありえない等式のようですが、これは等式ではなくて右の値を左の変数に代入する命令です。
+上記のプログラムはメソッドの外で `score` という変数を定義しています。そして、マウスをクリックするたびにその値を 1
+ずつ増やして表示します。値を増やす命令は、`score = score + 1`
+と数学的にはありえない等式のようですが、これは等式ではなくて右の値を左の変数に代入する命令です。
 
 [Step 1.8: コードを整理しよう][WhackACircle18]
 
@@ -315,6 +345,7 @@ void mouseClicked() {
 以下のコードを入力して実行してみましょう。
 
 ```example
+// WhackACircle18
 // 円の中心の座標
 int x;
 int y;
@@ -339,7 +370,7 @@ void setup() {
 
 // 座標 (x, y) に円を描く
 void drawCircle(int x, int y) {
-  // 円の中身を緑色にする 
+  // 円の中身を緑色にする
   fill(0, 255, 0);
   // 円周を赤にする
   stroke(255, 0, 0);
@@ -379,8 +410,9 @@ void mouseClicked() {
 }
 ```
 
-
-上記は円を描くプログラムとスコアを表示するプログラムをあわせたものです。そこにコードをまとめるために `drawCircle` と `drawScore` というメソッドを定義しています。この 2 つのメソッドの内容を `draw` に直接書くと、長くなって分かりにくくなります。そこで 2つの別々のメソッドにまとめています。
+上記は円を描くプログラムとスコアを表示するプログラムをあわせたものです。そこにコードをまとめるために `drawCircle` と `drawScore`
+というメソッドを定義しています。この 2 つのメソッドの内容を `draw` に直接書くと、長くなって分かりにくくなります。そこで
+2つの別々のメソッドにまとめています。
 
 この状態ではどこをクリックしてもスコアが増えてしまいます。次は、円をクリックした場合にだけスコアが増えるようにコードを変更してみましょう。
 
@@ -401,16 +433,18 @@ mouseClicked メソッドのコードを次のように書き換えて実行し�
       }
     }
 
+ここでは条件文を使っています。**条件文**の構成は `if( ... ) { ... }`
+です。括弧の中に条件を書きます。条件が満たされる場合、中括弧の中のコードが実行されます。
 
-ここでは条件文を使っています。**条件文**の構成は `if( ... ) { ... }` です。括弧の中に条件を書きます。条件が満たされる場合、中括弧の中のコードが実行されます。
-
-上記で使われている条件はコメントで説明されています。`dist()` メソッドは Processing でもともと定義されているメソッドで、 2 つの点の間の距離を計算します。
+上記で使われている条件はコメントで説明されています。`dist()` メソッドは Processing でもともと定義されているメソッドで、 2
+つの点の間の距離を計算します。
 
 これで最初のステップが完成です。
 
 今までの完成プログラムはこちらで確認できます。
 
 ```hidden
+// WhackACircle19
 // 円の中心の座標
 int x;
 int y;
@@ -435,7 +469,7 @@ void setup() {
 
 // 座標 (x, y) に円を描く
 void drawCircle(int x, int y) {
-  // 円の中身を緑色にする 
+  // 円の中身を緑色にする
   fill(0, 255, 0);
   // 円周を赤にする
   stroke(255, 0, 0);
@@ -488,9 +522,11 @@ void mouseClicked() {
 
 [前に戻る][WhackACircle19]
 
-コードを次のように書き換えて実行してみましょう。 `circleX` と `circleY` は新しいメソッドです。古い `draw` メソッドは消してください。
+コードを次のように書き換えて実行してみましょう。 `circleX` と `circleY` は新しいメソッドです。古い `draw`
+メソッドは消してください。
 
 ```
+// WhackACircle21
 // i 番目の円の x 座標を返す (iは円の番号を表す0から8までの整数)
 int circleX(int i) {
   return (int)(i / 3) * 100 + 50;
@@ -504,7 +540,7 @@ int circleY(int i) {
 void draw() {
   // キャンバスを白で塗る
   background(255, 255, 255);
-  
+
   // i を 0 から 8 まで繰り返す
   int i = 0;
   while (i < 9) {
@@ -519,11 +555,17 @@ void draw() {
 }
 ```
 
-上記のコードは 9 個の円を描きます。円は 0 番から 8 番までの番号にします。各円の x 座標と y 座標はそれぞれ `circleX` と `circleY` で計算します。`draw` メソッド内では、`while`-ループを使って円を描きます。これは繰り返しを意味します。`while`-文の構成は `while( ... ) { ... }` です。条件分岐の `if` に近いですが、条件が満たされる限り中括弧のコードが永遠に実行されます。このようなプログラムを書くときには、ループからいつか出るように条件を設定する注意をしなければなりません。上記のコードでは、最初は `i` を 0 に設定して、中括弧の最後のコードで 1 ずつ `i` を増やしています。
+上記のコードは 9 個の円を描きます。円は 0 番から 8 番までの番号にします。各円の x 座標と y 座標はそれぞれ `circleX` と
+`circleY` で計算します。`draw`
+メソッド内では、`while`-ループを使って円を描きます。これは繰り返しを意味します。`while`-文の構成は `while( ... ) { ... }`
+です。条件分岐の `if`
+に近いですが、条件が満たされる限り中括弧のコードが永遠に実行されます。このようなプログラムを書くときには、ループからいつか出るように条件を設定する注意をしなければなりません。上記のコードでは、最初は
+`i` を 0 に設定して、中括弧の最後のコードで 1 ずつ `i` を増やしています。
 
 今までの完成プログラムはこちらで確認できます。
 
 ```hidden
+// WhackACircle21
 // 円の中心の座標
 int x;
 int y;
@@ -548,7 +590,7 @@ void setup() {
 
 // 座標 (x, y) に円を描く
 void drawCircle(int x, int y) {
-  // 円の中身を緑色にする 
+  // 円の中身を緑色にする
   fill(0, 255, 0);
   // 円周を赤にする
   stroke(255, 0, 0);
@@ -581,7 +623,7 @@ int circleY(int i) {
 void draw() {
   // キャンバスを白で塗る
   background(255, 255, 255);
-  
+
   // i を 0 から 8 まで繰り返す
   int i = 0;
   while (i < 9) {
@@ -614,6 +656,7 @@ void mouseClicked() {
 コードを次のように書き換えて実行してみましょう。
 
 ```
+// WhackACircle22
 // 円がそれぞれ現れているかを記憶する
 boolean[] shown = new boolean[9];
 
@@ -621,7 +664,7 @@ boolean[] shown = new boolean[9];
 void draw() {
   // キャンバスを白で塗る
   background(255, 255, 255);
-  
+
   // i を 0 から 8 まで繰り返す
   int i = 0;
   while (i < 9) {
@@ -660,14 +703,17 @@ void mouseClicked() {
 
     boolean[] shown = new boolean[9];
 
-これは今まで違う変数の種類です。`boolean` は真理値型を指します。値が `true`（真） あるいは `false`（偽）の 2 つだけです。また`boolean` のあとの `[]` はこの変数を配列に定義する意味をします。配列は 1 つの変数で複数の値を記憶できるような変数です。そして、配列のサイズは初期値の `new boolean[9]` で指定しています。サイズは 9 で番号は 0 から 8 までになっています。
+これは今まで違う変数の種類です。`boolean` は真理値型を指します。値が `true`（真） あるいは `false`（偽）の 2
+つだけです。また`boolean` のあとの `[]` はこの変数を配列に定義する意味をします。配列は 1
+つの変数で複数の値を記憶できるような変数です。そして、配列のサイズは初期値の `new boolean[9]` で指定しています。サイズは 9 で番号は 0
+から 8 までになっています。
 
 この配列は `draw` の中で値が決まります。そして、`mouseClicked` の中で値を使っています。
-
 
 これでプログラムが完成です！実行して遊んでみてください。
 
 ```hidden
+// WhackACircle22
 // 円の中心の座標
 int x;
 int y;
@@ -692,7 +738,7 @@ void setup() {
 
 // 座標 (x, y) に円を描く
 void drawCircle(int x, int y) {
-  // 円の中身を緑色にする 
+  // 円の中身を緑色にする
   fill(0, 255, 0);
   // 円周を赤にする
   stroke(255, 0, 0);
@@ -728,7 +774,7 @@ boolean[] shown = new boolean[9];
 void draw() {
   // キャンバスを白で塗る
   background(255, 255, 255);
-  
+
   // i を 0 から 8 まで繰り返す
   int i = 0;
   while (i < 9) {
@@ -769,34 +815,31 @@ void mouseClicked() {
 
 [前に戻る][WhackACircle22]
 
-
 このプログラムはまだまだ改良できます。次の点を直す方法を考えて実装してみてください。
 
-* 円をクリックしてもすぐにスコアが更新されません。すぐにスコアが更新されるように改良してみましょう。
-* クリックして円に当たらなかった際、スコアをマイナスしてみましょう。
-* 1 秒間に何回も円をクリックしてスコアを増やせてしまいます。円をクリックしたらその円がすぐに消えるなどの対策を実装してみましょう。
+*   円をクリックしてもすぐにスコアが更新されません。すぐにスコアが更新されるように改良してみましょう。
+*   クリックして円に当たらなかった際、スコアをマイナスしてみましょう。
+*   1 秒間に何回も円をクリックしてスコアを増やせてしまいます。円をクリックしたらその円がすぐに消えるなどの対策を実装してみましょう。
 
 [前に戻る][WhackACircle22]
 
 # 1. キャラクターを表示 {#ref-Maze1}
 
-まずは迷路を表示しましょう。 
-下にある「読み込む」ボタンを押してから画面の左上にある
-「実行」ボタンをおしましょう。
+まずは迷路を表示しましょう。 下にある「読み込む」ボタンを押してから画面の左上にある 「実行」ボタンをおしましょう。
 
 ```example
+// Maze1
 /* @pjs preload="/static/labyrinth1.png"; */
 PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
 size(360, 360);  // キャンバスの大きさの設定
 image(imgLabyrinth, 1, 1, 360, 360); // 迷路の表示
 ```
 
-そして、キャラクターを表示しましょう。キャラクターはマウスのカーソル
-のところに表示されます。Processing.jsでは画像はスクラッチのスプライトのよう
-ではなく、スタンプのようなものです。なので、もともとの背景を壊さないように
-[get()]を使って画像を保存して、あと背景を回復をしなければなりません。
+そして、キャラクターを表示しましょう。キャラクターはマウスのカーソル のところに表示されます。Processing.jsでは画像はスクラッチのスプライトのよう
+ではなく、スタンプのようなものです。なので、もともとの背景を壊さないように [get()]を使って画像を保存して、あと背景を回復をしなければなりません。
 
 ```example
+// Maze1
 /* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
@@ -835,7 +878,7 @@ void draw() {
     int dx = 0;
     int dy = -1;
 
-    void draw() {  // この関数は繰り返し呼ばれている.  
+    void draw() {  // この関数は繰り返し呼ばれている.
       image(imgWalker, x, y);
       x += dx;
       y += dy;
@@ -844,6 +887,7 @@ void draw() {
 結果はこのようなスケッチになります。
 
 ```hidden
+// Maze2
 /* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
@@ -864,7 +908,7 @@ int dx = 0;
 int dy = -1;
 
 PImage imgSave = null;
-void draw() {  // この関数は繰り返し呼ばれている.  
+void draw() {  // この関数は繰り返し呼ばれている.
   if (imgSave != null) {
     image(imgSave, x, y, s, s);
   }
@@ -875,8 +919,8 @@ void draw() {  // この関数は繰り返し呼ばれている.
 }
 ```
 
-キャラクターは壁を無視して動いてます。
-`imgSave = get(...)`や`image(imgSave,...)`をしなければ、キャラクターは壁に当たると壁を消して穴を開けてしまいます。
+キャラクターは壁を無視して動いてます。 `imgSave =
+get(...)`や`image(imgSave,...)`をしなければ、キャラクターは壁に当たると壁を消して穴を開けてしまいます。
 これは、実際には壁ではなくてただの背景画像が表示されているだけだからです。壁が実際にあるように見せるのが、プログラマの仕事です。
 
 次は[3. 壁の検出][Maze3]
@@ -887,7 +931,8 @@ void draw() {  // この関数は繰り返し呼ばれている.
 
 壁を検出するには[get()]関数を利用して、指定した位置のピクセルの色を調べます。[imageMode]([CENTER])の設定によって、キャラクターの位置はスタンプの中心を示すようになるので、キャラクターの進行方向の前の位置を調べましょう。
 
-その前に、dx, dyには常に０か１の値しか与えないようにします。たとえば、下は（０，１）、上は（０，−１）、右は（１，０）、左は（−１，０）です。最初の設定では上方向にしましょう。
+その前に、dx,
+dyには常に０か１の値しか与えないようにします。たとえば、下は（０，１）、上は（０，−１）、右は（１，０）、左は（−１，０）です。最初の設定では上方向にしましょう。
 
     int dx = 0;
     int dy = -1;
@@ -897,7 +942,7 @@ void draw() {  // この関数は繰り返し呼ばれている.
 
     boolean wallAhead() {
       // キャラクターの３ピクセル前に調べよう.
-      color c = get(x+dx*(s/2+3), y+dy*(s/2+3)); 
+      color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
     　// 黒を検出しよう。
       return brightness(c) < 50;
     }
@@ -913,6 +958,7 @@ void draw() {  // この関数は繰り返し呼ばれている.
 スケッチこんな漢字になったでしょうか？
 
 ```hidden
+// Maze3
 /* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
@@ -934,7 +980,7 @@ int dx = 0;
 int dy = -1;
 
 PImage imgSave = null;
-void draw() {  // この関数は繰り返し呼ばれている.  
+void draw() {  // この関数は繰り返し呼ばれている.
   if (imgSave != null) {
     image(imgSave, x, y, s, s);
   }
@@ -949,7 +995,7 @@ void draw() {  // この関数は繰り返し呼ばれている.
 
 boolean wallAhead() {
   // キャラクターの３ピクセル前に調べよう.
-  color c = get(x+dx*(s/2+3), y+dy*(s/2+3)); 
+  color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
 　// 黒を検出しよう。
   return brightness(c) < 50;
 }
@@ -990,6 +1036,7 @@ boolean wallAhead() {
 完成スケッチはこちらです。
 
 ```hidden
+// Maze3
 /* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
@@ -1011,7 +1058,7 @@ int dx = 0;
 int dy = -1;
 
 PImage imgSave = null;
-void draw() {  // この関数は繰り返し呼ばれている.  
+void draw() {  // この関数は繰り返し呼ばれている.
   if (imgSave != null) {
     image(imgSave, x, y, s, s);
   }
@@ -1025,7 +1072,7 @@ void draw() {  // この関数は繰り返し呼ばれている.
 
 boolean wallAhead() {
   // キャラクターの３ピクセル前に調べよう.
-  color c = get(x+dx*(s/2+3), y+dy*(s/2+3)); 
+  color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
 　// 黒を検出しよう。
   return brightness(c) < 50;
 }
@@ -1076,7 +1123,6 @@ void turnLeft() {
       ...
     }
 
-
 上のプログラムは一回右に曲がってしまうと、キャラクターが無限ループに入ってしまうため上手く動きません。原因は右側を検出する関数が1ピクセルしか確認していないため、キャラクター全体が曲がった先に入れないときにも
 true を返してしまうからです。
 
@@ -1104,7 +1150,6 @@ true を返してしまうからです。
       return wallFound;
     }
 
-
 それでも他にも問題が残ってます。右に空き通路を検出すると、キャラクターはまた無限ループに入ってしまいます。今度の原因は、右に曲がったすぐ後に右側に壁がないとキャラクターがすぐにまた右に曲がってしまうことです。これを直すには、曲がってから数ピクセルはまっすぐに進む必要があります。
 
     void draw() {
@@ -1121,6 +1166,7 @@ true を返してしまうからです。
 完成スケッチこちらです。
 
 ```hidden
+// Maze4
 /* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
@@ -1142,7 +1188,7 @@ int dx = 0;
 int dy = -1;
 
 PImage imgSave = null;
-void draw() {  // この関数は繰り返し呼ばれている.  
+void draw() {  // この関数は繰り返し呼ばれている.
   if (imgSave != null) {
     image(imgSave, x, y, s, s);
   }
@@ -1200,8 +1246,8 @@ void turnRight() {
 
 ここまでのプログラムで、キャラクターは迷路の中をうまく動くはずです。まだ問題がある場合、以下の点を確認しましょう。
 
-* `dx`, `dy`には-1/0/1の以外の値を与えない。
-* 右側に空き通路を検出する関数はキャラクターが確実に入れる広さか確認する。
+*   `dx`, `dy`には-1/0/1の以外の値を与えない。
+*   右側に空き通路を検出する関数はキャラクターが確実に入れる広さか確認する。
 
 次は[5. ゴールの判定][Maze5]
 
@@ -1236,14 +1282,15 @@ void turnRight() {
 
 別の迷路を解いてみましょう。2箇所の「labyrinth1.png」をに変えたら、別の迷路に挑戦できます。使用可能の迷路は
 
-* `labyrinth1.png`
-* `labyrinth2.png`
-* `labyrinth3.png`
-* `labyrinth4.png`
+*   `labyrinth1.png`
+*   `labyrinth2.png`
+*   `labyrinth3.png`
+*   `labyrinth4.png`
 
 完成させたプログラムは全ての迷路を解けるでしょうか？
 
 ```example
+// Maze5
 /* @pjs preload="/static/labyrinth1.png"; */
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgLabyrinth = loadImage("/static/labyrinth1.png");
@@ -1265,7 +1312,7 @@ int dx = 0;
 int dy = -1;
 
 PImage imgSave = null;
-void draw() {  // この関数は繰り返し呼ばれている.  
+void draw() {  // この関数は繰り返し呼ばれている.
   if (imgSave != null) {
     image(imgSave, x, y, s, s);
   }
@@ -1279,7 +1326,7 @@ void draw() {  // この関数は繰り返し呼ばれている.
     boolean hitWall = false;
     for (int i = 0; i < 2; i++) {
       if (!wallAhead() && !wallRight()) {
-	    moveForward(1);
+        moveForward(1);
       } else {
         hitWall = true;
         break;
@@ -1287,7 +1334,7 @@ void draw() {  // この関数は繰り返し呼ばれている.
     }
     if (!hitWall) {
       //moveForward(-2);
-      turnLeft(); 
+      turnLeft();
     }
   } else if (wallAhead()) {
     turnLeft();
@@ -1344,19 +1391,19 @@ void turnRight() {
 
 # プログラミング体験ワークショップ {#ref-tts-workshop}
 
-* プログラミング体験ワークショップ
-  * [ステップ1][step1]
-  * [ステップ2][step2]
-  * [ステップ3][step3]
-  * [ステップ4][step4]
-* [補足][Addendum]
-* [デモ][Demos]
-* [ゲーム][Games]
+*   プログラミング体験ワークショップ
+    *   [ステップ1][step1]
+    *   [ステップ2][step2]
+    *   [ステップ3][step3]
+    *   [ステップ4][step4]
+*   [補足][Addendum]
+*   [デモ][Demos]
+*   [ゲーム][Games]
 
-たとえば、こちらのスケッチを試してみましょう。「読み込み」にクリックしてから、
-「実行」を押してください。
+たとえば、こちらのスケッチを試してみましょう。「読み込み」にクリックしてから、 「実行」を押してください。
 
-``` prerender
+```prerender
+// Rect
 // キャンバスの大きさを設定する。
 size(150, 150);
 // キャンバスをホワイトで塗る
@@ -1372,11 +1419,12 @@ rect(25, 25, 100, 100);
 今回のワークショップのテーマはコンピューターに言葉を話させることです。こちらのプログラムを入力してみましょう。
 
 ```example
-// 「こんにちは」と話して。 
+// 「こんにちは」と話して。
 speak("こんにちは");
 ```
 
-ここに書いてある2行のうち、「//」 から初めの行は人間への説明です。コンピュータはこちらを無視しますので入力を省略しても大丈夫です。コンピューターへの命令は２行目のみです。
+ここに書いてある2行のうち、「//」
+から初めの行は人間への説明です。コンピュータはこちらを無視しますので入力を省略しても大丈夫です。コンピューターへの命令は２行目のみです。
 
 ```
 speak("こんにちは");
@@ -1388,9 +1436,9 @@ speak("こんにちは");
 
 詳しく知りたい人へ：
 
-* `speak(...)` は 「... の中の内容を話して」という命令です。
-* “...” の **"** は言葉を囲む記号です。
-* **;** は命令の区切りを意味します。
+*   `speak(...)` は 「... の中の内容を話して」という命令です。
+*   “...” の **"** は言葉を囲む記号です。
+*   **;** は命令の区切りを意味します。
 
 次は[ステップ2][step2]に進みましょう。
 
@@ -1420,16 +1468,16 @@ text("こんにちは、" + namae, 0, 50);
 
 詳しく知りたい人へ：
 
-* 「String namae」 は 「言葉 (String) を記憶する変数を作ります、その変数の名前は 「namae」 です」 という意味です。
-* 「=」 は右にあるものを左の変数に記憶しなさいという命令です。全体で、「namae という言葉を格納する変数に “太郎” を記憶しなさい」 という命令になります。
-* 「+」 を使うと言葉をつなげることができます。
-* 「text(...)」はテキストを表示します。格好のなかの最初のものは表示する言葉です。その後のは2つの数字は表示する場所を表しています。
-変数はコンピューターの記憶と考えてもいいです。変数を使うことによって、
-コンピューターは様々な情報を覚えてくれます。
+*   「String namae」 は 「言葉 (String) を記憶する変数を作ります、その変数の名前は 「namae」 です」 という意味です。
+*   「=」 は右にあるものを左の変数に記憶しなさいという命令です。全体で、「namae という言葉を格納する変数に “太郎” を記憶しなさい」
+    という命令になります。
+*   「+」 を使うと言葉をつなげることができます。
+*   「text(...)」はテキストを表示します。格好のなかの最初のものは表示する言葉です。その後のは2つの数字は表示する場所を表しています。
+    変数はコンピューターの記憶と考えてもいいです。変数を使うことによって、 コンピューターは様々な情報を覚えてくれます。
 
 次は[ステップ3][step3]に進みましょう。
 
-# ステップ3：配列（はいれつ）{#ref-step3}
+# ステップ3：配列（はいれつ） {#ref-step3}
 
 [ステップ2][step2]に戻る。
 
@@ -1453,10 +1501,11 @@ speak("全部で" + yotei.length + "つの予定があります。");
 
 詳しく知りたい人へ：
 
-* 「`String yotei[]`」 の「`[]`」は 「ふくすうの言葉 (String) を記憶する変数を作ります、その変数の名前は 「`yotei`」 です」 という意味です。
-* 「`{`」 と「`}`」で覚えてほしい言葉は囲まれています。
-* 「`yotei[0]`」と「`yotei[1]`」はふくすうの覚えてるのものから思い出す命令です。「`[0]`」は1つ目と「`[1]`」は二つ目を指します。というわけで、覚えているものは０から数えます。
-* 「`yotei.length`」は配列の長さといい、覚えているものの数という意味です。
+*   「`String yotei[]`」 の「`[]`」は 「ふくすうの言葉 (String) を記憶する変数を作ります、その変数の名前は
+    「`yotei`」 です」 という意味です。
+*   「`{`」 と「`}`」で覚えてほしい言葉は囲まれています。
+*   「`yotei[0]`」と「`yotei[1]`」はふくすうの覚えてるのものから思い出す命令です。「`[0]`」は1つ目と「`[1]`」は二つ目を指します。というわけで、覚えているものは０から数えます。
+*   「`yotei.length`」は配列の長さといい、覚えているものの数という意味です。
 
 次は[ステップ4][step4]に進みましょう。
 
@@ -1468,6 +1517,7 @@ speak("全部で" + yotei.length + "つの予定があります。");
 「トップ」→「ステップ4」を押してから「読み込む」ボタンを押してプログラムを読み込みましょう。
 
 ```example
+// 「いつだれがどこでどうした」ゲーム
 String itsu[] = {"昨日", "2年前", "今朝"};
 String darega[] = {"太郎が", "花子が"};
 String dokode[] = {"外で", "学校で", "とつぜん", "大きく"};
@@ -1491,26 +1541,24 @@ speak(phrase);
 
 詳しく知りたい人へ：
 
-* 「random(...)」は乱数といい、実行するごとに違う数字を返します。例えば、「random(5)」は0から5までの数字を返します。
-* 「int(...)」は数字の整数部分を抽出します。例えば、「int(4.5)」= 4。「random」は整数ではない数字を返しますが、[配列][Array]にアクセスするには整数は必要です。
+*   「random(...)」は乱数といい、実行するごとに違う数字を返します。例えば、「random(5)」は0から5までの数字を返します。
+*   「int(...)」は数字の整数部分を抽出します。例えば、「int(4.5)」=
+    4。「random」は整数ではない数字を返しますが、[配列][Array]にアクセスするには整数は必要です。
 
-それでプログラミング体験のステップ終わりです。
-もし、時間の余裕と興味があったら、[補足][Addendum]を見てみてください。
+それでプログラミング体験のステップ終わりです。 もし、時間の余裕と興味があったら、[補足][Addendum]を見てみてください。
 または、[デモ][Demos]や[ゲーム][Games]を実行してみましょう。
 
 # 補足 {#ref-Addendum}
 
 プログラミングに興味があったらこちらの補足情報もご覧ください。
 
-* [顔を描く][DrawFace]
-* [繰り返し（ループ）][Loop]
-* [イベント][Events]
-
+*   [顔を描く][DrawFace]
+*   [繰り返し（ループ）][Loop]
+*   [イベント][Events]
 
 # 補足：顔を描く {#ref-DrawFace}
 
-左側にあるプログラムを実行したら、右側にある実行キャンバスにさまざまな
-絵や形状を描けます。位置を指定のために座標を使います。左上は(0,0)です。
+左側にあるプログラムを実行したら、右側にある実行キャンバスにさまざまな 絵や形状を描けます。位置を指定のために座標を使います。左上は(0,0)です。
 座標の最初の数は左右を表して、最後の数は上下を表しています。
 
 ```prerender
@@ -1530,8 +1578,7 @@ text("(0, 200)", 10, 190);
 
 では、丸を描きましょう。丸を描くために`ellipse()`という関数を使います。
 `ellipse()`を呼ぶときは4つの数を指定します。最初2つの数は中心の座標を表します。
-最後の2つの数は横幅と高さを表しています。例えば、縦の長い丸を描いてみましょう。
-顔に似ているでしょうか？
+最後の2つの数は横幅と高さを表しています。例えば、縦の長い丸を描いてみましょう。 顔に似ているでしょうか？
 
 ```prerender
 size(200, 200);
@@ -1548,8 +1595,7 @@ size(200, 200);
 triangle(100, 90, 90, 120, 110, 120);
 ```
 
-口と目を前と同じように`ellipse()`を使いましょう。次の見本のプログラムに進む前に
-自分で目と口を描いてみましょう。
+口と目を前と同じように`ellipse()`を使いましょう。次の見本のプログラムに進む前に 自分で目と口を描いてみましょう。
 
 ```prerender
 size(200, 200);
@@ -1586,14 +1632,13 @@ for (int i = 1; i <= 5; i++) {　// 1から5まで数えます。
 
 # 補足：イベント {#ref-Events}
 
-プログラムの実行中でユーザの入力に対応するにはいくつかの方法ありますが、
-こちらで**イベント**を紹介します。ユーザーはマウスクリックしたときに
+プログラムの実行中でユーザの入力に対応するにはいくつかの方法ありますが、 こちらで**イベント**を紹介します。ユーザーはマウスクリックしたときに
 [mouseClicked()]という関数が呼ばれます。
 
 ```example
 // マウスがクリックした時に実行されます。
 void mouseClicked() {　
-  // 四角の中か外か判断する。 
+  // 四角の中か外か判断する。
   if (60 <= mouseX && mouseX <= 140 &&
       60 <= mouseY && mouseY <= 140) {
     speak("ピンポン");
@@ -1617,24 +1662,23 @@ void setup() {
 
 マウスの入力は[イベント][Events]によって行う。イベントのリスト:
 
-* [mouseClicked()] マウスはクリックされたとき
-* [mousePressed()] マウスのボタンが押されたとき
-* [mouseReleased()] マウスのボタンが話されたとき
-* [mouseMoved()] マウスが動いたとき
-* [mouseDragged()] マウスが押されたままに動いたとき
-* [mouseOver()] マウスのカーソルはキャンバスに入ったとき
-* [mouseOut()] マウスのカーソルがキャンバスから離れたとき
-* [mouseX], [mouseY] マウスのXとY座標
-* [mouseButton] マウスイベントの関数の中は押されたボタンを表す
+*   [mouseClicked()] マウスはクリックされたとき
+*   [mousePressed()] マウスのボタンが押されたとき
+*   [mouseReleased()] マウスのボタンが話されたとき
+*   [mouseMoved()] マウスが動いたとき
+*   [mouseDragged()] マウスが押されたままに動いたとき
+*   [mouseOver()] マウスのカーソルはキャンバスに入ったとき
+*   [mouseOut()] マウスのカーソルがキャンバスから離れたとき
+*   [mouseX], [mouseY] マウスのXとY座標
+*   [mouseButton] マウスイベントの関数の中は押されたボタンを表す
 
 # 形状ゲーム {#ref-ShapeGame}
 
-ここまでに勉強してきたことを合わせて簡単のゲームを作ってみましょう。
-キャンバスに形状を３つ書いて、英語で形状の名前を話して、ユーザー
-に形を当てましょう。正しければ「ピンポン」、間違っていれば「ぶぶ」と
-コンピューターに話させましょう。
+ここまでに勉強してきたことを合わせて簡単のゲームを作ってみましょう。 キャンバスに形状を３つ書いて、英語で形状の名前を話して、ユーザー
+に形を当てましょう。正しければ「ピンポン」、間違っていれば「ぶぶ」と コンピューターに話させましょう。
 
 ```example
+// ShapeGame
 String shapes[] = new String[3];
 shapes[0] = "circle";
 shapes[1] = "square";
@@ -1688,9 +1732,9 @@ while(noLoop()は呼ばれていない) {
 
 ## 参考
 
-* [draw()]
-* [noLoop()]
-* [loop()]
+*   [draw()]
+*   [noLoop()]
+*   [loop()]
 
 # draw
 
@@ -1716,8 +1760,7 @@ void setup() {
 # frameRate
 
 `frameRate(x)`は`setup()`の中で使える関数で、`draw()`が呼ばれる頻度を設定します。
-括弧の中には`draw()`関数を1秒間に何回呼ぶかを指定します。
-たとえば、`frameRate(10)`を実行すると、`draw()`の実行が終わってから
+括弧の中には`draw()`関数を1秒間に何回呼ぶかを指定します。 たとえば、`frameRate(10)`を実行すると、`draw()`の実行が終わってから
 次に`draw()`を呼ぶまで0.1秒待ちます。`frameRate(1)`では1秒待ちます。
 
 # インデックス {#ref-index}
@@ -1726,106 +1769,105 @@ void setup() {
 
 `setup()`と`draw()`はプログラムの中で定義する必要があります。
 
-* [void setup() {...}][setup] 設定するための関数
-* [void draw() {...}][draw] アニメーションのフレームを描くための関数
-* [exit()] 実行を終了する
+*   [void setup() {...}][setup] 設定するための関数
+*   [void draw() {...}][draw] アニメーションのフレームを描くための関数
+*   [exit()] 実行を終了する
 
 ## アニメーション
 
-* [noLoop()] アニメーションの繰り返しを止める
-* [loop()] アニメーションの繰り返しを再開する
-* [millis()] 実行時間をミリ秒単位で返す
+*   [noLoop()] アニメーションの繰り返しを止める
+*   [loop()] アニメーションの繰り返しを再開する
+*   [millis()] 実行時間をミリ秒単位で返す
 
 ## キャンバス
 
-* [background()] キャンバスを色で塗る
-* [size()] キャンバスの大きさを設定する
-* [dist()] 2点間の距離を計算する
-* [copy()] 画像の一部を別の位置にコピーする
+*   [background()] キャンバスを色で塗る
+*   [size()] キャンバスの大きさを設定する
+*   [dist()] 2点間の距離を計算する
+*   [copy()] 画像の一部を別の位置にコピーする
 
 ## 図形
 
-* [ellipse()] 楕円
-* [rect()] 長方形
-* [triangle()] 三角形
-* [line()] 直線
-* [arc()] 円弧
+*   [ellipse()] 楕円
+*   [rect()] 長方形
+*   [triangle()] 三角形
+*   [line()] 直線
+*   [arc()] 円弧
 
 ## 筆の設定
 
-* [fill()] 塗りつぶしの色を設定する
-* [stroke()] ペンの色を設定する
-* [strokeCap()] ペンの端の形を設定する
-* [strokeWeight()] ペンの太さを設定する
+*   [fill()] 塗りつぶしの色を設定する
+*   [stroke()] ペンの色を設定する
+*   [strokeCap()] ペンの端の形を設定する
+*   [strokeWeight()] ペンの太さを設定する
 
 ## 画像
 
-* [image()] 画像を写す
-* [loadImage()], [@pjs preload][preload] 画像データを読み込む
-* [createImage()] 空画像を作る
-* [get()] 画像データをキャンバスから抽出する
+*   [image()] 画像を写す
+*   [loadImage()], [@pjs preload][preload] 画像データを読み込む
+*   [createImage()] 空画像を作る
+*   [get()] 画像データをキャンバスから抽出する
 
 ## 文字
 
-* [textSize()] 文字の大きさを設定する
-* [text()] 文字を表示する
-* [textFont()] 字体を設定する
-* [loadFont()] 字体を読み込みする
+*   [textSize()] 文字の大きさを設定する
+*   [text()] 文字を表示する
+*   [textFont()] 字体を設定する
+*   [loadFont()] 字体を読み込みする
 
 ## スピーチ
 
-* [speak()] 声で話す
+*   [speak()] 声で話す
 
 ## [マウス][Mouse]
 
-* [mouseClicked()] マウスのボタンがクリックされたとき
-* [mousePressed()] マウスのボタンが押されたとき
-* [mouseReleased()] マウスのボタンが離されたとき
-* [mouseOver()] マウスがキャンバス内に入ったとき
-* [mouseOut()] マウスがキャンバスの外に出たとき
-* [mouseX], [mouseY], [pmouseX], [pmouseY] マウスのX座標とY座標
-* [mouseButton] マウスイベント関数の中で押されたボタンを表す
-* [cursor()] マウスカーソルの形を変える
+*   [mouseClicked()] マウスのボタンがクリックされたとき
+*   [mousePressed()] マウスのボタンが押されたとき
+*   [mouseReleased()] マウスのボタンが離されたとき
+*   [mouseOver()] マウスがキャンバス内に入ったとき
+*   [mouseOut()] マウスがキャンバスの外に出たとき
+*   [mouseX], [mouseY], [pmouseX], [pmouseY] マウスのX座標とY座標
+*   [mouseButton] マウスイベント関数の中で押されたボタンを表す
+*   [cursor()] マウスカーソルの形を変える
 
 ## キーボード
 
-* [keyPressed()], [keyReleased()], [keyTyped()] キーボードのイベント関数
-* [key], [keyCode], [keyPressed] 押されたキーの変数
-* [keyCodes] キーコードの一覧
+*   [keyPressed()], [keyReleased()], [keyTyped()] キーボードのイベント関数
+*   [key], [keyCode], [keyPressed] 押されたキーの変数
+*   [keyCodes] キーコードの一覧
 
 ## データ
 
-* 単純な型
-  * [int], [float], [boolean], [byte], [short], [double], [char]
-* [Array]
-  * [append()], [concat()]
-* [HashMap]
-  * [entrySet()]
-* [PImage] 画像
+*   単純な型
+    *   [int], [float], [boolean], [byte], [short], [double], [char]
+*   [Array]
+    *   [append()], [concat()]
+*   [HashMap]
+    *   [entrySet()]
+*   [PImage] 画像
 
 ## 言語の基礎
 
-* 条件付き実行
-  * [if], [else]
-* [ループ][Loop]
-  * [for], [while], [do]
-  * [continue], [break]
-* switch文
-  * [switch], [case], [default]
-* クラス
-  * [class], [this]
-* [final]
-
+*   条件付き実行
+    *   [if], [else]
+*   [ループ][Loop]
+    *   [for], [while], [do]
+    *   [continue], [break]
+*   switch文
+    *   [switch], [case], [default]
+*   クラス
+    *   [class], [this]
+*   [final]
 
 ## 定数
 
-* [PI], [HALF_PI], [QUARTER_PI], [TWO_PI].
+*   [PI], [HALF_PI], [QUARTER_PI], [TWO_PI].
 
 ## 数学関数
 
-* [abs()]
-* [ceil()], [floor()], [round()]
-* [sin()], [cos()], [tan()]
+*   [abs()]
+*   [ceil()], [floor()], [round()]
+*   [sin()], [cos()], [tan()]
 
 # size
 
@@ -1840,8 +1882,7 @@ background(250, 200, 200);
 
 # background
 
-キャンバスを一つの色で塗りつぶます。色を指定する方法は2つあります。
-1個の数値を指定した場合は、グレースケールで明るさを指定します。
+キャンバスを一つの色で塗りつぶます。色を指定する方法は2つあります。 1個の数値を指定した場合は、グレースケールで明るさを指定します。
 0は黒、255は白、その中間は数値に応じた灰色を意味します。例えば
 
 ```prerender
@@ -1849,8 +1890,7 @@ background(250, 200, 200);
 background(150);
 ```
 
-3個の数値を指定した場合は、RGBモデルで任意の色を指定できます。
-R・G・Bそれぞれを0から255までの数値で指定します。
+3個の数値を指定した場合は、RGBモデルで任意の色を指定できます。 R・G・Bそれぞれを0から255までの数値で指定します。
 
 ```prerender
 // キャンバスを赤で塗ります。
@@ -1863,25 +1903,23 @@ background(255, 0, 0);
 
 ## 参考
 
-* [draw()]
-* [noLoop()]
+*   [draw()]
+*   [noLoop()]
 
 # noLoop
 
-スケッチの実行ループを停止します。
-なお、マウスなどのイベントが発生したときは対応する関数が呼ばれるので、
-スケッチの実行が完全に停止するわけではありません。
+スケッチの実行ループを停止します。 なお、マウスなどのイベントが発生したときは対応する関数が呼ばれるので、 スケッチの実行が完全に停止するわけではありません。
 
 ## 参考
 
-* [draw()]
-* [loop()]
+*   [draw()]
+*   [loop()]
 
 # Demos
 
-* [RandomSentenceGenerator]
-* [Drawing]
-* [ChaseTheCircle]
+*   [RandomSentenceGenerator]
+*   [Drawing]
+*   [ChaseTheCircle]
 
 # Drawing
 
@@ -1944,7 +1982,7 @@ void setup() {
   stroke(0);
 }
 
-void draw() { 
+void draw() {
   // Paint the background.
   background(40, 40, 100);
 
@@ -1972,9 +2010,294 @@ void draw() {
 
 # ゲーム {#ref-Games}
 
-* [JumpingBall]
-* [TouchTheNumber]
-* [形状ゲーム][ShapeGame]
+*   [JumpingBall]
+*   [TouchTheNumber]
+*   [形状ゲーム][ShapeGame]
+*   [IslandHopper]
+*   [PingPong]
+
+# PingPong
+
+```example
+// PingPong
+void setup() {
+  size(360, 360, P2D);
+  background(250);
+  frameRate(30);
+}
+
+int ballDiameter = 30;
+int paddleWidth = 10;
+int paddleHeight = 90;
+
+int sleepUntil = 0;
+
+void drawBall(int x, int y) {
+  fill(200);
+  stroke(0);
+  int deform = 0;
+  if (x <= paddleWidth*2 + ballDiameter/2 &&
+      y1 - paddleHeight/2 - ballDiameter/2 < y &&
+      y < y1 + paddleHeight/2 + ballDiameter/2) {
+    deform = (paddleWidth*2 + ballDiameter/2 - x);
+  } else if (x >= 360-paddleWidth*2 - ballDiameter/2 &&
+             y2 - paddleHeight/2 -ballDiameter/2< y &&
+             y < y2 + paddleHeight/2 + ballDiameter/2) {
+    deform = (paddleWidth*2 + ballDiameter/2 - (360-x));
+  }
+  ellipse(x, y, ballDiameter-deform, ballDiameter+deform);
+}
+
+void drawPaddle(int x, int y) {
+  fill(100);
+  stroke(0);
+  rect(x - paddleWidth/2, y - paddleHeight/2, paddleWidth, paddleHeight);
+}
+
+// Ball coordinates.
+int x = 180, y = 180;
+// Ball velocity.
+int vx = 5, vy = 5;
+int lastPlayer1inputMs = 0;
+int lastPlayer2inputMs = 0;
+
+boolean updateBall() {
+  if (y < 10 && vy < 0) {
+    vy = -vy - 1 + random(2);
+  }
+  if (y > 350 && vy > 0) {
+    vy = -vy - 1 + random(2);
+  }
+  if (x <= paddleWidth + ballDiameter/2 &&
+      y1 - paddleHeight/2 - ballDiameter/2 < y &&
+      y < y1 + paddleHeight/2 + ballDiameter/2) {
+    vx = 5 + random(2);
+  }
+  if (x >= 360-paddleWidth - ballDiameter/2 &&
+      y2 - paddleHeight/2 -ballDiameter/2< y &&
+      y < y2 + paddleHeight/2 + ballDiameter/2) {
+    vx = -7 + random(2);
+  }
+  x += vx;
+  y += vy;
+  if (x < 10 || x > 350) {
+    sleepUntil = millis() + 2000;
+    background(250);
+    textSize(30);
+    fill(0);
+    if (x < 10) {
+      text("Player B won!", 100, 180);
+       speak("Player B won!", "en");
+    } else {
+      text("Player A won!", 100, 180);
+       speak("Player A won!", "en");
+    }
+    x = 180;
+    y = 0;
+    vx = -5;
+    return false;
+  }
+  return true;
+}
+
+void draw() {
+  if (millis() < sleepUntil) {
+    return;
+  }
+  if (!updateBall()) {
+    return;
+  }
+  background(255);
+  drawPaddle(10, y1);
+  drawPaddle(345, y2);
+  drawBall(x, y);
+  textSize(10);
+  text(str(x) + "," + str(y)+"  "+y1+" " + y2, 10, 10);
+  if (random(70) < 10 && millis() - lastPlayer1inputMs > 5000) {
+    y1 = y;
+  } else if (random(90) < 10 && millis() - lastPlayer2inputMs > 5000) {
+    y2 = y;
+  }
+}
+
+int y1 = 180;
+int y2 = 180;
+
+void mouseMoved() {
+  y1 = mouseY;
+  lastPlayer1inputMs = millis();
+}
+
+void keyPressed() {
+  int ms = millis() - lastPlayer2inputMs;
+  if (keyCode == UP) {
+    if (ms < 100) {
+      y2 -= 100;
+    } else if (ms < 200) {
+      y2 -= 50;
+    } else {
+      y2 -= 10;
+    }
+  } else if (keyCode = DOWN) {
+    if (ms < 100) {
+      y2 += 100;
+    } else if (ms < 200) {
+      y2 += 50;
+    } else {
+      y2 += 10;
+    }
+  }
+  lastPlayer2inputMs = millis();
+}
+```
+
+# IslandHopper
+
+```example
+// IslandHopper
+int location = 0;
+int[] sizes = new int[]{30, 30, 20, 30, 20, 10, 30};
+int N = sizes.length;
+
+int width = 300;
+int height = 200;
+
+void setup() {
+  size(width, height);
+  frameRate(10);
+  stroke(0);
+  fill(255);
+}
+
+int margin = 30;
+int islandR = 30;
+int islandAspect = 4;
+int islandH = height-20;
+int step = (width - 2*margin) / (N-1);
+
+int negSizeThreshold = -3;
+
+int humanHeight = 50;
+int humanWidth = 20;
+int humanHeadR = 10;
+int humanY = islandH;
+
+boolean gameOver = false;
+String message = "GAME OVER";
+
+void initialize() {
+  location = 0;
+  gameOver = false;
+  humanY = islandH;
+  message = "GAME OVER";
+}
+
+
+void drawHuman(int x, int y) {
+  line(x, y-humanHeight/3, x, y-humanHeight);
+  line(x-humanWidth/2, y, x, y-humanHeight/3);
+  line(x+humanWidth/2, y, x, y-humanHeight/3);
+  line(x-humanWidth/2, y-humanHeight*4/5, x+humanWidth/2, y-humanHeight*4/5);
+  ellipse(x, y-humanHeight-humanHeadR, humanHeadR*2, humanHeadR*2);
+}
+
+void drawIsland(int x, int s) {
+  ellipse(x, islandH, s, islandW);
+}
+
+void redraw() {
+  background(200);
+  drawHuman(margin + location*step, humanY);
+  for (int i = 0; i < N; i++) {
+    int s = sizes[i];
+    if (s > 0) {
+      if (s > islandR) s = islandR;
+      ellipse(margin + i*step, islandH, s, s/islandAspect);
+    }
+  }
+  drawHuman(margin + location*step, humanY);
+  if (gameOver) {
+    textSize(40);
+    fill(0);
+    text(message, 30, height/2+10);
+    fill(255);
+  }
+}
+
+void shrinkIslands() {
+  for (int i = 1; i < N-1; i++) {
+    if (sizes[i] > -random(negSizeThreshold)) {
+      sizes[i] -= 1;
+    } else {
+      sizes[i] = random(islandR) + islandR;
+    }
+  }
+}
+
+void pullHuman() {
+  if (humanY < islandH) {
+    humanY += humanHeight/10;
+  }
+  if (humanY > islandH) {
+    humanY = islandH;
+  }
+}
+
+void advanceTime() {
+  shrinkIslands();
+  pullHuman();
+}
+
+void checkGround() {
+  int s = sizes[location];
+  if (humanY == islandH && s < humanWidth-2) {
+    humanY = height;
+    gameOver = true;
+    redraw();
+    noLoop();
+    return;
+  }
+  if (location == sizes.length-1 && humanY == islandH) {
+    message = "YOU WON";
+    gameOver = true;
+  }
+}
+
+void draw() {
+  if (gameOver) return;
+  advanceTime();
+  checkGround();
+  redraw();
+}
+
+void keyPressed() {
+  if (gameOver) {
+    if (keyCode == ' ') {
+      initialize();
+      loop();
+    }
+    return;
+  }
+  switch (keyCode) {
+    case LEFT: if (location > 0) location--; break;
+    case RIGHT: if (location < sizes.length-1) location++; break;
+    case 32:
+      if (humanY == islandH) {
+        humanY -= humanHeight;
+      }
+      break;
+  }
+  checkGround();
+  redraw();
+}
+
+void mouseClicked() {
+  if (gameOver) {
+    initialize();
+    loop();
+  }
+}
+```
 
 # JumpingBall
 
@@ -2084,7 +2407,6 @@ class Wall {
 }
 ```
 
-
 # TouchTheNumber
 
 ```example
@@ -2182,7 +2504,7 @@ void mouseClicked() {
   //text(str(mouseX) + " " + str(mouseY)+" : " + str(x) + " " + str(y), 20, 20);
   if (numbers[x][y] == current) {
     textSize(50);
-    fill(0); 
+    fill(0);
     text(str(numbers[x][y]), 85+120*x, 118+120*y);
     current++;
     if (current == 10) {
@@ -2217,10 +2539,10 @@ ellipse(50, 50, 40, 40);
 
 呼び方: `ellipse(x, y, width, height)`
 
-* x --- 中心のX座標
-* y --- 中心のY座標
-* width --- 楕円の幅
-* height --- 楕円の高さ
+*   x --- 中心のX座標
+*   y --- 中心のY座標
+*   width --- 楕円の幅
+*   height --- 楕円の高さ
 
 weightとheightを等しくすれば円になります。
 
@@ -2250,6 +2572,7 @@ speak("Hello!", "en-US");
 # RandomSentenceGenerator
 
 ```example
+// RandomSentenceGenerator
 String itsu[] = {"昨日", "2年前", "今朝"};
 String darega[] = {"太郎が", "花子が"};
 String dokode[] = {"外で", "学校で", "とつぜん", "大きく"};
@@ -2291,8 +2614,7 @@ Wall: 壁
 
 # fill
 
-`fill()`は筆の中の色を設定する。筆には２つの色が設定できます。中の色は形状の中に塗ります。
-端の色は形状の堺麺を描く時に使います。
+`fill()`は筆の中の色を設定する。筆には２つの色が設定できます。中の色は形状の中に塗ります。 端の色は形状の堺麺を描く時に使います。
 
 ```prerender
 fill(0, 255, 0);  // 緑
@@ -2317,8 +2639,8 @@ ellipse(50, 50, 50, 25);
 
 `boolean`は真理値の型です。真理値には2つの値があります。
 
-* `true` 「真」
-* `false` 「偽」
+*   `true` 「真」
+*   `false` 「偽」
 
 [if()]と[while()]のカッコの中の値は真理値でなければなりません。
 
@@ -2366,8 +2688,6 @@ text(str(x), 10, 30);
 
 **注意:** Processing.jsでは変数につけている型は倍精度(double)であるため、使う時点で`short()`で変換が必要である。
 
-
-
 # line
 
 `line()`はキャンバスに直線を描きます。
@@ -2387,6 +2707,7 @@ line(x1, y1, x2, y2);
 例えば、このプログラムは実行を始めてから2秒後に赤い円を描きます。
 
 ```prerender
+// millis
 void setup() {
   size(150, 100);
   background(255);  // キャンバスを白で塗ります
@@ -2479,8 +2800,7 @@ void mouseOut() {
 
 # mousePressed
 
-ユーザがマウスのボタンを押すと`mousePressed()`関数が呼ばれます。
-この関数を定義すれば、「マウスで絵を描く」のような操作が実装できます。
+ユーザがマウスのボタンを押すと`mousePressed()`関数が呼ばれます。 この関数を定義すれば、「マウスで絵を描く」のような操作が実装できます。
 
 ```example
 void setup() {
@@ -2514,8 +2834,7 @@ void draw() {
 
 # mouseReleased
 
-ユーザがマウスのボタンを離すと`mouseReleased()`関数が呼ばれます。
-この関数を定義すれば、「マウスで絵を描く」のような操作が実装できます。
+ユーザがマウスのボタンを離すと`mouseReleased()`関数が呼ばれます。 この関数を定義すれば、「マウスで絵を描く」のような操作が実装できます。
 
 ```example
 void setup() {
@@ -2542,8 +2861,7 @@ void draw() {
 
 # mouseButton
 
-[マウスイベント][Mouse]の中で使い、押されたボタンを表す。
-押されたボタンが左ボタンのときは[LEFT]に、右ボタンがときは[RIGHT]になる。
+[マウスイベント][Mouse]の中で使い、押されたボタンを表す。 押されたボタンが左ボタンのときは[LEFT]に、右ボタンがときは[RIGHT]になる。
 
 ```prerender
 // キャンバスの中でマウスボタンが押してみましょう。
@@ -2569,7 +2887,8 @@ void mouseReleased() {
 
 マウスのX座標。[draw()]からも[マウスイベント][Mouse]からも参照できます。
 
-関連項目: [mouseX], [pmouseX], [pmouseY], [mousePressed()], [mouseReleased()], [mouseClicked()].
+関連項目: [mouseX], [pmouseX], [pmouseY], [mousePressed()], [mouseReleased()],
+[mouseClicked()].
 
 ```prerender
 void draw() {
@@ -2599,7 +2918,8 @@ void draw() {
 
 マウスのY座標。[draw()]からも[マウスイベント][Mouse]からも参照できます。
 
-関連項目: [mouseX], [pmouseX], [pmouseY], [mousePressed()], [mouseReleased()], [mouseClicked()].
+関連項目: [mouseX], [pmouseX], [pmouseY], [mousePressed()], [mouseReleased()],
+[mouseClicked()].
 
 ```prerender
 void draw() {
@@ -2613,11 +2933,10 @@ void draw() {
 
 関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
 
-**キーボード**: 左の矢印キーのコード。一覧は[keyCodes]に参照。
-`keyCode == LEFT`を調べる先に`key == CODED`を確かめなければなりません。
+**キーボード**: 左の矢印キーのコード。一覧は[keyCodes]に参照。 `keyCode == LEFT`を調べる先に`key ==
+CODED`を確かめなければなりません。
 
 関連項目: [keyCode], [keyCodes].
-
 
 # CENTER
 
@@ -2631,8 +2950,8 @@ void draw() {
 
 関連項目: [mouseButton], [mousePressed()], [mouseReleased()], [mouseClicked()].
 
-**キーボード**: 右の矢印キーのコード。一覧は[keyCodes]に参照。
-`keyCode == RIGHT`を調べる先に`key == CODED`を確かめなければなりません。
+**キーボード**: 右の矢印キーのコード。一覧は[keyCodes]に参照。 `keyCode == RIGHT`を調べる先に`key ==
+CODED`を確かめなければなりません。
 
 関連項目: [keyCode], [keyCodes].
 
@@ -2641,7 +2960,6 @@ void draw() {
 数値を表示する。
 
 # random
-
 
 # rect
 
@@ -2695,14 +3013,13 @@ line(20, 20, 80, 80);
 
 選択できる形は
 
-* `ROUND` - 丸い
-* `SQUARE` - 四角い。線は座標で表している点までぴったり及びます。
-* `PROJECT` - 四角い。線は座標で表している点から筆の大きさの部分まで出ています。
+*   `ROUND` - 丸い
+*   `SQUARE` - 四角い。線は座標で表している点までぴったり及びます。
+*   `PROJECT` - 四角い。線は座標で表している点から筆の大きさの部分まで出ています。
 
 # ROUND
 
-線を描く筆を丸い形に設定します。
-[strokeCap()]を見てください。
+線を描く筆を丸い形に設定します。 [strokeCap()]を見てください。
 
 ```prerender
 strokeCap(ROUND);
@@ -2714,8 +3031,7 @@ line(20, 20, 80, 80);
 
 # SQUARE
 
-線を描く筆を四角い形に設定します。
-[strokeCap()]を見てください。
+線を描く筆を四角い形に設定します。 [strokeCap()]を見てください。
 
 ```prerender
 strokeCap(SQUARE);
@@ -2727,8 +3043,7 @@ line(20, 20, 80, 80);
 
 # PROJECT
 
-線を描く筆を四角い形に設定します。[SQUARE]と比べて、筆の大きさは線の先端に出ています。
-[strokeCap()]を見てください。
+線を描く筆を四角い形に設定します。[SQUARE]と比べて、筆の大きさは線の先端に出ています。 [strokeCap()]を見てください。
 
 ```prerender
 strokeCap(PROJECT);
@@ -2824,8 +3139,7 @@ for (int i = 0; i < 10; i++) {
 
 # do
 
-ループの一つの種類。[while]と違って、初めて条件を調べる前に一回ループの本体
-を実行する。
+ループの一つの種類。[while]と違って、初めて条件を調べる前に一回ループの本体 を実行する。
 
 ```prerender
 do {
@@ -2838,8 +3152,7 @@ do {
 
 # if
 
-条件付き実行する。条件が満たされたら、条件付きのブロックを実行する。
-条件は満たさなければ、[else]のブロックを実行する。[else]のブロックはなければ、
+条件付き実行する。条件が満たされたら、条件付きのブロックを実行する。 条件は満たさなければ、[else]のブロックを実行する。[else]のブロックはなければ、
 何も実行しない。
 
 ```prerender
@@ -2855,8 +3168,7 @@ if (10 > 5) {
 
 # else
 
-条件付きの実行の[if]のブロックに条件が満たされないときに実行するブロック
-指定する。
+条件付きの実行の[if]のブロックに条件が満たされないときに実行するブロック 指定する。
 
 ```prerender
 fill(0);
@@ -2877,8 +3189,7 @@ if (10 < 5) {
 
 # switch
 
-`switch`文は一つの変数の値を検出して、複数の値に対して比べて多重分岐から
-一つの分岐を実行する。
+`switch`文は一つの変数の値を検出して、複数の値に対して比べて多重分岐から 一つの分岐を実行する。
 
 ```prerender
 fill(0); textSize(30);
@@ -2903,36 +3214,36 @@ switch (x) {
 
 ループは繰り返す実行の命令である。いくつの種類がある
 
-* [for]
-* [while]
-* [do]
+*   [for]
+*   [while]
+*   [do]
 
 # LabyrinthWalker
 
 ```example
 /* @pjs preload="/static/Labyrinth2a.png"; */
 /* @pjs preload="/static/Walker44.png"; */
- 
+
 PImage imgLabyrinth = loadImage("/static/Labyrinth2a.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
- 
+
 int s = 44;
- 
+
 int x = 190;
 int y = 310;
- 
+
 int dx = 0;
 int dy = -1;
- 
-void setup() {  // this is run once.     
+
+void setup() {  // this is run once.
     // canvas size (Variable aren't evaluated. Integers only, please.)
-    size(360, 360); 
-    
+    size(360, 360);
+
     // Display the background (labyrinth).
     image(imgLabyrinth, 1, 1, 360, 360);
-    
- 
-    
+
+
+
     // Use white fill color for drawing rectangles.
     fill(255,255,255);
     // Use white stroke color for drawing rectangles.
@@ -2941,14 +3252,14 @@ void setup() {  // this is run once.
     imageMode(CENTER);
     // Display the starting position of the walker.
     image(imgWalker, x, y, s, s);
-} 
- 
+}
+
 void turnLeft() {
   int tmp = dx;
   dx = dy;
   dy = -tmp;
 }
- 
+
 boolean wallAhead() {
     boolean wallFound = false;
     int rx = -dy;
@@ -2959,20 +3270,20 @@ boolean wallAhead() {
     }
     return wallFound;
 }
- 
+
 void moveForward() {
   rect(x-s/2, y-s/2, s, s);
   x += dx;
   y += dy;
   image(imgWalker, x, y, s, s);
 }
- 
+
 void turnRight() {
   int tmp = dx;
   dx = -dy;
   dy = tmp;
 }
- 
+
 boolean wallRight() {
   int rx = -dy;
   int ry = dx;
@@ -2983,12 +3294,12 @@ boolean wallRight() {
   }
   return wallFound;
 }
- 
+
 boolean reachedGoal() {
   color c = get(x+dx*(s/2+3), y+dy*(s/2+3));
   return red(c) < 50 && green(c) > 50;
 }
- 
+
 void draw() {
   if (reachedGoal()) {
       fill(0,0,0);  // black.
@@ -3015,10 +3326,10 @@ void draw() {
 PImage imgLabyrinth = loadImage("/static/Labyrinth3a.png");
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgWalker = loadImage("/static/Walker44.png");
- 
-void setup() {  // this is run once.     
+
+void setup() {  // this is run once.
     // Set up canvas size.
-    size(360, 360); 
+    size(360, 360);
     // Display the background (labyrinth).
     image(imgLabyrinth, 1, 1, 360, 360);
 }
@@ -3047,38 +3358,38 @@ void draw() {
 PImage imgLabyrinth = loadImage("/static/Labyrinth3a.png");
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgWalker = loadImage("/static/Walker44.png");
- 
+
 // Step in pixels.
 int s = 17;
 // Size of the grid.
 int n = 360/s;
 // The grid. 0 means the cell is blocked. >0 means the cell is open.
 int grid[][];
- 
+
 boolean showMap = true;
- 
+
 // The starting point;
 int sx = 0, sy = 0;
 // The goal.
 int gx = 0, gy = 0;
- 
-void setup() {  // this is run once.     
+
+void setup() {  // this is run once.
     // canvas size (Variable aren't evaluated. Integers only, please.)
-    size(360, 360); 
-    
+    size(360, 360);
+
     // Display the background (labyrinth).
     image(imgLabyrinth, 1, 1, 360, 360);
-    
+
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
         grid[i] = new boolean[n];
-    }  
+    }
 }
- 
+
 // The loop counters that live across multiple mapStep invocations.
 int i = 0, j = 0;
-            
+
 void mapStep() {
             color c = get(i*s+s/2, j*s+s/2);
             if (brightness(c) > 200) {
@@ -3112,11 +3423,11 @@ void mapStep() {
          }
      }
 }
- 
- 
+
+
 int next = 0;
 int step = 50;
- 
+
 void draw() {
     if (showMap) {
         while (millis() <= next) return;
@@ -3139,21 +3450,21 @@ void draw() {
 PImage imgLabyrinth = loadImage("/static/Labyrinth3a.png");
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgWalker = loadImage("/static/Walker44.png");
- 
+
 // Step in pixels.
 int s = 17;
 // Size of the grid.
 int n = 360/s;
 // The grid. 0 means the cell is blocked. >0 means the cell is open.
 int grid[][];
- 
+
 boolean showMap = true;
- 
+
 // The starting point;
 int sx = 0, sy = 0;
 // The goal.
 int gx = 0, gy = 0;
- 
+
 void CreateMap() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -3164,11 +3475,11 @@ void CreateMap() {
             if (red(c) > 100 && green(c) < 100) {
                 sx = i;
                 sy = j;
-               
+
             } else if (green(c) > 100 & red(c) < 100) {
                 gx = i;
                 gy = j;
-                
+
             }
         }
     }
@@ -3179,7 +3490,7 @@ void CreateMap() {
     fill(0, 200, 0);
     rect(s*i, s*j, s/2, s/2);
 }
- 
+
 // Fixed queue length for simplicity. The expected maximum queue size is
 // the the size of the grid, so should be well below 500.
 int queueLength = 500;
@@ -3187,7 +3498,7 @@ int qx[] = new int[queueLength];
 int qy[] = new int[queueLength];
 int qhead = 0;
 int qtail = 0;
- 
+
 void queuePush(int x, int y) {
     qx[qtail] = x;
     qy[qtail] = y;
@@ -3195,17 +3506,17 @@ void queuePush(int x, int y) {
     // Note: in case of queue overflow, the queue contents will be lost
     // (misinterpreted as empty queue).
 }
- 
+
 void queuePop() {
     if (qtail != qhead) {
         qhead = (qhead+1) % queueLength;
     }
 }
- 
+
 boolean queueEmpty() {
     return qtail == qhead;
 }
- 
+
 void visitCell(int x, int y, int distance) {
     // Out of bounds checks.
     if (x < 0 || x >= n) return;
@@ -3225,7 +3536,7 @@ void visitCell(int x, int y, int distance) {
         }
     }
 }
- 
+
 void StartSearch() {
     // Using Breadth-first search in rectangular grid.
     // Put the goal position into the queue and search back towards
@@ -3233,45 +3544,45 @@ void StartSearch() {
     queuePush(gx, gy);
     grid[gx][gy] = 1;
 }
- 
-void setup() {  // this is run once.     
+
+void setup() {  // this is run once.
     // canvas size (Variable aren't evaluated. Integers only, please.)
-    size(360, 360); 
-    
+    size(360, 360);
+
     // Display the background (labyrinth).
     image(imgLabyrinth, 1, 1, 360, 360);
-    
+
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
         grid[i] = new boolean[n];
-    }  
-        
+    }
+
     CreateMap();
     StartSearch();
 }
- 
+
 int next = 0;
 int step = 250;
 bool found = false;
- 
+
 // The position during backtracing.
 int bx, by;
- 
+
 void searchStep() {
     // While queue is not empty. Loop is implicit around draw().
     if (!queueEmpty()) {
         int x = qx[qhead];
         int y = qy[qhead];
         queuePop();
- 
+
         fill(200, 200, 180);
         rect(s*x, s*y, s/2, s/2);
         int distance = grid[x][y];
         fill(0,0,0);
         text("" + distance, x*s, y*s);
- 
-        if (x == sx && y == sy) {            
+
+        if (x == sx && y == sy) {
             exit();
             return;
         }
@@ -3280,19 +3591,19 @@ void searchStep() {
         visitCell(x-1, y, distance+1);
         visitCell(x, y-1, distance+1);
         visitCell(x, y+1, distance+1);
-        
+
     } else {
         // path not found.
         noLoop();
     }
 }
- 
+
 void draw() {
     if (showMap) {
         while (millis() <= next) return;
         next = millis() + step;
     }
-    
+
     searchStep();
 }
 ```
@@ -3310,31 +3621,31 @@ void draw() {
 PImage imgLabyrinth = loadImage("/static/Labyrinth3a.png");
 /* @pjs preload="/static/Walker44.png"; */
 PImage imgWalker = loadImage("/static/Walker44.png");
- 
+
 // Step in pixels.
 int s = 17;
 // Size of the grid.
 int n = 360/s;
 // The grid. 0 means the cell is blocked. >0 means the cell is open.
 int grid[][];
- 
+
 boolean showMap = true;
- 
+
 // The starting point;
 int sx = 0, sy = 0;
 // The goal.
 int gx = 0, gy = 0;
- 
+
 void CreateMap() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             color c = get(i*s+s/2, j*s+s/2);
             if (brightness(c) > 200) {
-                grid[i][j] = 999;            
+                grid[i][j] = 999;
             }
             if (red(c) > 100 && green(c) < 100) {
                 sx = i;
-                sy = j;        
+                sy = j;
             } else if (green(c) > 100 & red(c) < 100) {
                 gx = i;
                 gy = j;
@@ -3342,7 +3653,7 @@ void CreateMap() {
         }
     }
 }
- 
+
 // Fixed queue length for simplicity. The expected maximum queue size is
 // the the size of the grid, so should be well below 500.
 int queueLength = 500;
@@ -3350,7 +3661,7 @@ int qx[] = new int[queueLength];
 int qy[] = new int[queueLength];
 int qhead = 0;
 int qtail = 0;
- 
+
 void queuePush(int x, int y) {
     qx[qtail] = x;
     qy[qtail] = y;
@@ -3358,17 +3669,17 @@ void queuePush(int x, int y) {
     // Note: in case of queue overflow, the queue contents will be lost
     // (misinterpreted as empty queue).
 }
- 
+
 void queuePop() {
     if (qtail != qhead) {
         qhead = (qhead+1) % queueLength;
     }
 }
- 
+
 boolean queueEmpty() {
     return qtail == qhead;
 }
- 
+
 void visitCell(int x, int y, int distance) {
     // Out of bounds checks.
     if (x < 0 || x >= n) return;
@@ -3389,7 +3700,7 @@ void visitCell(int x, int y, int distance) {
         }
     }
 }
- 
+
 void StartSearch() {
     // Using Breadth-first search in rectangular grid.
     // Put the goal position into the queue and search back towards
@@ -3397,43 +3708,43 @@ void StartSearch() {
     queuePush(gx, gy);
     grid[gx][gy] = 1;
 }
- 
-void setup() {  // this is run once.     
+
+void setup() {  // this is run once.
     // canvas size (Variable aren't evaluated. Integers only, please.)
-    size(360, 360); 
-    
+    size(360, 360);
+
     // Display the background (labyrinth).
     image(imgLabyrinth, 1, 1, 360, 360);
-    
+
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
         grid[i] = new boolean[n];
-    }  
-        
+    }
+
     CreateMap();
     StartSearch();
 }
- 
+
 int next = 0;
 int step = 250;
 bool found = false;
- 
+
 // The position during backtracing.
 int bx, by;
- 
+
 void searchStep() {
     // While queue is not empty. Loop is implicit around draw().
     if (!queueEmpty()) {
         int x = qx[qhead];
         int y = qy[qhead];
         queuePop();
- 
+
         fill(200, 200, 180);
         rect(s*x, s*y, s/2, s/2);
         int distance = grid[x][y];
- 
-        if (x == sx && y == sy) {            
+
+        if (x == sx && y == sy) {
             found = true;
             fill(0,0,0);
             bx = sx;
@@ -3445,13 +3756,13 @@ void searchStep() {
         visitCell(x-1, y, distance+1);
         visitCell(x, y-1, distance+1);
         visitCell(x, y+1, distance+1);
-        
+
     } else {
         // path not found.
         noLoop();
     }
 }
- 
+
 boolean backTrace(int nx, int ny, int distance) {
     if (nx < 0 || nx >= n) return false;
     if (ny < 0 || ny >= n) return false;
@@ -3459,13 +3770,13 @@ boolean backTrace(int nx, int ny, int distance) {
     // Found the backtrace step.
     if (showMap) {
         stroke(255,0,0);
-        line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
+        line(bx+s/4, by+s/4, nx+s/4, ny+s/4);
     }
     bx = nx;
     by = ny;
     return true;
 }
- 
+
 void backTraceStep() {
     fill(255, 255, 100);
     rect(bx*s+s/4, by*s+s/4, s/2, s/2);
@@ -3479,13 +3790,13 @@ void backTraceStep() {
     else if (backTrace(bx, by-1, distance-1));
     else if (backTrace(bx, by+1, distance-1));
 }
- 
+
 void draw() {
     if (found) {
         while (millis() <= next) return;
         next = millis() + step;
     }
-    
+
     if (found) {
         backTraceStep();
     } else {
@@ -3503,24 +3814,24 @@ void draw() {
 ```example
 /* @pjs preload="/static/Labyrinth2a.png"; */
 /* @pjs preload="/static/Walker44.png"; */
- 
+
 PImage imgLabyrinth = loadImage("/static/Labyrinth2a.png");
 PImage imgWalker = loadImage("/static/Walker44.png");
- 
+
 // Step in pixels.
 int s = 17;
 // Size of the grid.
 int n = 360/s;
 // The grid. 0 means the cell is blocked. >0 means the cell is open.
 int grid[][];
- 
+
 boolean showMap = true;
- 
+
 // The starting point;
 int sx = 0, sy = 0;
 // The goal.
 int gx = 0, gy = 0;
- 
+
 void CreateMap() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -3550,7 +3861,7 @@ void CreateMap() {
         }
     }
 }
- 
+
 // Fixed queue length for simplicity. The expected maximum queue size is
 // the the size of the grid, so should be well below 500.
 int queueLength = 500;
@@ -3558,7 +3869,7 @@ int qx[] = new int[queueLength];
 int qy[] = new int[queueLength];
 int qhead = 0;
 int qtail = 0;
- 
+
 void queuePush(int x, int y) {
     qx[qtail] = x;
     qy[qtail] = y;
@@ -3566,17 +3877,17 @@ void queuePush(int x, int y) {
     // Note: in case of queue overflow, the queue contents will be lost
     // (misinterpreted as empty queue).
 }
- 
+
 void queuePop() {
     if (qtail != qhead) {
         qhead = (qhead+1) % queueLength;
     }
 }
- 
+
 boolean queueEmpty() {
     return qtail == qhead;
 }
- 
+
 void visitCell(int x, int y, int distance) {
     // Out of bounds checks.
     if (x < 0 || x >= n) return;
@@ -3597,7 +3908,7 @@ void visitCell(int x, int y, int distance) {
         }
     }
 }
- 
+
 void StartSearch() {
     // Using Breadth-first search in rectangular grid.
     // Put the goal position into the queue and search back towards
@@ -3605,43 +3916,43 @@ void StartSearch() {
     queuePush(gx, gy);
     grid[gx][gy] = 1;
 }
- 
-void setup() {  // this is run once.     
+
+void setup() {  // this is run once.
     // canvas size (Variable aren't evaluated. Integers only, please.)
-    size(360, 360); 
-    
+    size(360, 360);
+
     // Display the background (labyrinth).
     image(imgLabyrinth, 1, 1, 360, 360);
-    
+
     // Allocate 2-dimensional array in 2 steps.
     grid = new boolean[n][];
     for (int i = 0; i < n; i++) {
         grid[i] = new boolean[n];
-    }  
-        
+    }
+
     CreateMap();
     StartSearch();
 }
- 
+
 int next = 0;
 int step = 10;
 bool found = false;
- 
+
 // The position during backtracing.
 int bx, by;
- 
+
 void searchStep() {
     // While queue is not empty. Loop is implicit around draw().
     if (!queueEmpty()) {
         int x = qx[qhead];
         int y = qy[qhead];
         queuePop();
- 
+
         fill(200, 200, 180);
         rect(s*x, s*y, s/2, s/2);
         int distance = grid[x][y];
- 
-        if (x == sx && y == sy) {            
+
+        if (x == sx && y == sy) {
             found = true;
             fill(0,0,0);
             bx = sx;
@@ -3653,13 +3964,13 @@ void searchStep() {
         visitCell(x-1, y, distance+1);
         visitCell(x, y-1, distance+1);
         visitCell(x, y+1, distance+1);
-        
+
     } else {
         // path not found.
         noLoop();
     }
 }
- 
+
 boolean backTrace(int nx, int ny, int distance) {
     if (nx < 0 || nx >= n) return false;
     if (ny < 0 || ny >= n) return false;
@@ -3667,13 +3978,13 @@ boolean backTrace(int nx, int ny, int distance) {
     // Found the backtrace step.
     if (showMap) {
         stroke(255,0,0);
-        line(bx+s/4, by+s/4, nx+s/4, ny+s/4);     
+        line(bx+s/4, by+s/4, nx+s/4, ny+s/4);
     }
     bx = nx;
     by = ny;
     return true;
 }
- 
+
 void backTraceStep() {
     fill(255, 255, 100);
     rect(bx*s+s/4, by*s+s/4, s/2, s/2);
@@ -3687,13 +3998,13 @@ void backTraceStep() {
     else if (backTrace(bx, by-1, distance-1));
     else if (backTrace(bx, by+1, distance-1));
 }
- 
+
 void draw() {
     if (showMap) {
         while (millis() <= next) return;
         next = millis() + step;
     }
-    
+
     if (found) {
         backTraceStep();
     } else {
@@ -3704,8 +4015,7 @@ void draw() {
 
 # 配列 {#ref-Array}
 
-`Array`は配列といい、データのリストを持っている。複数のデータを保存するとき、
-番号を使って取り出せるのだ。
+`Array`は配列といい、データのリストを持っている。複数のデータを保存するとき、 番号を使って取り出せるのだ。
 
 ```prerender
 int x[] = {1, 2, 3};  // 配列をつくる
@@ -3763,8 +4073,7 @@ arc(50, 50, 45, 45, HALF_PI, TWO_PI);
 
 # HashMap
 
-`HashMap`はハッシュテーブルデータ構造である。データはキーと値の組で保存され、
-キーに対して値を素早く参照できる。
+`HashMap`はハッシュテーブルデータ構造である。データはキーと値の組で保存され、 キーに対して値を素早く参照できる。
 
 ```prerender
 HashMap<Integer, String> map = new HashMap();
@@ -3778,8 +4087,8 @@ fill(0); text(map.get(123), 10, 30);
 
 `get()`は複数の意味持っている。
 
-* [HashMap]の場合、キーに対して値を取り出す。
-* 画像の場合は、ピクセルデートを読み込みます。
+*   [HashMap]の場合、キーに対して値を取り出す。
+*   画像の場合は、ピクセルデートを読み込みます。
 
 ```prerender
 /* @pjs preload="/static/Walker44.png" */
@@ -3801,7 +4110,7 @@ rect(72, 0, 28, 28);
 
 `put`は複数の意味を持っている。
 
-* [HashMap]の場合、キーに対して与えられた値を保存する。
+*   [HashMap]の場合、キーに対して与えられた値を保存する。
 
 # entrySet
 
@@ -3899,8 +4208,7 @@ text("Arial", 10, 60);
 
 # textFont
 
-`textFont`は書体デート(フォント)を設定する。すぐは見える効果はないが、
-次の[text]の呼び出しに影響を与える。
+`textFont`は書体デート(フォント)を設定する。すぐは見える効果はないが、 次の[text]の呼び出しに影響を与える。
 
 ```prerender
 fill(0);
@@ -3926,7 +4234,8 @@ stroke(blue);
 rect(10, 10, 80, 80);
 ```
 
-関連項目: [fill()], [background()], [red()], [green()], [blue()], [hue()], [saturation()], [brightness()], [colorMode()].
+関連項目: [fill()], [background()], [red()], [green()], [blue()], [hue()],
+[saturation()], [brightness()], [colorMode()].
 
 # abs
 
@@ -3974,12 +4283,11 @@ arc(50, 50, 40, 20, PI/4, 2*PI);
 
 呼び方:`arc(x, y, width, height, start, stop)`
 
-* x, y --- 楕円の中心の座標。
-* width, height --- 楕円の横幅と縦幅。
-* start, stop --- 弧の角度を指定する。
+*   x, y --- 楕円の中心の座標。
+*   width, height --- 楕円の横幅と縦幅。
+*   start, stop --- 弧の角度を指定する。
 
 関連項目: [ellipse()].
-
 
 # break
 
@@ -4011,8 +4319,8 @@ text(binary(x, 5), 10, 40);
 
 呼び方: `binary(input, num_digits)`
 
-* `input` --- 二進法で表現する数
-* `num_digits` --- 最大返す数字の上限
+*   `input` --- 二進法で表現する数
+*   `num_digits` --- 最大返す数字の上限
 
 # blue
 
@@ -4117,8 +4425,7 @@ fill(0); text(wanwan, 10, 30);
 
 # toString
 
-オブジェクトに対して、文字列を期待する文脈で呼ばれるメソッド。
-例えば、`str()`にオブジェクトを渡されたとき。
+オブジェクトに対して、文字列を期待する文脈で呼ばれるメソッド。 例えば、`str()`にオブジェクトを渡されたとき。
 
 ```prerender
 class Inu {
@@ -4225,15 +4532,14 @@ copy(50, 50, 24, 24, 0, 0, 50, 50);
 
 呼び方: `copy(x, y, w, h, dx, dy, dw, dh)`
 
-* x, y --- コピーの元の四角の左上の角のX,Y座標
-* w, h --- コピーする資格の横幅と縦幅
-* dx, dy --- コピーの目的地の四角の左上の角のX,Y座標
-* dw, dh --- コピーの目的地の横幅と縦幅
+*   x, y --- コピーの元の四角の左上の角のX,Y座標
+*   w, h --- コピーする資格の横幅と縦幅
+*   dx, dy --- コピーの目的地の四角の左上の角のX,Y座標
+*   dw, dh --- コピーの目的地の横幅と縦幅
 
 # key
 
-最後に押された文字または記号を文字列として保存している変数。
-矢印などの文字ではないキーの判断
+最後に押された文字または記号を文字列として保存している変数。 矢印などの文字ではないキーの判断
 
 関連項目: [keyReleased()], [keyTyped()], [key], [keyCode], [keyCodes].
 
@@ -4250,8 +4556,7 @@ void draw() {
 
 # keyCode
 
-最後に押されたキーのコード。通常イベント関数で使います。
-コードの一覧は[keyCodes]に参照。
+最後に押されたキーのコード。通常イベント関数で使います。 コードの一覧は[keyCodes]に参照。
 
 関連項目: [keyPressed()], [keyReleased()], [keyTyped()].
 
@@ -4269,8 +4574,7 @@ void draw() {
 
 # keyPressed
 
-**関数**: `keyPressed()`を定義すれば、キーが押されたたび
-に呼ばれる関数です。
+**関数**: `keyPressed()`を定義すれば、キーが押されたたび に呼ばれる関数です。
 
 **変数**: `keyPressed`は最後に押されたキーのコードです。
 
@@ -4308,8 +4612,7 @@ void keyPressed() {
 
 # keyTyped
 
-`keyTyped()`を定義すれば、キーボードの文字または数字や記号のキー
-押されたときに呼ばれる関数です。
+`keyTyped()`を定義すれば、キーボードの文字または数字や記号のキー 押されたときに呼ばれる関数です。
 
 関連項目: [keyPressed()], [keyReleased()], [key], [keyCode], [keyCodes].
 
@@ -4333,8 +4636,7 @@ void keyTyped() {
 
 # keyReleased
 
-`keyReleased()`を定義すれば、キーが話されたたびに
-呼ばれる関数です。
+`keyReleased()`を定義すれば、キーが話されたたびに 呼ばれる関数です。
 
 関連項目: [keyPressed()], [keyTyped()], [key], [keyCode], [keyCodes].
 
@@ -4360,16 +4662,14 @@ void keyReleased() {
 
 [keyCode]の値を調べるときに次のキーコードを使えます。
 
-* [BACKSPACE], [TAB], [ENTER], [RETURN], [ESC], [DELETE].
+*   [BACKSPACE], [TAB], [ENTER], [RETURN], [ESC], [DELETE].
 
-以下のキーの条件を調べるときに先に`key == CODED`を確かめなければなりません。
-[CODED]に参照。
+以下のキーの条件を調べるときに先に`key == CODED`を確かめなければなりません。 [CODED]に参照。
 
-* 矢印キー: [UP], [DOWN], [RIGHT], [LEFT].
-* [ALT], [CONTROL], [SHIFT].
+*   矢印キー: [UP], [DOWN], [RIGHT], [LEFT].
+*   [ALT], [CONTROL], [SHIFT].
 
-**注意**: Processing.jsではブラウザの環境によって使えないキーコードがあります。
-以下のスケッチで確認ください。
+**注意**: Processing.jsではブラウザの環境によって使えないキーコードがあります。 以下のスケッチで確認ください。
 
 ```example
 // Keycodes
@@ -4403,7 +4703,7 @@ void draw() {
         case BACKSPACE: label = label + "BACKSPACE"; break;
       }
       text(label, 10, 100);
- 	} else {
+    } else {
       label = "key " + str(key) + " ";
       switch (keyCode) {
         case RETURN: label = label + "RETURN"; break;
@@ -4420,36 +4720,31 @@ void draw() {
 
 # UP
 
-上の矢印キーのコード。一覧は[keyCodes]に参照。
-`keyCode == UP`を調べる先に`key == CODED`を確かめなければなりません。
+上の矢印キーのコード。一覧は[keyCodes]に参照。 `keyCode == UP`を調べる先に`key == CODED`を確かめなければなりません。
 
 関連項目: [keyCode], [keyCodes].
 
 # DOWN
 
-下の矢印キーのコード。一覧は[keyCodes]に参照。
-`keyCode == DOWN`を調べる先に`key == CODED`を確かめなければなりません。
+下の矢印キーのコード。一覧は[keyCodes]に参照。 `keyCode == DOWN`を調べる先に`key == CODED`を確かめなければなりません。
 
 関連項目: [keyCode], [keyCodes].
 
 # ALT
 
-「Alt」キーのコード。
-`keyCode == ALT`を調べる先に`key == CODED`を確かめなければなりません。
+「Alt」キーのコード。 `keyCode == ALT`を調べる先に`key == CODED`を確かめなければなりません。
 
 関連項目: [keyCode], [keyCodes].
 
 # CONTROL
 
-「Ctrl」キーのコード。
-`keyCode == CONTROL`を調べる先に`key == CODED`を確かめなければなりません。
+「Ctrl」キーのコード。 `keyCode == CONTROL`を調べる先に`key == CODED`を確かめなければなりません。
 
 関連項目: [keyCode], [keyCodes].
 
 # SHIFT
 
-「Shift」キーのコード。
-`keyCode == SHIFT`を調べる先に`key == CODED`を確かめなければなりません。
+「Shift」キーのコード。 `keyCode == SHIFT`を調べる先に`key == CODED`を確かめなければなりません。
 
 関連項目: [keyCode], [keyCodes].
 
@@ -4491,17 +4786,15 @@ void draw() {
 
 # CODED
 
-[keyCode]の値を調べるときに先`key == CODED`を確かめる必要なときがあります。
-詳しく[keyCodes]に参照。
+[keyCode]の値を調べるときに先`key == CODED`を確かめる必要なときがあります。 詳しく[keyCodes]に参照。
 
 関連項目: [key], [keyCodes].
 
 # loadImage
 
 `loadImage()`は画像のデートを読み込んでいます。ないProcessing.jsでは
-ファイルシステムにアクセスできないので、画像データはサーバからダウンロード
-されます。ダウンロードは時間かかる場合があるので、`@pjs preload`の命令が
-必要です。
+ファイルシステムにアクセスできないので、画像データはサーバからダウンロード されます。ダウンロードは時間かかる場合があるので、`@pjs
+preload`の命令が 必要です。
 
 ```prerender
 /* @pjs preload="/static/Walker44.png"; */
@@ -4534,8 +4827,7 @@ image(img, 20, 20);
 # @pjs preload {#ref-preload}
 
 `@pjs preload`はProcessing.jsでは画像データを予めダウンロードするような
-命令です。[loadImage()]で読み込む画像のファイルが全て`@pjs preload`で
-ファイル名の記述が必要です。
+命令です。[loadImage()]で読み込む画像のファイルが全て`@pjs preload`で ファイル名の記述が必要です。
 
 関連項目: [loadImage()], [image()].
 
@@ -4549,7 +4841,7 @@ image(walker, 10, 10, 80, 80);
 
 Processing.jsのコンパイラーへの命令。
 
-* [@pjs preload][preload]
+*   [@pjs preload][preload]
 
 # image
 
@@ -4570,4 +4862,3 @@ for (int i = 0; i < img.pixels.length; i++) {
 }
 image(img, 20, 20);
 ```
-
