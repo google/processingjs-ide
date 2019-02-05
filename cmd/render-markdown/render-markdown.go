@@ -56,6 +56,13 @@ func text(elt *html.Node) string {
 	return strings.Join(r, "")
 }
 
+func getData(n *html.Node) string {
+	if n == nil {
+		return "nil"
+	}
+	return n.Data
+}
+
 func run() error {
 	if *inputMDFile == "" {
 		return fmt.Errorf("Please specify --input_md_file")
@@ -126,6 +133,25 @@ func run() error {
 	}
 	bodyElt.FirstChild = divElts[0]
 	bodyElt.LastChild = divElts[len(divElts)-1]
+	// Add the <meta charset="UTF-8">.
+	if htmlElt.FirstChild == nil || htmlElt.FirstChild.Data != "head" {
+		return fmt.Errorf("render-markdown's assumption broken, expected <head> as first child of <html>, got <%s> > <%s>",
+			getData(htmlElt), getData(htmlElt.FirstChild))
+	}
+	headElt := htmlElt.FirstChild
+	meta := &html.Node{
+		Type: html.ElementNode,
+		Data: "meta",
+		Attr: []html.Attribute{{Key: "charset", Val: "UTF-8"}},
+	}
+	if headElt.FirstChild == nil {
+		headElt.FirstChild = meta
+		headElt.LastChild = meta
+	} else {
+		meta.NextSibling = headElt.FirstChild
+		headElt.FirstChild = meta
+		meta.Parent = headElt
+	}
 	// Render the modified HTML tree back into []byte.
 	buf := new(bytes.Buffer)
 	err = html.Render(buf, root)
