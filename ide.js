@@ -48,6 +48,14 @@ var ide = (/** @type {function(): !Object} */ (function() {
     // The cache for TTS blobs.
     /** @type {!Object<string, !Blob>} */
     ttsCache: new Object(),
+    /** @type {boolean} */
+    hoverHelpEnabled: false,
+    /** @type {?string} */
+    keyword: null,
+    /** @type {?HTMLDivElement} */
+    hoverElement: null,
+    /** @type {number} */
+    hoverStartedMs: 0,
   };
 
   /**
@@ -174,6 +182,17 @@ var ide = (/** @type {function(): !Object} */ (function() {
     //ide.processingCanvas.style.height = '100%';
   }
 
+  function newSketch() {
+    let l = window.location;
+    let port = '';
+    if (l.port != 80) {
+      port = ':' + l.port;
+    }
+    let url = l.protocol + '//' + l.hostname + port + l.pathname;
+    console.log('opening ' + url);
+    window.open(url, '_blank');
+  }
+
   /**
    * @param {boolean} on
    */
@@ -269,6 +288,98 @@ var ide = (/** @type {function(): !Object} */ (function() {
     }
     // Scroll to top.
     $('#help_section').scrollTop(0);
+  }
+
+  function hoverHelp(x, y) {
+    let pos = ide.codemirror.coordsChar({left:x, top:y}, "page");
+    let line = ide.codemirror.getLine(pos.line);
+    // Find the identifier under cursor.
+    let match = /^([a-zA-Z0-9_]*)/.exec(line.substr(pos.ch));
+    match = /([a-zA-Z_][a-zA-Z0-9_]*)([^a-zA-Z_]*)$/.exec(
+        line.substr(0, pos.ch) + match[1]);
+    if (!match) {
+      if (new Date().getTime() - ide.hoverStartedMs > 2000) {
+        // Hide the hover help.
+        showHelpHover(null, x, y);
+        ide.keyword = null;
+      }
+      return;
+    }
+    let keyword = match[1];
+    //window.console.log(keyword, x, y);
+    if (ide.keyword == keyword) {
+      return;
+    }
+    showHelpHover('ref-' + keyword, x, y);
+    ide.keyword = keyword;
+  }
+
+  function enableHover() {
+    $('#editor').mousemove(function(ev) {
+      //window.console.log(ev.pageX, ev.pageY);
+      hoverHelp(ev.pageX, ev.pageY);
+    });
+    ide.hoverHelpEnabled = true;
+    window.console.log('enabled hover');
+    window.setTimeout(function() {
+      $('#editor').click(function(ev) {
+        showHelp();
+        disableHover();
+        return true;
+      });
+    }, 100);
+  }
+
+  function disableHover() {
+    $('#editor').off('mousemove');
+    $('#editor').off('click');
+    ide.keyword = null;
+    if (ide.hoverElement) {
+      $(ide.hoverElement).hide();
+    }
+    ide.hoverHelpEnabled = false;
+    window.console.log('disabled hover');
+  }
+
+  function toggleHover() {
+    if (ide.hoverHelpEnabled) {
+      disableHover();
+    } else {
+      enableHover();
+    }
+  }
+
+  function showHelpHover(refkey, x, y) {
+    if (ide.hoverElement == null) {
+      // Create the hover.
+      let $hover = $('<div>').addClass('hover');
+      $hover.mousemove(function(ev) {
+        return false;
+      });
+      /** @type {?HTMLDivElement} */
+      ide.hoverElement = $hover[0];
+      document.getElementsByTagName('body')[0].appendChild(ide.hoverElement);
+    }
+    // tmp
+    //else return;
+    $(ide.hoverElement).hide();
+    // Detach the help article.
+    if (ide.hoverElement.lastChild)
+      ide.hoverElement.removeChild(ide.hoverElement.lastChild);
+    if (refkey == null) {
+      // Hide the hover.
+      $(ide.hoverElement).hide();
+      return;
+    }
+    // Move the hover.
+    $(ide.hoverElement).css('top', y).css('left', x);
+    // Show the text.
+    var doc = ide.referenceDict[refkey];
+    if (doc) {
+      ide.hoverElement.appendChild(doc);
+      $(ide.hoverElement).fadeIn(200);
+      ide.hoverStartedMs = new Date().getTime();
+    }
   }
 
   function showHelp() {
@@ -417,7 +528,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
     document.getElementById('stop_sketch_button')
       .addEventListener('click', stopSketch);
     document.getElementById('show_help_button')
-      .addEventListener('click', showHelp);
+      .addEventListener('click', toggleHover);
+    document.getElementById('new_sketch_button')
+      .addEventListener('click', newSketch);
     document.getElementById('help_top_button')
       .addEventListener('click', helpTop);
     document.getElementById('help_index_button')

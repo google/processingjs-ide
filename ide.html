@@ -19,7 +19,10 @@
   <div id='nav'>
     <button href='#' id='start_sketch_button'>実行</button>
     <button href='#' id='stop_sketch_button'>停止</button>
+    <span class='space' style='margin-left: 4em'></span>
     <button href='#' id='show_help_button'>参照</button>
+    <span class='space' style='margin-left: 8em'></span>
+    <button href='#' id='new_sketch_button'>新規作成</button>
   </div>
   <div id='main'>
     <div id='editor'>
@@ -32,52 +35,52 @@
     </canvas>
   </div>
   <div id='help_section'>
-		<div id='help-nav'>
-			<button href='#' id='help_top_button'>トップ</button>
-			<button href='#' id='help_index_button'>索引</button>
-		</div>
-		<div id='help_div'>
-			<h2>Help</h2>
-			Here is a sketch to get you started.<br>
-			Go ahead and press the Load button.
+    <div id='help-nav'>
+      <button href='#' id='help_top_button'>トップ</button>
+      <button href='#' id='help_index_button'>索引</button>
+    </div>
+    <div id='help_div'>
+      <h2>Help</h2>
+      Here is a sketch to get you started.<br>
+      Go ahead and press the Load button.
 
-			<pre><code class='language-example'> // 「こんにちは」と話して。 
+      <pre><code class='language-example'> // 「こんにちは」と話して。 
 speak("こんにちは");
 ellipse(50, 50, 80, 80);
 </code></pre>
 
-			<p>And here is some pre-rendered text.
-			</p>
-	<pre><code class='language-prerender'>// Draw an ellipse
+      <p>And here is some pre-rendered text.
+      </p>
+  <pre><code class='language-prerender'>// Draw an ellipse
 ellipse(50, 50, 80, 80);
 </code></pre>
 
-		</div>
-	</div>
-	<footer>
-		Built from <a href='http://github.com/google/processingjs-ide'>github.com/google/processingjs-ide</a>.
-		<a href='static/terms.html'>Terms and conditions</a>
-	</footer>
+    </div>
+  </div>
+  <footer>
+    Built from <a href='http://github.com/google/processingjs-ide'>github.com/google/processingjs-ide</a>.
+    <a href='static/terms.html'>Terms and conditions</a>
+  </footer>
 </div>
 <div id='reference'>
   <div id='ref-help' class='section'>
   <h1>Help top</h1>
-	<p>
-	Here is a sketch to get you started.<br>
-	Go ahead and press the Load button.
-	</p>
-	<pre><code class='language-example'> // 「こんにちは」と話して。 
+  <p>
+  Here is a sketch to get you started.<br>
+  Go ahead and press the Load button.
+  </p>
+  <pre><code class='language-example'> // 「こんにちは」と話して。 
 speak("こんにちは");
 ellipse(50, 50, 80, 80);
 </code></pre>
 
-	<p>And here is some pre-rendered sketch.</p>
-	<pre><code class='language-render'>// Draw an ellipse
+  <p>And here is some pre-rendered sketch.</p>
+  <pre><code class='language-render'>// Draw an ellipse
 size(110, 110);
 ellipse(50, 50, 80, 80);
 </code></pre>
 
-	See also <a href="#ref-index">Index</a>.
+  See also <a href="#ref-index">Index</a>.
   </div>
   <div id='ref-more' class='section'>
   <h1>More</h1>
@@ -119,7 +122,7 @@ draw();
     any output itself. Arguments:
     <ul>
       <li><code>size</code> an integer specifying the text size. Typical
-	values between 5 and 50.
+  values between 5 and 50.
     </ul>
   </div>
   <div id='ref-text' class='section'>

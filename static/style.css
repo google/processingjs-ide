@@ -118,3 +118,32 @@ pre.render {
 p > code {
   color: green;
 }
+.space {
+  padding: 0px;
+  margin: 0px;
+}
+button {
+  height: 19pt;
+}
+#start_sketch_button {
+  background-color: #99FFCC;
+}
+#stop_sketch_button {
+  background-color: #FFCC88;
+}
+#new_sketch_button {
+  background-color: #F0FFFF;
+}
+.hover {
+  position: absolute;
+  padding: 2pt;
+  border: 1px solid #222;
+  margin: 3pt;
+  min-width: 100px;
+  max-width: 500px;
+  min-height: 2em;
+  max-height: 600px;
+  background-color: #FFFFFF;
+  z-index: 10;
+  overflow: scroll;
+}

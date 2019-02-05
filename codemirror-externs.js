@@ -80,6 +80,13 @@ CodeMirror.prototype.setValue = function(value) {};
  */
 CodeMirror.prototype.setOption = function(key, value) {};
 
+/**
+ * @param {{top: number, left: number}} pos
+ * @param {string} mode
+ * @return {!CodeMirror.Pos}
+ */
+CodeMirror.prototype.coordsChar = function(pos, mode) {};
+
 CodeMirror.lint = {
   /**
    * @type {Object}
