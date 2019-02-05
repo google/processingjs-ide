@@ -134,6 +134,8 @@ genrule(
         ":ide-bin",
         ":ide-html-bin",
         ":ide-html-ja",
+        ":docs-ja-html",
+        ":docs-en-html",
         "@jquery//:dist/jquery.min.js",
         "node_modules/codemirror/lib/codemirror.js",
         "node_modules/codemirror/addon/lint/lint.js",
@@ -159,26 +161,14 @@ closure_js_library(
     ],
 )
 
-load("@org_pubref_rules_node//node:rules.bzl", "node_module")
-
-node_module(
-    name = "lint-module",
-    srcs = ["lint.js"],
-    description = "Synthetic module for lint.js",
-    main = "lint.js",
-    version = "0.0.1",
-    deps = [
-    ],
-)
-
-load("@org_pubref_rules_node//node:rules.bzl", "mocha_test")
+load("//:defs.bzl", "mocha_test")
 
 mocha_test(
     name = "lint_test",
-    main = "lint_test.js",
-    deps = [
-        ":lint-module",
+    src = "lint_test.js",
+    data = [
+        "lint.js",
         "//grammars:toplevel",
-        "@yarn_modules//:_all_",
+        "@npm//google-closure-library",
     ],
 )

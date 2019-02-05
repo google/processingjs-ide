@@ -1,5 +1,3 @@
-load("@org_pubref_rules_node//node:rules.bzl", "node_module")
-
 def pegjs_grammar(
         name,
         srcs,
@@ -12,23 +10,17 @@ def pegjs_grammar(
         name = name + "_genrule",
         srcs = srcs,
         outs = outjs,
-        cmd = ("$(location @yarn_modules//:node_modules/pegjs/bin/pegjs) " +
+        cmd = ("$(location @npm//pegjs/bin:pegjs) " +
                "--format " + format + " " +
                ("--allowed-start-rules " + ",".join(startrules) + " " if len(startrules) > 0 else "") +
                "--export-var " + varname + " -o $@ $<"),
         tools = [
-            "@yarn_modules//:node_modules/pegjs/bin/pegjs",
+            "@npm//pegjs/bin:pegjs",
         ],
         visibility = visibility,
     )
-    node_module(
+    native.filegroup(
         name = name,
-        main = outjs[0],
         srcs = outjs,
-        version = "0.0.1",
-        description = "Synthetic node module for " + name,
-        deps = [
-            "@yarn_modules//:_all_",
-        ],
         visibility = visibility,
     )

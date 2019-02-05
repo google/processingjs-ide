@@ -19,7 +19,11 @@ var assert = require('assert');
 var fs = require('fs');
 var chai = require('chai');
 var expect = chai.expect;
-var grammar = require('grammars/toplevel/toplevel.pegjs.js').toplevelGrammar;
+var process = require('process');
+// TODO(salikh): Figure out the way to import dependent modules without this
+// hack.
+module.paths.push(process.cwd());
+var grammar = require('grammars/toplevel.pegjs.js').toplevelGrammar;
 
 function has_error(result) {
   for (var i = 0; i < result.length; i++) {
@@ -660,7 +664,7 @@ describe('Grammar', function() {
   });
 
   describe('StrictSource', function() {
-    var dir = 'grammars/toplevel_test_modules/node_modules/grammars/examples/examples';
+    var dir = 'grammars/examples';
     it('parses all file examples', function() {
       var names = fs.readdirSync(dir);
       for (var i = 0; i < names.length; i++) {

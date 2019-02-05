@@ -52,26 +52,26 @@ processingjs.lint.lint = function(result) {
       var start = block['location']['start'];
       var end = block['location']['end'];
       var err = {
-	"message": "Unparseable",
-	"severity": "error",
-	"from": new Pos(start['line']-1, start['column']-1),
-	"to": new Pos(end['line']-1, end['column']-1),
+        "message": "Unparseable",
+        "severity": "error",
+        "from": new Pos(start['line']-1, start['column']-1),
+        "to": new Pos(end['line']-1, end['column']-1),
       };
       errors.push(err);
     } else if (block['name']) {
       // Check the named top level blocks for non-duplication.
       if (seen[block['name']]) {
-	if (block.location) {
-	  var start = block['location']['start'];
-	  var end = block['location']['end'];
-	  var err = {
-	    "message": "Duplicated definition of " + block['name'],
-	    "severity": "error",
-	    "from": new Pos(start['line']-1, start['column']-1),
-	    "to": new Pos(end['line']-1, end['column']-1),
-	  };
-	  errors.push(err);
-	}
+        if (block.location) {
+          var start = block['location']['start'];
+          var end = block['location']['end'];
+          var err = {
+            "message": "Duplicated definition of " + block['name'],
+            "severity": "error",
+            "from": new Pos(start['line']-1, start['column']-1),
+            "to": new Pos(end['line']-1, end['column']-1),
+          };
+          errors.push(err);
+        }
       }
       seen[block['name']] = true;
     }
@@ -80,10 +80,10 @@ processingjs.lint.lint = function(result) {
       var start = block['location']['start'];
       var end = block['location']['end'];
       var err = {
-	"message": "Missing semicolon ';'",
-	"severity": "error",
-	"from": new Pos(start['line']-1, start['column']-1),
-	"to": new Pos(end['line']-1, end['column']-1),
+        "message": "Missing semicolon ';'",
+        "severity": "error",
+        "from": new Pos(start['line']-1, start['column']-1),
+        "to": new Pos(end['line']-1, end['column']-1),
       };
       errors.push(err);
     }

@@ -19,7 +19,7 @@ limitations under the License.
 //
 // Usage:
 //
-//   go run cmd/server/server.go --dir .
+//   go run cmd/server/server.go --dir bazel-genfiles/static
 //
 // Or, with Bazel:
 //
@@ -32,14 +32,18 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 )
 
 var (
-	dir = flag.String("dir", ".", "The directory to serve.")
+	dir  = flag.String("dir", "bazel-genfiles", "The directory to serve.")
+	port = flag.Int("port", 8080, "The port to listen on.")
 )
 
 func main() {
 	flag.Parse()
-	panic(http.ListenAndServe(":8080", http.FileServer(http.Dir(*dir))))
+	addr := fmt.Sprintf(":%d", *port)
+	fmt.Printf("\n\tListening on http://localhost%s/\n\n", addr)
+	panic(http.ListenAndServe(addr, http.FileServer(http.Dir(*dir))))
 }

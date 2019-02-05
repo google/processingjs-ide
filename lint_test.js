@@ -1,14 +1,17 @@
-require("google-closure-library");
 var assert = require('assert');
-var fs = require('fs');
 var chai = require('chai');
 chai.use(require('chai-match'));
 var expect = chai.expect;
+var fs = require('fs');
+require("google-closure-library");
 
-var toplevel = require('grammars/toplevel/toplevel.pegjs.js');
+// TODO(salikh): Figure out the way to import dependent modules without this
+// hack.
+module.paths.push(process.cwd());
+var toplevel = require('grammars/toplevel.pegjs.js');
 var toplevelGrammar = toplevel.toplevelGrammar;
 
-require('lint-module/lint.js');
+require('lint.js');
 goog.require('processingjs.lint');
 
 describe('validator', function() {

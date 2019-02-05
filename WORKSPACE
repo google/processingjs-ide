@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# For Bazel 0.21 or later, the minimum Protocol Buffer version required is 3.6.1.2,
+# because of the REPOSITORY_NAME removal.
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "com_google_protobuf",
+    sha256 = "2244b0308846bb22b4ff0bcc675e99290ff9f1115553ae9671eba1030af31bc0",
+    strip_prefix = "protobuf-3.6.1.2",
+    urls = ["https://github.com/google/protobuf/archive/v3.6.1.2.tar.gz"],
+)
+
 #
 # Bazel rules for Closure compiler.
 #
@@ -34,16 +45,16 @@ closure_repositories()
 #
 new_local_repository(
     name = "processing_js",
-    build_file = "third_party/processing-js.BUILD",
+    build_file = "//:third_party/processing-js.BUILD",
     path = "third_party",
 )
 
 #
 # Import jQuery.
 #
-new_http_archive(
+http_archive(
     name = "jquery",
-    build_file = "third_party/jquery.BUILD",
+    build_file = "//:third_party/jquery.BUILD",
     strip_prefix = "jquery-3.2.1",
     urls = ["https://github.com/jquery/jquery/archive/3.2.1.tar.gz"],
 )
@@ -51,12 +62,12 @@ new_http_archive(
 #
 # Import Closure compiler to use contrib/externs.
 #
-new_http_archive(
+http_archive(
     name = "closure_compiler",
-    build_file = "third_party/closure-compiler.BUILD",
-    sha256 = "e7d5f24a9ba38b84294c8acc866a9d4ba0da03f297655d588d33d982cb6133f8",
-    strip_prefix = "closure-compiler-20180101",
-    url = "https://github.com/google/closure-compiler/archive/v20180101.tar.gz",
+    build_file = "//:third_party/closure-compiler.BUILD",
+    sha256 = "418f1120146bd349b246388ce0d0255acd3f7e96519682237bad0909b32f931d",
+    strip_prefix = "closure-compiler-20190121",
+    url = "https://github.com/google/closure-compiler/archive/v20190121.tar.gz",
 )
 
 #
@@ -64,21 +75,21 @@ new_http_archive(
 #
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "c1f52b8789218bb1542ed362c4f7de7052abcf254d865d96fb7ba6d44bc15ee3",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.12.0/rules_go-0.12.0.tar.gz",
+    sha256 = "492c3ac68ed9dcf527a07e6a1b2dcbf199c6bf8b35517951467ac32e421c06c1",
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.17.0/rules_go-0.17.0.tar.gz"],
 )
 
-http_archive(
-    name = "bazel_gazelle",
-    sha256 = "ddedc7aaeb61f2654d7d7d4fd7940052ea992ccdb031b8f9797ed143ac7e8d43",
-    url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/0.12.0/bazel-gazelle-0.12.0.tar.gz",
-)
-
-load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies", "go_register_toolchains")
 
 go_rules_dependencies()
 
 go_register_toolchains()
+
+http_archive(
+    name = "bazel_gazelle",
+    sha256 = "7949fc6cc17b5b191103e97481cf8889217263acf52e00b560683413af204fcb",
+    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.16.0/bazel-gazelle-0.16.0.tar.gz"],
+)
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 
@@ -140,31 +151,23 @@ go_repository(
 )
 
 #
-# Bazel rules for yarn modules and nodejs tests (Mocha etc.)
+# Bazel rules for yarn modules and nodejs tests.
 #
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-http_archive(
-    name = "org_pubref_rules_node",
-    sha256 = "019cb4d3d96c90ac7fd92ebc7e1a86bb73e002a8c8b033d22704b179ac4250dc",
-    strip_prefix = "rules_node-0.4.1",
-    url = "https://github.com/pubref/rules_node/archive/v0.4.1.tar.gz",
+git_repository(
+    name = "build_bazel_rules_nodejs",
+    remote = "https://github.com/bazelbuild/rules_nodejs.git",
+    tag = "0.16.8",
 )
 
-load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
+load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories", "yarn_install")
 
-node_repositories()
+node_repositories(package_json = ["//:package.json"])
 
-# Use a package.json file as input. Location of the package json
-# is arbitrary.
-yarn_modules(
-    name = "yarn_modules",
+# yarm_modules enables to use npm modules as fine-grained data dependencies.
+yarn_install(
+    name = "npm",
     package_json = "//:package.json",
-)
-
-# A separate mocha installation used by mocha_test.
-yarn_modules(
-    name = "mocha_modules",
-    deps = {
-        "mocha": "^4.0.1",
-    },
+    yarn_lock = "//:yarn.lock",
 )

@@ -29,23 +29,20 @@ pegjs_grammar(
     visibility = ["//visibility:public"],
 )
 
-load("@org_pubref_rules_node//node:rules.bzl", "mocha_test", "node_module")
+load("//:defs.bzl", "mocha_test")
 
 mocha_test(
     name = "toplevel_test",
-    main = "toplevel_test.js",
-    deps = [
+    src = "toplevel_test.js",
+    data = [
         ":examples",
         ":toplevel",
-        "@yarn_modules//:_all_",
     ],
 )
 
-node_module(
+filegroup(
     name = "examples",
     srcs = glob(["examples/*"]),
-    description = "Dummy module to provide examples as node module.",
-    version = "0.0.0",
 )
 
 exports_files(["toplevel-externs.js"])
