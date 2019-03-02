@@ -15,7 +15,8 @@ programming. For this reason the main focus areas of this project are:
 
 Currently this project includes the local version of HTML files for quick
 development and a very small application to serve the static HTML file of the
-IDE from Google App Engine.
+IDE from Google App Engine and provide the saving of the sketch source code
+to Cloud datastore.
 
 ## Install the dependencies
 
@@ -23,7 +24,7 @@ Install the dependencies by running Yarn via Bazel.
 
     bazel run @nodejs//:yarn
 
-Open the file `ide.html` in browser.
+Now you can open the file `ide.html` in browser.
 
 ## Build the project with Bazel for HTTP serving
 
