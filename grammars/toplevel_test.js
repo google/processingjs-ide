@@ -328,6 +328,11 @@ describe('Grammar', function() {
       var source = 'int x = 1'
       var result = grammar.parse(source, {startRule: "VarDecl"});
     });
+
+    it('parses variable declaration with full-width semicolon', function() {
+      var source = 'int x = 1；'
+      var result = grammar.parse(source, {startRule: "VarDecl"});
+    });
   });
 
   describe('Statement', function() {

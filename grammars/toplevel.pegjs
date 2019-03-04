@@ -263,6 +263,7 @@ Comment = "/*" ( !"*/" . )* "*/" / "//" ( ![\n\r] . )* NL?  { return null; }
 AnyUnbraced = ( Comment / ![{}()\[\]] . )*            { return null; }
 
 Semi = ";" _ 						{ return true; }
+       / "；" _              		{ return false; }
        / NL _              		{ return false; }
 _ = ( Comment / [ 　\t\r\n]+)*            { return null; }
 __ = ( Comment / [ 　\t]+)*     				{ return null; }
