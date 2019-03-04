@@ -23,16 +23,39 @@ goog.provide('processingjs.lint');
  * @param {number} ch -- 0-based byte (?) count in the line.
  * @struct
  */
-var Pos = function(line, ch) {
+const Pos = function(line, ch) {
   this['line'] = line;
   this['ch'] = ch;
 };
 
 /**
+ * @param {{line: number, column: number}} loc -- the location object
+ *               returned by parser.
+ * @return {Pos!} -- The Pos object as expected by CodeMirror lint.
+ */
+function locationToPos(loc) {
+  return new Pos(loc['line']-1, loc['column']-1);
+}
+
+/**
+ * @constructor
+ * @param {string} message -- The human-readable message text.
+ * @param {string} severity -- "error" or "warning".
+ * @param {{start:Object!, end:Object!}} loc -- Starting position of the message.
+ */
+const LintMessage = function(message, severity, loc) {
+  this['message'] = message;
+  this['severity'] = severity;
+  this['from'] = locationToPos(loc['start']);
+  this['to'] = locationToPos(loc['end']);
+};
+
+/**
  * Converts an array of parse results (AST) into array of linter messages.
  * May throw errors.
- * @param {!Array<!Object>} result
- * @return {!Array<!Object>}
+ * @param {!Array<!Object>} result - The AST tree returned by the toplevel
+ *                                   grammar parser.
+ * @return {!Array<!LintMessage>} - The array of messages.
  */
 processingjs.lint.lint = function(result) {
   var errors = [];
@@ -49,34 +72,27 @@ processingjs.lint.lint = function(result) {
       errors = errors.concat(errs);
     }
     if (block['kind'] == 'error') {
-      var start = block['location']['start'];
-      var end = block['location']['end'];
-      var err = {
-        "message": "Unparseable",
-        "severity": "error",
-        "from": new Pos(start['line']-1, start['column']-1),
-        "to": new Pos(end['line']-1, end['column']-1),
-      };
+      var err = new LintMessage("Unparseable", "error", block['location']);
+      errors.push(err);
+    } else if (block['kind'] == 'message') {
+      var err = new LintMessage(block['message'], block['severity'],
+	block['location']);
       errors.push(err);
     } else if (block['name']) {
       // Check the named top level blocks for non-duplication.
       if (seen[block['name']]) {
         if (block.location) {
-          var start = block['location']['start'];
-          var end = block['location']['end'];
-          var err = {
-            "message": "Duplicated definition of " + block['name'],
-            "severity": "error",
-            "from": new Pos(start['line']-1, start['column']-1),
-            "to": new Pos(end['line']-1, end['column']-1),
-          };
+          var err = new LintMessage(
+            "Duplicated definition of " + block['name'],
+            "error",
+	    block.location);
           errors.push(err);
         }
       }
       seen[block['name']] = true;
     }
     // Detect missing semicolons.
-    if (block.hasOwnProperty('semi') && !block['semi']) {
+    if (block.hasOwnProperty('semi') && block['semi'] === false) {
       var start = block['location']['start'];
       var end = block['location']['end'];
       var err = {
