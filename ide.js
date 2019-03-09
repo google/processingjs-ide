@@ -552,9 +552,6 @@ var ide = (/** @type {function(): !Object} */ (function() {
         }, new Object()),
       },
       'lint': validator,
-      'extraKeys': {
-        'F1': showHelp,
-      },
       'theme': 'eclipse',
       'lineNumbers': true,
     };
@@ -599,7 +596,6 @@ var ide = (/** @type {function(): !Object} */ (function() {
     }
     // Instantiate CodeMirror.
     ide.codemirror = CodeMirror.fromTextArea(ide.textarea, codemirror_options);
-    ide.codemirror.setOption("extraKeys", { Tab: showHelp });
     ide.canvasDiv = document.getElementById('canvas_div');
     ide.helpDiv = document.getElementById('help_div');
     ide.processingCanvas = /** @type{HTMLCanvasElement!} */(document.getElementById('processing_canvas'));
