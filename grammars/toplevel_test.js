@@ -682,4 +682,19 @@ describe('Grammar', function() {
       }
     });
   });
+
+  describe('Source', function() {
+    var startRule = 'Source';
+    it('parses full-width braces', function() {
+      let source = 'void f() { ｝';
+      var result = grammar.parse(source, {"startRule": startRule});
+      // TODO: check the result.
+    });
+
+    it('parses full-width parens', function() {
+      let source = 'void f(） { }';
+      var result = grammar.parse(source, {"startRule": startRule});
+      // TODO: check the result.
+    });
+  });
 });

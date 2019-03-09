@@ -98,7 +98,13 @@ ClassDecl = Visibility "class" _ name:identifier _ TypeParameters? ("extends" _ 
 Visibility = "public" _
   / "private" _
   / _
-ClassBody = "{" _ x:ClassBodyDecl* _ "}" _ { return x; }
+ClassBody = bo:BraceOpen _ dd:ClassBodyDecl* _ bc:BraceClose _
+  {
+    if (!dd) dd = [];
+    if (bo) dd.push(bo);
+    if (bc) dd.push(bc);
+    return dd;
+  }
 ClassBodyDecl
   = ";" _ { return null; }
   / "static" _ b:Block { return b; }
@@ -142,7 +148,13 @@ Modifier =
   / "final"
   / "strictfp") _ {return s; }
 
-Block = "{" _ bb:BlockStatement* _ "}" _ { return bb; }
+Block = bo:BraceOpen _ bb:BlockStatement* _ bc:BraceClose _
+  {
+    if (!bb) bb = [];
+    if (bo) bb.push(bo);
+    if (bc) bb.push(bc);
+    return bb;
+  }
 BlockStatement = t:TypeDeclaration _ { return t; }
   / s:Statement _ { return s; }
   / x:VarDecl _ { return x; }
@@ -319,14 +331,20 @@ BraceMatched =  AnyUnbraced ("{" _ BraceMatched "}" _ AnyUnbraced /
 Comment = "/*" ( !"*/" . )* "*/" / "//" ( ![\n\r] . )* NL?  { return null; }
 AnyUnbraced = ( Comment / ![{}()\[\]] . )*            { return null; }
 
+BraceOpen = "{"
+  / "｛" { return err("Full-width brace", location()); }
+BraceClose = "}"
+  / "｝" { return err("Full-width brace", location()); }
+
+
 FullWidthSemi = "；" { return location(); }
 Location = &. { return location(); }
 EOF = !. { return location(); }
 
 Semi = __ ";" _                                            { return null; }
-       / __ loc:FullWidthSemi _ { return err("Full-width semicolon", loc); }
-       / __ loc:NL _            { return err("Missing semicolon (NL)", loc); }
-       / __ loc:EOF             { return err("Missing semicolon (EOF)", loc); }
+       / __ loc:FullWidthSemi _ { return err("Full-width semicolon ';'", loc); }
+       / __ loc:NL _            { return err("Missing semicolon ';'", loc); }
+       / __ loc:EOF             { return err("Missing semicolon ';'", loc); }
 _ = ( Comment / [ 　\t\r\n]+)*            { return null; }
 __ = ( Comment / [ 　\t]+)*                                     { return null; }
 NL = [\r]?[\n]                  { return location(); }
