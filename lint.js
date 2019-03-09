@@ -46,8 +46,16 @@ function locationToPos(loc) {
 const LintMessage = function(message, severity, loc) {
   this['message'] = message;
   this['severity'] = severity;
-  this['from'] = locationToPos(loc['start']);
-  this['to'] = locationToPos(loc['end']);
+  let from = locationToPos(loc['start']);
+  let to = locationToPos(loc['end']);
+  // Some ad-hoc fixes.
+  if (((from.line == to.line && from.ch == to.ch) ||
+       (from.line+1 == to.line && to.ch == 0)) && from.ch > 0) {
+    // Step back one character to make the underwave visible.
+    from.ch--;
+  }
+  this['from'] = from;
+  this['to'] = to;
 };
 
 /**
@@ -93,15 +101,7 @@ processingjs.lint.lint = function(result) {
     }
     // Detect missing semicolons.
     if (block.hasOwnProperty('semi') && block['semi'] === false) {
-      var start = block['location']['start'];
-      var end = block['location']['end'];
-      var err = {
-        "message": "Missing semicolon ';'",
-        "severity": "error",
-        "from": new Pos(start['line']-1, start['column']-1),
-        "to": new Pos(end['line']-1, end['column']-1),
-      };
-      errors.push(err);
+      errors.push(new LintMessage("Missing semicolon ';'", "error", block['location']));
     }
   }
   return errors;
