@@ -274,7 +274,7 @@ term
   / "new" _ x:Creator
     { x["kind"] = "new"; return x; }
   / n:qualifiedName { return {"kind": "name", "name": n}; }
-  / v:literal { return{"kind": "literal", "value": v}; }
+  / v:literal { return v; }
 
 ExprRest = exprRest __
 exprRest
@@ -314,8 +314,26 @@ TypeArgumentsOrDiamond
 
 identifier = [a-zA-Z_][a-zA-Z_0-9]* { return text(); }
 literal = string  / number / character
-string = '"' ( !'"' . / "\\\"" )* '"' { return {"string": text}; }
-character = "'" ( !"'" . ) "'" { return {"char": text}; }
+string = dq1:DoubleQuote ( !DoubleQuote . / "\\\"" )* dq2:DoubleQuote
+  {
+    let children = [];
+    if (dq1) children.push(dq1);
+    if (dq2) children.push(dq2);
+    let ret = {kind: "string", string: text};
+    if (children.length > 0) {
+      ret["children"] = children;
+    }
+    return ret;
+  }
+character = sq1:SingleQuote ( !SingleQuote . ) sq2:SingleQuote
+  {
+    let children = [];
+    if (sq1) children.push(sq1);
+    if (sq2) children.push(sq2);
+    let ret = {kind: "char", char: text};
+    if (children.length > 0) ret["children"] = children;
+    return ret;
+  }
 number = [+-]?[0-9]+("."[0-9]*)? { return parseFloat(text()); }
 
 
@@ -336,6 +354,10 @@ BraceOpen = "{"
 BraceClose = "}"
   / "｝" { return err("Full-width brace", location()); }
 
+DoubleQuote = '"' { return null; }
+  / "”" { return err("Full-width quote", location()); }
+SingleQuote = "'" { return null; }
+  / "’" { return err("Full-width quote", location()); }
 
 FullWidthSemi = "；" { return location(); }
 Location = &. { return location(); }
