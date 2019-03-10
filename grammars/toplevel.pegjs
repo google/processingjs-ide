@@ -106,7 +106,7 @@ ClassBody = bo:BraceOpen _ dd:ClassBodyDecl* _ bc:BraceClose _
     return dd;
   }
 ClassBodyDecl
-  = ";" _ { return null; }
+  = semi:semi _ { return semi; }
   / "static" _ b:Block { return b; }
   / Modifier* b:ClassMemberDecl { return b; }
 
@@ -128,7 +128,7 @@ FormalParameterList
 FormalParameter =  VariableModifier* TypeType VariableDeclaratorId
 LastFormalParameter = VariableModifier* TypeType "..." _ VariableDeclaratorId
 
-FieldDecl = t:TypeType v:VariableDeclarators semi:Semi
+FieldDecl = t:TypeType v:VariableDeclarators semi:MaybeSemi
   { return appendChild({"kind": "field", "vars": v, "type": t}, semi); }
 
 ThrowsClause = "throws" _ QualifiedNameList
@@ -166,34 +166,35 @@ Statement = x:Block _ { return {kind: "block", children: x}; }
     { return {"kind": "for", "children": [f, s]}; }
   / "while" _ "(" _ e:Expression ")" _ s:Statement
     { return {"kind": "while", "children": [e, s]}; }
-  / "do" _ s:Statement "while" _ "(" _ e:Expression ")" _ semi:Semi
+  / "do" _ s:Statement "while" _ "(" _ e:Expression ")" _ semi:MaybeSemi
     { return appendChild({"kind": "dowhile", "children": [s, e],
               "location": location()}, semi); }
   / "try" _ Block (CatchClause+ FinallyBlock? / FinallyBlock)
   / "switch" _ "(" _ e:Expression ")" _ SwitchBlock
-  / "return" _ e:Expression _ semi:Semi? _
-    { return {"kind": "return", "children": [e], "semi": semi,
-              "location": location()}; }
-  / "break" _ i:identifier _ semi:Semi? _
-    { return {"kind": "break", "semi": semi,
-              "location": location()}; }
+  / "return" _ e:Expression _ semi:MaybeSemi _
+    { return appendChild({"kind": "return", "children": [e], "location": location()}, semi); }
+  / "break" _ i:identifier _ semi:MaybeSemi _
+    { return appendChild({"kind": "break", "location": location()}, semi); }
   / "continue" _ i:identifier _
-    { return {"kind": "continue", "semi": semi,
-              "location": location()}; }
+    { return appendChild({"kind": "continue", "location": location()}, semi); }
   / i:identifier _ ":" _ s:Statement 
     { return s; }
-  / e:expression semi:Semi _ 
-    { return appendChild({"kind": "expression", "children": [e],
-              "location": location()}, semi); }
-  / ";" _
+  / e:expression semi:MaybeSemi _ 
+    { return appendChild({"kind": "expression", "children": [e], "location": location()}, semi); }
+  / semi:semi _ { return semi; }
 
 CatchClause = "catch" _ "(" _ VariableModifier* CatchType identifier _ ")" _ b:Block
 CatchType = QualifiedName ("|" _ QualifiedName)*
 FinallyBlock = "finally" _ b:Block 
 VariableModifier = "final" _
 
-ForControl = a:ForInit? _ ";" _ e:Expression? _ ";" _ u:ForUpdate?
-  { return {"kind": "for-control", "children": [a,e,u]}; }
+ForControl = a:ForInit? _ s1:semi _ e:Expression? _ s2:semi _ u:ForUpdate?
+  {
+    let children = [a,e,u];
+    if (s1) children.push(s1);
+    if (s2) children.push(s2);
+    return {"kind": "for", "children": children};
+  }
 ForInit = VarDeclaration
   / ExpressionList
 ForUpdate = ExpressionList
@@ -203,7 +204,7 @@ ExpressionList = a:Expression b:(_ "," _ e:Expression { return e; })*
 // TODO(salikh)
 SwitchBlock = BraceMatched
 
-VarDecl = v:VarDeclaration semi:Semi
+VarDecl = v:VarDeclaration semi:MaybeSemi
   { return appendChild(v, semi); }
 VarDeclaration
   = mod:VariableModifier* type:TypeType vars:VariableDeclarators
@@ -359,14 +360,18 @@ DoubleQuote = '"' { return null; }
 SingleQuote = "'" { return null; }
   / "’" { return err("Full-width quote", location()); }
 
-FullWidthSemi = "；" { return location(); }
 Location = &. { return location(); }
 EOF = !. { return location(); }
 
-Semi = __ ";" _                                            { return null; }
-       / __ loc:FullWidthSemi _ { return err("Full-width semicolon ';'", loc); }
-       / __ loc:NL _            { return err("Missing semicolon ';'", loc); }
-       / __ loc:EOF             { return err("Missing semicolon ';'", loc); }
+comma = "," { return null; }
+  / "，" { return err("Full-width comma ','", location()); }
+
+semi = ";" { return null; }
+  / "；" { return err("Full-width semicolon ';'", location()); }
+
+MaybeSemi = __ semi:semi _ { return semi; }
+  / __ loc:NL _            { return err("Missing semicolon ';'", loc); }
+  / __ loc:EOF             { return err("Missing semicolon ';'", loc); }
 _ = ( Comment / [ 　\t\r\n]+)*            { return null; }
 __ = ( Comment / [ 　\t]+)*                                     { return null; }
 NL = [\r]?[\n]                  { return location(); }
