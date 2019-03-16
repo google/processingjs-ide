@@ -14,6 +14,18 @@ var toplevelGrammar = toplevel.toplevelGrammar;
 require('lint.js');
 goog.require('processingjs.lint');
 
+function expect_a_message(result, severity, regex, lineno) {
+  expect(result).to.have.property('length');
+  expect(result).to.have.length(1);
+  expect(result[0]).to.have.property('severity');
+  expect(result[0]['severity']).to.equal(severity);
+  expect(result[0]).to.have.property('message');
+  expect(result[0]['message']).to.match(regex);
+  expect(result[0]).to.have.property('from');
+  expect(result[0]['from']).to.have.property('line');
+  expect(result[0]['from']['line']).to.equal(lineno);
+}
+
 describe('validator', function() {
   it('must exist and be a function', function() {
     expect(processingjs.lint).to.have.property('validator');
@@ -25,6 +37,51 @@ describe('validator', function() {
   it('must produce some output', function() {
     var result = processingjs.lint.validator('int x = 1;', null, toplevelGrammar.parse);
     expect(result).to.have.length(0);
+  });
+});
+
+describe('precheck', function() {
+  it('must exist and be a function', function() {
+    expect(processingjs.lint).to.have.property('precheck');
+    expect(processingjs.lint.precheck).to.be.a('function');
+  });
+
+  it('must accept correct program', function() {
+    const result = processingjs.lint.precheck('int x = 1;\nvoid f() {}');
+    expect(result).to.have.length(0);
+  });
+  it('must detect full-width semicolon', function() {
+    const result = processingjs.lint.precheck('int x = 1；');
+    expect_a_message(result, 'error', /full-width character/i, 0);
+  });
+
+  it('must detect full-width opening parenthesis', function() {
+    const result = processingjs.lint.precheck('int x = （1);');
+    expect_a_message(result, 'error', /full-width character/i, 0);
+  });
+  it('must detect full-width closing parenthesis', function() {
+    const result = processingjs.lint.precheck('int x = (1）;');
+    expect_a_message(result, 'error', /full-width character/i, 0);
+  });
+  it('must detect full-width opening brace', function() {
+    const result = processingjs.lint.precheck('void f() ｛}');
+    expect_a_message(result, 'error', /full-width character/i, 0);
+  });
+  it('must detect full-width closing brace', function() {
+    const result = processingjs.lint.precheck('void f() {｝');
+    expect_a_message(result, 'error', /full-width character/i, 0);
+  });
+  it('must detect full-width opening bracket', function() {
+    const result = processingjs.lint.precheck('int x［];');
+    expect_a_message(result, 'error', /full-width character/i, 0);
+  });
+  it('must detect full-width closing bracket', function() {
+    const result = processingjs.lint.precheck('int x[］;');
+    expect_a_message(result, 'error', /full-width character/i, 0);
+  });
+  it('must detect full-width comma', function() {
+    const result = processingjs.lint.precheck('void f(int x， int y) {}');
+    expect_a_message(result, 'error', /full-width character/i, 0);
   });
 });
 
@@ -113,17 +170,6 @@ describe('lint', function() {
     });
   });
 
-  function expect_a_message(result, severity, regex, lineno) {
-    expect(result).to.have.property('length');
-    expect(result).to.have.length(1);
-    expect(result[0]).to.have.property('severity');
-    expect(result[0]['severity']).to.equal(severity);
-    expect(result[0]).to.have.property('message');
-    expect(result[0]['message']).to.match(regex);
-    expect(result[0]).to.have.property('from');
-    expect(result[0]['from']).to.have.property('line');
-    expect(result[0]['from']['line']).to.equal(lineno);
-  }
 
   describe('full-width characters', function() {
     describe('semicolon', function() {

@@ -109,6 +109,32 @@ processingjs.lint.lint = function(result) {
 };
 
 /**
+ * The precheck validator function that takes a source text
+ * and produces an array of messages usable for Codemirror wave underlines
+ * (lint plugin), detected with simple means (regexp), as opposed to
+ * validator which does full grammar parse.
+ *
+ * @param {string} text
+ * @return {!Array<!Object>}
+ */
+processingjs.lint.precheck = function(text) {
+  const lines = text.split("\n");
+  let ret = [];
+  for (let i = 0; i < lines.length; i++) {
+    const match = /[；（）｛｝”’、，．「」［］]/.exec(lines[i]);
+    if (match) {
+      ret.push({
+	"severity": "error",
+	"message": "full-width character",
+	"from": new Pos(i, match.index),
+	"to": new Pos(i, match.index+1)
+      });
+    }
+  }
+  return ret;
+};
+
+/**
  * The validator function that takes a source text, parse function
  * and produces an array of messages usable for Codemirror wave underlines
  * (lint plugin).
@@ -120,8 +146,15 @@ processingjs.lint.lint = function(result) {
  */
 processingjs.lint.validator = function(text, options, parse) {
   try {
-    var result = parse(text);
-    return processingjs.lint.lint(result);
+    const precheck_result = processingjs.lint.precheck(text);
+    if (precheck_result.length > 0) {
+      console.log('precheck result', precheck_result);
+      return precheck_result;
+    }
+    const parse_result = parse(text);
+    const lint_result = processingjs.lint.lint(parse_result);
+    console.log('lint result', lint_result);
+    return lint_result;
   } catch(e) {
     console.error(e);
     return [];
