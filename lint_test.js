@@ -197,14 +197,20 @@ describe('lint', function() {
 
     describe('single quote', function() {
       it('in literal start', function() {
-	var parse_result = toplevelGrammar.parse("’a';");
-	var result = processingjs.lint.lint(parse_result);
+	const parse_result = toplevelGrammar.parse("’a';");
+	const result = processingjs.lint.lint(parse_result);
 	// Line number is 0-based.
 	expect_a_message(result, 'error', /full-width quote/i, 0);
       });
       it('in literal end', function() {
-	var parse_result = toplevelGrammar.parse("'a’;");
-	var result = processingjs.lint.lint(parse_result);
+	const parse_result = toplevelGrammar.parse("'a’;");
+	const result = processingjs.lint.lint(parse_result);
+	// Line number is 0-based.
+	expect_a_message(result, 'error', /full-width quote/i, 0);
+      });
+      it('in function call', function() {
+	const parse_result = toplevelGrammar.parse("f(’a');");
+	const result = processingjs.lint.lint(parse_result);
 	// Line number is 0-based.
 	expect_a_message(result, 'error', /full-width quote/i, 0);
       });

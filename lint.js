@@ -66,6 +66,7 @@ const LintMessage = function(message, severity, loc) {
  * @return {!Array<!LintMessage>} - The array of messages.
  */
 processingjs.lint.lint = function(result) {
+  if (result == null) return [];
   var errors = [];
   // The map of names that has been seen (on the top parse level of the
   // provided parse result).

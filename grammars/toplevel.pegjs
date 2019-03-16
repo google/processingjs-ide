@@ -258,8 +258,8 @@ qualifiedName = a:identifier b:(_ "." _ c:identifier {return "." + c;})*
 
 Expression = x:expression _ {return x;}
 expression
-  = l:term r:(_ exprRest)+
-    { return {kind:"expr", children: [l].concat(r.children), location: location()}; }
+  = l:term r:(_ e:exprRest {return e;})+
+    { return { kind: "expr", children: [l].concat(r), location: location() }; }
   / t:term
     { return t; }
 
@@ -277,14 +277,14 @@ term
   / n:qualifiedName { return {"kind": "name", "name": n}; }
   / v:literal { return v; }
 
-ExprRest = exprRest __
+ExprRest = e:exprRest __ { return e; }
 exprRest
   = o:op _ e:expression
-    { return {"kind": "op", "op": o, "children": [e]}; }
+    { return {kind: "op", op: o, children: [e]}; }
   / "[" _ e:expression _ "]"
-    { return {"kind": "index", "children": [e]}; }
+    { return {kind: "index", children: [e]}; }
   / "(" _ ee:ExpressionList? _ ")"
-    { return {"kind": "call", "children": ee}; }
+    { return {kind: "call", children: ee}; }
   / o:("++"/"--") __
     { return {"kind": "op", "op": o, "children": []}; }
   / "." _ n:identifier __
@@ -315,23 +315,29 @@ TypeArgumentsOrDiamond
 
 identifier = [a-zA-Z_][a-zA-Z_0-9]* { return text(); }
 literal = string  / number / character
-string = dq1:DoubleQuote ( !DoubleQuote . / "\\\"" )* dq2:DoubleQuote
+stringcontent = ( !DoubleQuote s:. / "\\\"" )*  { return text(); }
+string = dq1:DoubleQuote s:stringcontent dq2:DoubleQuote
   {
     let children = [];
     if (dq1) children.push(dq1);
     if (dq2) children.push(dq2);
-    let ret = {kind: "string", string: text};
+    let ret = {kind: "string", string: s};
     if (children.length > 0) {
       ret["children"] = children;
     }
     return ret;
   }
-character = sq1:SingleQuote ( !SingleQuote . ) sq2:SingleQuote
+
+escchar = "\\" [nbrt]  { return text(); }
+  / "\\x" [0-9a-fA-F]+ { return text(); }
+  / "\\0" [0-9]+ { return text(); }
+  / !SingleQuote c:. { return c; }
+character = sq1:SingleQuote s:escchar sq2:SingleQuote
   {
     let children = [];
     if (sq1) children.push(sq1);
     if (sq2) children.push(sq2);
-    let ret = {kind: "char", char: text};
+    let ret = {kind: "char", char: s};
     if (children.length > 0) ret["children"] = children;
     return ret;
   }

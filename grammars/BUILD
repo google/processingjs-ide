@@ -34,6 +34,8 @@ pegjs_grammar(
         "Block",
         "literal",
         "exprRest",
+        "character",
+        "string",
     ],
     varname = "toplevelGrammar",
     visibility = ["//visibility:public"],
