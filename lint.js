@@ -121,7 +121,18 @@ processingjs.lint.precheck = function(text) {
   const lines = text.split("\n");
   let ret = [];
   for (let i = 0; i < lines.length; i++) {
-    const match = /[；（）｛｝”’、，．「」［］]/.exec(lines[i]);
+    // Check for NoLint directive.
+    let match = /\/\/ *NoLint/.exec(lines[i]);
+    if (match) {
+      return [{
+	"severity": "warning",
+	"message": "lint disabled",
+	"from": new Pos(i, match.index),
+	"to": new Pos(i, match.index + match.input.length)
+      }];
+    }
+    // Check for full-width characters.
+    match = /[；（）｛｝”’、，．「」［］＋＝／＊％！＆｜＜＞]/.exec(lines[i]);
     if (match) {
       ret.push({
 	"severity": "error",
