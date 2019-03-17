@@ -26,6 +26,7 @@ import (
 	"net/url"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -70,6 +71,7 @@ func main() {
 	r := mux.NewRouter()
 	r.Methods("GET").Path("/").Handler(appHandler(indexHandler))
 	r.Methods("GET").Path("/list").Handler(appHandler(listHandler))
+	r.Methods("GET").Path("/recent").Handler(appHandler(recentHandler))
 	r.Methods("GET").Path("/sketch/{id}").Handler(appHandler(sketchGetHandler))
 	r.Methods("POST").Path("/sketch").Handler(appHandler(sketchPostHandler))
 	r.Methods("POST").Path("/sketch/{id}").Handler(appHandler(sketchPostHandler))
@@ -116,6 +118,31 @@ func listHandler(w http.ResponseWriter, req *http.Request) error {
 	sketches, err := dataStore.ListSketches(ctx)
 	if err != nil {
 		return fmt.Errorf("error listing sketches: %s", err)
+	}
+	sketchListTmpl.Execute(w, sketches)
+	return nil
+}
+
+func recentHandler(w http.ResponseWriter, req *http.Request) error {
+	session, err := sessionStore.Get(req, sessionName)
+	if err != nil {
+		return err
+	}
+	recent, _ := session.Values["recent"].(string)
+	if len(recent) == 0 {
+		return fmt.Errorf("no recent sketches")
+	}
+	ids := strings.Split(recent, ",")
+	sketches := make([]*db.Sketch, 0, len(ids))
+	for _, idStr := range ids {
+		if idStr == "" {
+			continue
+		}
+		id, err := db.ParseID(idStr)
+		if err != nil {
+			return fmt.Errorf("error parsing ID %q: %s", idStr, err)
+		}
+		sketches = append(sketches, &db.Sketch{ID: id, Title: idStr})
 	}
 	sketchListTmpl.Execute(w, sketches)
 	return nil
@@ -173,10 +200,18 @@ func sketchPostHandler(w http.ResponseWriter, req *http.Request) error {
 		if err != nil {
 			return fmt.Errorf("Error creating sketch: %s", err)
 		}
+		recentStr, _ := session.Values["recent"].(string)
+		recent := strings.Split(recentStr, ",")
+		if len(recent) > 9 {
+			recent = recent[1:len(recent)]
+		}
+		recent = append(recent, id.String())
+		session.Values["recent"] = strings.Join(recent, ",")
 	}
 	session.Values["sketch"] = id.String()
 	if err := session.Save(req, w); err != nil {
-		return err
+		log.Printf("error saving session: %s", err)
+		// Do not fail the request to user on failure to set cookie.
 	}
 	// Return the new sketch id in the response.
 	fmt.Fprintf(w, id.String())

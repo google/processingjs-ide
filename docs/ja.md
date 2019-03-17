@@ -23,6 +23,7 @@
 
 ```prerender
 /* @pjs preload="/static/baloon1-170x200.png"; */
+// SpriteExample
 PImage img = loadImage("/static/baloon1-170x200.png");
 imageMode(CENTER);
 image(img, 50, 50, 85, 100);
