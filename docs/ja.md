@@ -1841,13 +1841,50 @@ void setup() {
 }
 ```
 
+関連項目: [frameRate()]。
+
 # frameRate
 
 `frameRate(x)`は`setup()`の中で使える関数で、`draw()`が呼ばれる頻度を設定します。
 括弧の中には`draw()`関数を1秒間に何回呼ぶかを指定します。 たとえば、`frameRate(10)`を実行すると、`draw()`の実行が終わってから
 次に`draw()`を呼ぶまで0.1秒待ちます。`frameRate(1)`では1秒待ちます。
 
+関連項目: [frameCount], [draw()].
+
+# frameCount
+
+`frameCount`は`draw()`は何回呼ばれたかカウントします。
+
+関連項目: [frameRate()], [draw()].
+
+# width
+
+`width`はキャンバスの横幅です。
+
+# height
+
+`height`はキャンバスの縦幅です。
+
+# print
+
+`print`はメッセージをプリントします。メッセージはキャンバス内で下のところにでてきます。`println()`と違って、メッセージのの後に改行しません。
+
+呼び方:`print(message);`
+
+関連項目:[println()]。
+
+# println
+
+`println`はメッセージをプリントします。メッセージはキャンバス内で下のところにでてきます。`print()`と違って、メッセージのの後に改行します。
+
+呼び方:`println(message);`
+
+関連項目:[print()]。
+
 # インデックス {#ref-index}
+
+正式なProcessing.jsのマニュアルはこちら:
+<a href='http://processingjs.org/reference/' target='_blank'>http://processingjs.org/reference/</a>.
 
 ## 実行
 
@@ -1862,6 +1899,8 @@ void setup() {
 *   [noLoop()] アニメーションの繰り返しを止める
 *   [loop()] アニメーションの繰り返しを再開する
 *   [millis()] 実行時間をミリ秒単位で返す
+*   [frameRate()] `draw()`の呼び方の頻度の設定
+*   [frameCount] `draw()`が何回呼ばれたかカウント
 
 ## キャンバス
 
@@ -1889,6 +1928,7 @@ void setup() {
 ## 画像
 
 *   [image()] 画像を写す
+*   [imageMode()] 画像の写し方の設定
 *   [loadImage()], [@pjs preload][preload] 画像データを読み込む
 *   [createImage()] 空画像を作る
 *   [get()] 画像データをキャンバスから抽出する
@@ -4943,11 +4983,48 @@ Processing.jsのコンパイラーへの命令。
 
 *   [@pjs preload][preload]
 
+# imageMode
+
+`imageMode()`は画像の移す位置を設定します。
+
+*  `imageMode(CENTER)`は画像を写すときに中心点を使う設定します。
+*  `imageMode(CORNER)`は画像を写すときに左上の角を使う設定します。
+*  `imageMode(CORNERS)`は画像の左上と右下の角を使う設定します。
+
+```prerender
+/* @pjs preload="/static/baloon1-170x200.png"; */
+// SpriteExample
+PImage img = loadImage("/static/baloon1-170x200.png");
+imageMode(CORNERS);
+image(img, 50, 50, 85, 100);
+```
+
+```prerender
+/* @pjs preload="/static/baloon1-170x200.png"; */
+// SpriteExample
+PImage img = loadImage("/static/baloon1-170x200.png");
+imageMode(CORNER);
+image(img, 50, 50, 85, 100);
+```
+
+```prerender
+/* @pjs preload="/static/baloon1-170x200.png"; */
+// SpriteExample
+PImage img = loadImage("/static/baloon1-170x200.png");
+imageMode(CENTER);
+image(img, 50, 50, 85, 100);
+```
+
 # image
 
 `image()`は画像データをキャンバスにスタンプのように写します。
 
-関連項目: [loadImage()], [createImage()].
+呼び方:`image(img, x, y, width, height);`
+
+* x, y --- 画像を写す座標。`imageMode`は`CENTER`の設定の場合、画像の中心の座標。`imageMode`は`CORNER`または`CORNERS`の設定の場合、画像の左上の角の座標。
+* width, height --- 画像の縦幅や横幅。`imageMode`は`CORNERS`の場合は`width`と`height`ではなく、右下の角の座標として使われます。
+
+関連項目: [loadImage()], [createImage()], [imageMode()].
 
 # createImage
 
