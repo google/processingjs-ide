@@ -96,7 +96,7 @@ const sessionName = "pjs"
 var sketchListHTML = `
 <!DOCTYPE html>
 <title>Sketch list</title>
-<p><a href='/'>Create new</a></p>
+<p><a href='/static/ide-ja.html'>Create new</a></p>
 {{range .}}
 <a href='/static/ide-ja.html#sketch={{.ID}}'>{{if .Title}}{{.Title}}{{else}}sketch{{end}}</a>
 {{else}}
@@ -124,6 +124,14 @@ func listHandler(w http.ResponseWriter, req *http.Request) error {
 }
 
 func recentHandler(w http.ResponseWriter, req *http.Request) error {
+	ctx := appengine.NewContext(req)
+	if dataStore == nil {
+		var err error
+		dataStore, err = newDatastore(ctx)
+		if err != nil {
+			return fmt.Errorf("could not connect to DataStore: %s", err)
+		}
+	}
 	session, err := sessionStore.Get(req, sessionName)
 	if err != nil {
 		return err
@@ -142,7 +150,10 @@ func recentHandler(w http.ResponseWriter, req *http.Request) error {
 		if err != nil {
 			return fmt.Errorf("error parsing ID %q: %s", idStr, err)
 		}
-		sketches = append(sketches, &db.Sketch{ID: id, Title: idStr})
+		sketch, err := dataStore.GetSketch(ctx, id)
+		if err == nil {
+			sketches = append(sketches, sketch)
+		}
 	}
 	sketchListTmpl.Execute(w, sketches)
 	return nil
