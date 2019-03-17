@@ -26,7 +26,14 @@
   </div>
   <div id='main'>
     <div id='editor'>
-      <textarea id='editor_textarea' cols='80' rows='25' name='source'>speak("こんにちは");
+			<textarea id='editor_textarea' cols='80' rows='25' name='source'>void setup() {
+  size(200, 200);
+}
+
+void draw() {
+	background(220);
+	text(frameCount, mouseX, mouseY);
+}
 </textarea>
     </div>
   </div>
