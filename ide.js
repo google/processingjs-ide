@@ -602,6 +602,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
     if (params['help']) {
       showHelpSection('ref-' + params['help']);
     }
+    ide.saved = ide.codemirror.getValue();
   }
 
   window.addEventListener('load', function() {
