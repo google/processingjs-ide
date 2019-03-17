@@ -1877,6 +1877,7 @@ void setup() {
 *   [triangle()] 三角形
 *   [line()] 直線
 *   [arc()] 円弧
+*   [point()] 点
 
 ## 筆の設定
 
@@ -4365,13 +4366,28 @@ for (int i = 0; i < namae.length; i++) {
 arc(50, 50, 40, 20, PI/4, 2*PI);
 ```
 
-呼び方:`arc(x, y, width, height, start, stop)`
+呼び方:`arc(x, y, width, height, start, stop);`
 
 *   x, y --- 楕円の中心の座標。
 *   width, height --- 楕円の横幅と縦幅。
 *   start, stop --- 弧の角度を指定する。
 
 関連項目: [ellipse()].
+
+# point
+
+`point`は一点を描く。
+
+```prerender
+strokeWeight(5);
+point(50, 50);
+```
+
+呼び方:`point(x,y);`
+
+* x, y --- 点の座標。
+
+関連項目: [strokeWeight()], [stroke()], [line()].
 
 # break
 
