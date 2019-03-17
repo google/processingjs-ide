@@ -610,6 +610,16 @@ var ide = (/** @type {function(): !Object} */ (function() {
     setup();
   });
 
+  window.addEventListener('hashchange', function() {
+    const shown = ide.helpDiv.lastElementChild.id;
+    window.console.log('currently shown: ', shown);
+    var params = parseFragment();
+    window.console.log('requested: ', params['help']);
+    if (shown != ('ref-' + params['help'])) {
+      showHelpSection('ref-' + params['help']);
+    }
+  });
+
   // Autosave every 3 seconds.
   window.setInterval(autosaveSketch, 3000);
 
