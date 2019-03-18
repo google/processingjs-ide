@@ -1,23 +1,25 @@
 # Processing.js 春ワークショップ {#ref-help}
 
-* はじめに
-* Step 1
-* Step 2
-* Step 3
-* Step 4
-* Step 5
-* Step 6
-* ヘルプ
-  *   [索引][index]
-  *   [デモ][Demos]
-  *   [ゲーム][Games]
-  *   [スプライト][Sprites]
-* [その他ワークショップ][otherworkshops]
+*   はじめに
+*   Step 1
+*   Step 2
+*   Step 3
+*   Step 4
+*   Step 5
+*   Step 6
+*   Step 7
+*   [アンケート][https://forms.gle/yCLKJCymfWJqCPYJ6]
+*   ヘルプ
+    *   [索引][index]
+    *   [デモ][Demos]
+    *   [ゲーム][Games]
+    *   [スプライト][Sprites]
+*   [その他ワークショップ][otherworkshops]
 
 # その他 {#ref-otherworkshops}
 
-* [2018年夏期ワークショップ][workshopSep]
-* [2018年TTSワークショップ][workshopTTS]
+*   [2018年夏期ワークショップ][workshopSep]
+*   [2018年TTSワークショップ][workshopTTS]
 
 # スプライト {#ref-Sprites}
 
@@ -29,58 +31,57 @@ imageMode(CENTER);
 image(img, 50, 50, 85, 100);
 ```
 
-* /static/baloon1-170x200.png
-![static/baloon1-170x200.png](/static/baloon1-170x200.png)
-* /static/baloon2-158x200.png
-![/static/baloon2-158x200.png](/static/baloon2-158x200.png)
-* /static/banana-200x113.png
-![/static/banana-200x113.png](/static/banana-200x113.png)
-* /static/baseball-200x171.png
-![/static/baseball-200x171.png](/static/baseball-200x171.png)
-* /static/cat1-200x134.png
-![/static/cat1-200x134.png](/static/cat1-200x134.png)
-* /static/cat2-185x200.png
-![/static/cat2-185x200.png](/static/cat2-185x200.png)
-* /static/cat3-134x200.png
-![/static/cat3-134x200.png](/static/cat3-134x200.png)
-* /static/dog1-200x188.png
-![/static/dog1-200x188.png](/static/dog1-200x188.png)
-* /static/dog2-180x200.png
-![/static/dog2-180x200.png](/static/dog2-180x200.png)
-* /static/dog3-179x200.png
-![/static/dog3-179x200.png](/static/dog3-179x200.png)
-* /static/face1-150x200.png
-![/static/face1-150x200.png](/static/face1-150x200.png)
-* /static/face2-171x200.png
-![/static/face2-171x200.png](/static/face2-171x200.png)
-* /static/face3-188x200.png
-![/static/face3-188x200.png](/static/face3-188x200.png)
-* /static/face4-106x200.png
-![/static/face4-106x200.png](/static/face4-106x200.png)
-* /static/face5-163x200.png
-![/static/face5-163x200.png](/static/face5-163x200.png)
-* /static/face6-155x200.png
-![/static/face6-155x200.png](/static/face6-155x200.png)
-* /static/fire1-200x123.png
-![/static/fire1-200x123.png](/static/fire1-200x123.png)
-* /static/fire2-134x200.png
-![/static/fire2-134x200.png](/static/fire2-134x200.png)
-* /static/football1-200x200.png
-![/static/football1-200x200.png](/static/football1-200x200.png)
-* /static/football2-200x200.png
-![/static/football2-200x200.png](/static/football2-200x200.png)
-* /static/kiwi-200x200.png
-![/static/kiwi-200x200.png](/static/kiwi-200x200.png)
-* /static/rose-200x161.png
-![/static/rose-200x161.png](/static/rose-200x161.png)
-* /static/smoke-200x195.png
-![/static/smoke-200x195.png](/static/smoke-200x195.png)
-* /static/sunflower-130x200.png
-![/static/sunflower-130x200.png](/static/sunflower-130x200.png)
-* /static/tennisball-200x197.png
-![/static/tennisball-200x197.png](/static/tennisball-200x197.png)
-* /static/Walker44.png
-![/static/Walker44.png](/static/Walker44.png)
+*   /static/baloon1-170x200.png
+    ![static/baloon1-170x200.png](/static/baloon1-170x200.png)
+*   /static/baloon2-158x200.png
+    ![/static/baloon2-158x200.png](/static/baloon2-158x200.png)
+*   /static/banana-200x113.png
+    ![/static/banana-200x113.png](/static/banana-200x113.png)
+*   /static/baseball-200x171.png
+    ![/static/baseball-200x171.png](/static/baseball-200x171.png)
+*   /static/cat1-200x134.png
+    ![/static/cat1-200x134.png](/static/cat1-200x134.png)
+*   /static/cat2-185x200.png
+    ![/static/cat2-185x200.png](/static/cat2-185x200.png)
+*   /static/cat3-134x200.png
+    ![/static/cat3-134x200.png](/static/cat3-134x200.png)
+*   /static/dog1-200x188.png
+    ![/static/dog1-200x188.png](/static/dog1-200x188.png)
+*   /static/dog2-180x200.png
+    ![/static/dog2-180x200.png](/static/dog2-180x200.png)
+*   /static/dog3-179x200.png
+    ![/static/dog3-179x200.png](/static/dog3-179x200.png)
+*   /static/face1-150x200.png
+    ![/static/face1-150x200.png](/static/face1-150x200.png)
+*   /static/face2-171x200.png
+    ![/static/face2-171x200.png](/static/face2-171x200.png)
+*   /static/face3-188x200.png
+    ![/static/face3-188x200.png](/static/face3-188x200.png)
+*   /static/face4-106x200.png
+    ![/static/face4-106x200.png](/static/face4-106x200.png)
+*   /static/face5-163x200.png
+    ![/static/face5-163x200.png](/static/face5-163x200.png)
+*   /static/face6-155x200.png
+    ![/static/face6-155x200.png](/static/face6-155x200.png)
+*   /static/fire1-200x123.png
+    ![/static/fire1-200x123.png](/static/fire1-200x123.png)
+*   /static/fire2-134x200.png
+    ![/static/fire2-134x200.png](/static/fire2-134x200.png)
+*   /static/football1-200x200.png
+    ![/static/football1-200x200.png](/static/football1-200x200.png)
+*   /static/football2-200x200.png
+    ![/static/football2-200x200.png](/static/football2-200x200.png)
+*   /static/kiwi-200x200.png
+    ![/static/kiwi-200x200.png](/static/kiwi-200x200.png)
+*   /static/rose-200x161.png
+    ![/static/rose-200x161.png](/static/rose-200x161.png)
+*   /static/smoke-200x195.png
+    ![/static/smoke-200x195.png](/static/smoke-200x195.png)
+*   /static/sunflower-130x200.png
+    ![/static/sunflower-130x200.png](/static/sunflower-130x200.png)
+*   /static/tennisball-200x197.png
+    ![/static/tennisball-200x197.png](/static/tennisball-200x197.png)
+*   /static/Walker44.png ![/static/Walker44.png](/static/Walker44.png)
 
 # Processing.js 夏期ワークショップ {#ref-workshopSep}
 
@@ -4425,7 +4426,7 @@ point(50, 50);
 
 呼び方:`point(x,y);`
 
-* x, y --- 点の座標。
+*   x, y --- 点の座標。
 
 関連項目: [strokeWeight()], [stroke()], [line()].
 
@@ -4987,9 +4988,9 @@ Processing.jsのコンパイラーへの命令。
 
 `imageMode()`は画像の移す位置を設定します。
 
-*  `imageMode(CENTER)`は画像を写すときに中心点を使う設定します。
-*  `imageMode(CORNER)`は画像を写すときに左上の角を使う設定します。
-*  `imageMode(CORNERS)`は画像の左上と右下の角を使う設定します。
+*   `imageMode(CENTER)`は画像を写すときに中心点を使う設定します。
+*   `imageMode(CORNER)`は画像を写すときに左上の角を使う設定します。
+*   `imageMode(CORNERS)`は画像の左上と右下の角を使う設定します。
 
 ```prerender
 /* @pjs preload="/static/baloon1-170x200.png"; */
@@ -5021,8 +5022,10 @@ image(img, 50, 50, 85, 100);
 
 呼び方:`image(img, x, y, width, height);`
 
-* x, y --- 画像を写す座標。`imageMode`は`CENTER`の設定の場合、画像の中心の座標。`imageMode`は`CORNER`または`CORNERS`の設定の場合、画像の左上の角の座標。
-* width, height --- 画像の縦幅や横幅。`imageMode`は`CORNERS`の場合は`width`と`height`ではなく、右下の角の座標として使われます。
+*   x, y ---
+    画像を写す座標。`imageMode`は`CENTER`の設定の場合、画像の中心の座標。`imageMode`は`CORNER`または`CORNERS`の設定の場合、画像の左上の角の座標。
+*   width, height ---
+    画像の縦幅や横幅。`imageMode`は`CORNERS`の場合は`width`と`height`ではなく、右下の角の座標として使われます。
 
 関連項目: [loadImage()], [createImage()], [imageMode()].
 
