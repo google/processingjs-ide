@@ -132,7 +132,7 @@ processingjs.lint.precheck = function(text) {
       }];
     }
     // Check for full-width characters.
-    match = /[；（）｛｝”’、，．「」［］＋＝／＊％！＆｜＜＞]/.exec(lines[i]);
+    match = /[；（）｛｝”’，．［］＋＝／＊％！＆｜＜＞]/.exec(lines[i]);
     if (match) {
       ret.push({
 	"severity": "error",
