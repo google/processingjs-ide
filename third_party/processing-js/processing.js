@@ -7909,7 +7909,7 @@ module.exports = function setupParser(Processing, options) {
       "noCursor", "noFill", "noise", "noiseDetail", "noiseSeed", "noLights",
       "noLoop", "norm", "normal", "noSmooth", "noStroke", "noTint", "ortho",
       "param", "parseBoolean", "parseByte", "parseChar", "parseFloat",
-      "parseInt", "parseXML", "peg", "perspective", "PImage", "pixels",
+      "parseInt", "parseXML", "peg", "perspective", "PAudio", "PImage", "pixels",
       "PMatrix2D", "PMatrix3D", "PMatrixStack", "pmouseX", "pmouseY", "point",
       "pointLight", "popMatrix", "popStyle", "pow", "print", "printCamera",
       "println", "printMatrix", "printProjection", "PShape", "PShapeSVG",
@@ -7919,7 +7919,7 @@ module.exports = function setupParser(Processing, options) {
       "round", "saturation", "save", "saveFrame", "saveStrings", "scale",
       "screenX", "screenY", "screenZ", "second", "set", "setup", "shape",
       "shapeMode", "shared", "shearX", "shearY", "shininess", "shorten", "sin", "size", "smooth",
-      "sort", "speak", "setClientTTS", "specular", "sphere", "sphereDetail", "splice", "split",
+      "sort", "loadSound", "speak", "setClientTTS", "specular", "sphere", "sphereDetail", "splice", "split",
       "splitTokens", "spotLight", "sq", "sqrt", "status", "str", "stroke",
       "strokeCap", "strokeJoin", "strokeWeight", "subset", "tan", "text",
       "textAlign", "textAscent", "textDescent", "textFont", "textLeading",
@@ -9959,6 +9959,7 @@ module.exports = function setupParser(Processing, options) {
         lastPressedKeyCode = null,
         globalVoices = window.speechSynthesis.getVoices(),
         playPromise = null,
+        audioCache = {},
         useClientTTS = false,
         codedKeys = [ PConstants.SHIFT, PConstants.CONTROL, PConstants.ALT, PConstants.CAPSLK, PConstants.PGUP, PConstants.PGDN,
                       PConstants.END, PConstants.HOME, PConstants.LEFT, PConstants.UP, PConstants.RIGHT, PConstants.DOWN, PConstants.NUMLK,
@@ -18558,6 +18559,28 @@ module.exports = function setupParser(Processing, options) {
       };
     }
 
+    var PAudio = function(audio) {
+      console.log("audio", audio);
+      if (audio instanceof HTMLAudioElement) {
+        this.audio = audio;
+      } else {
+        this.audio = document.createElement('audio');
+        this.audio.src = audio;
+      }
+    };
+    PAudio.prototype = {
+      play: function() {
+        this.audio.play();
+      },
+      isPlaying: function() {
+        return !this.audio.paused;
+      },
+      duration: function() {
+        return this.audio.duration;
+      }
+    };
+
+
     /**
     * Datatype for storing images. Processing can display .gif, .jpg, .tga, and .png images. Images may be
     * displayed in 2D and 3D space. Before an image is used, it must be loaded with the loadImage() function.
@@ -18941,6 +18964,7 @@ module.exports = function setupParser(Processing, options) {
     };
 
     p.PImage = PImage;
+    p.PAudio = PAudio;
 
     /**
     * Creates a new PImage (the datatype for storing images). This provides a fresh buffer of pixels to play
@@ -21046,6 +21070,15 @@ module.exports = function setupParser(Processing, options) {
       }
       xhr.send(null);
     }
+
+    p.loadSound = function(path) {
+      let audio = audioCache[path];
+      if (!audio) {
+        audio = new p.PAudio(path);
+        audioCache[path] = audio;
+      }
+      return audio;
+    };
 
     p.setClientTTS = function(on) {
       useClientTTS = on;
