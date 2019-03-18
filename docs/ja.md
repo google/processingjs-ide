@@ -75,6 +75,10 @@ image(img, 50, 50, 85, 100);
     ![/static/kiwi-200x200.png](/static/kiwi-200x200.png)
 *   /static/rose-200x161.png
     ![/static/rose-200x161.png](/static/rose-200x161.png)
+*   /static/rocket-168x300.png
+    ![/static/rocket-168x300.png](/static/rocket-168x300.png)
+*   /static/rocket1-168x300.png
+    ![/static/rocket1-168x300.png](/static/rocket1-168x300.png)
 *   /static/smoke-200x195.png
     ![/static/smoke-200x195.png](/static/smoke-200x195.png)
 *   /static/sunflower-130x200.png
