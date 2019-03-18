@@ -554,6 +554,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
       'lint': validator,
       'theme': 'eclipse',
       'lineNumbers': true,
+      'gutters': ["CodeMirror-lint-markers"],
     };
     // Parse and act on the fragment address.
     var params = new Object();
