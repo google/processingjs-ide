@@ -3459,6 +3459,15 @@ line(15, 70, 85, 70);
 
 関連項目: [stroke], [strokeWeight], [SQUARE].
 
+# noStroke
+
+`noStroke()`は端を書かないように設定する。
+
+```prerender
+noStroke();
+rect(20, 20, 60, 60);
+```
+
 # text
 
 `text()`はキャンバスに言葉を表示します。表示する位置を座標で指定します。
@@ -3469,6 +3478,90 @@ text("こんにちは", 20, 50);
 ```
 
 関連項目: [textSize], [fill], [textFont].
+
+# textAlign
+
+`textAlign()`は文字を移り方を設定する。
+
+```render
+void setup() {
+  size(300, 130);
+  stroke(0);
+  fill(0);
+  textSize(15);
+  strokeWeight(5);
+  point(width/2, height/2);
+  frameRate(1);
+}
+
+void draw() {
+  background(220);
+  point(width/2, height/2);
+  switch (frameCount % 12) {
+    case 0:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(LEFT, TOP)", 10, 20);
+      textAlign(LEFT, TOP);
+      break;
+    case 1:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(RIGHT, TOP)", 10, 20);
+      textAlign(RIGHT, TOP);
+      break;
+    case 2:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(CENTER, TOP)", 10, 20);
+      textAlign(CENTER, TOP);
+      break;
+    case 3:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(LEFT, BOTTOM)", 10, 20);
+      textAlign(LEFT, BOTTOM);
+      break;
+    case 4:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(RIGHT, BOTTOM)", 10, 20);
+      textAlign(RIGHT, BOTTOM);
+      break;
+    case 5:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(CENTER, BOTTOM)", 10, 20);
+      textAlign(CENTER, BOTTOM);
+      break;
+    case 6:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(LEFT, CENTER)", 10, 20);
+      textAlign(LEFT, CENTER);
+      break;
+    case 7:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(RIGHT, CENTER)", 10, 20);
+      textAlign(RIGHT, CENTER);
+      break;
+    case 8:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(CENTER, CENTER)", 10, 20);
+      textAlign(CENTER, CENTER);
+      break;
+    case 9:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(LEFT, BASELINE)", 10, 20);
+      textAlign(LEFT, BASELINE);
+      break;
+    case 10:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(RIGHT, BASELINE)", 10, 20);
+      textAlign(RIGHT, BASELINE);
+      break;
+    case 11:
+      textAlign(LEFT, BASELINE);
+      text("textAlign(CENTER, BASELINE)", 10, 20);
+      textAlign(CENTER, BASELINE);
+      break;
+  }
+  text("text", width/2, height/2);
+}
+```
 
 # textSize
 
