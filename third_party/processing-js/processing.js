@@ -18572,6 +18572,9 @@ module.exports = function setupParser(Processing, options) {
       play: function() {
         this.audio.play();
       },
+      stop: function() {
+        this.audio.pause();
+      },
       isPlaying: function() {
         return !this.audio.paused;
       },

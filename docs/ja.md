@@ -94,7 +94,7 @@ color posToColor(int x, int y) {
 }
 
 void setup() {
-  size(400, 400);
+  size(300, 300);
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       set(x, y, posToColor(x, y));
@@ -5297,6 +5297,36 @@ image(walker, 10, 10, 80, 80);
 画像の形。
 
 関連項目: [loadImage()], [image()].
+
+# PAudio
+
+音のデータ。
+
+```prerender
+PAudio sound = loadSound("/static/explosion.flac");
+
+void mouseClicked() {
+  sound.play();
+}
+
+void draw() {
+  if (sound.isPlaying()) {
+    background(50);
+  } else {
+    background(220);
+  }
+}
+```
+
+**注意**：標準のProcessing.jsに存在しない。
+
+関連項目: [音のギャラリー][SoundGallery]
+
+# loadSound
+
+音のデータをロードする。 [PAudio]に参照
+
+**注意**：標準のProcessing.jsに存在しない。
 
 # pixels
 
