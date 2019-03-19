@@ -290,6 +290,10 @@ image(img, 50, 50, 85, 100);
 *   /static/tennisball-200x197.png
     ![/static/tennisball-200x197.png](/static/tennisball-200x197.png)
 *   /static/Walker44.png ![/static/Walker44.png](/static/Walker44.png)
+*   /static/fuzzy-white-64x64.png
+    ![/static/fuzzy-white-64x64.png](/static/fuzzy-white-64x64.png)
+*   /static/fuzzy-black-64x64.png
+    ![/static/fuzzy-black-64x64.png](/static/fuzzy-black-64x64.png)
 
 # Processing.js 夏期ワークショップ {#ref-workshopSep}
 
