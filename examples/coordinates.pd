@@ -1,0 +1,34 @@
+// ShowCoordinates
+void setup() {
+  size(300, 300);
+  fill(0);
+  textSize(30);
+}
+
+bool inCircle = false;
+int cx, cy;
+
+void draw() {
+  int ox = 0, oy = 30;
+  if (mouseX > 150) ox = -130;
+  if (mouseY > 150) oy = -5;
+  background(220);
+  if (mousePressed) {
+    if (!inCircle) {
+      inCircle = true;
+      cx = mouseX;
+      cy = mouseY;
+      return;
+    }
+    int r = int(dist(cx, cy, mouseX, mouseY));
+    fill(255);
+    ellipse(cx, cy, 2*r, 2*r);
+    fill(0);
+    text("d=" + (2*r), mouseX+ox, mouseY+oy);
+    return;
+  }
+  inCircle = false;
+
+  fill(0);
+  text("(" + mouseX + "," + mouseY + ")", mouseX+ox, mouseY+oy);
+}
