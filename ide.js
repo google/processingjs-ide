@@ -212,6 +212,8 @@ var ide = (/** @type {function(): !Object} */ (function() {
    * @param {string} refkey
    */
   function showHelpSection(refkey) {
+    // Dirty workaround.
+    if (refkey == "ref-undefined") { refkey = 'ref-help'; }
     if (refkey.startsWith('#')) refkey = refkey.substr(1);
     /** @type {?Element} */
     var doc = ide.referenceDict[refkey];
