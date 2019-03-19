@@ -11,6 +11,7 @@
 *   [アンケート][https://forms.gle/yCLKJCymfWJqCPYJ6]
 *   ヘルプ
     *   [索引][index]
+    *   [ツール][Tools]
     *   [デモ][Demos]
     *   [ゲーム][Games]
     *   [スプライト][Sprites]
@@ -20,6 +21,209 @@
 
 *   [2018年夏期ワークショップ][workshopSep]
 *   [2018年TTSワークショップ][workshopTTS]
+
+# ツール {#ref-Tools}
+
+*   [軸を示す][ShowAxes]
+*   [座標を示す][ShowCoordinates]
+*   [色を選ぶ][ColorTool]
+*   [四角を描く][RectangleTool]
+*   [楕円を描く][EllipseTool]
+*   [keyCodeを調べる][keyCodes]
+
+# ShowAxes
+
+このプログラムは軸をお見せします。
+
+```prerender
+// CanvasAxes
+void arrow(int x1, int y1, int x2, int y2) {
+  line(x1, y1, x2, y2);
+  float x = x2-x1;
+  float y = y2-y1;
+  float l = sqrt(x*x+y*y);
+  x = x / l * 10;
+  y = y / l * 10;
+  alpha = PI/4;
+  line(x2, y2, x2 - x*cos(alpha) + y*sin(alpha), y2 - x*sin(alpha) - y*cos(alpha));
+  line(x2, y2, x2 - x*cos(-alpha) + y*sin(-alpha), y2 - x*sin(-alpha) - y*cos(-alpha));
+}
+
+arrow(10, 20, 90, 20);
+arrow(20, 10, 20, 90);
+fill(0);
+text("(0,0)", 1, 11);
+text("x", 80, 37);
+text("y", 30, 85);
+```
+
+# ShowCoordinates
+
+このプログラムは座標をお見せします。マウスをキャンバス内で動かしてみてください。
+
+```prerender
+// ShowCoordinates
+void setup() {
+  size(200, 200);
+}
+
+void draw() {
+  background(220);
+  textSize(20);
+  fill(0);
+  text("("+mouseX+","+mouseY+")", 80, 110);
+}
+```
+
+# ColorTool
+
+マウスを動かじながら、色を選ぶ
+
+```prerender
+// ColorsDemo2
+color posToColor(int x, int y) {
+  if (x < width/2 && y < height/2) {
+    return color((width/2-x)/width*512, (height/2-y)/height*512, 0);
+  } else if (x < width/2) {
+    return color(220);
+  } else if (y < height/2) {
+    return color(0, (height/2-y)/height*512, (x-width/2)/width*512);
+  } else {
+    return color((y-height/2)/height*512, 0, (x-width/2)/width*512);
+  }
+}
+
+void setup() {
+  size(400, 400);
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      set(x, y, posToColor(x, y));
+    }
+  }
+
+  fill(0);
+  textSize(height/20);
+  text("(255,0,0)", 5, height/2-5);
+  text("(255,255,0)", 5, 20);
+  textAlign(RIGHT, TOP);
+  text("(0,255,255)", width-5, 2);
+  textAlign(CENTER, TOP);
+  text("(0,255,0)", width/2, 2);
+  textAlign(LEFT, BASELINE);
+  fill(255);
+  text("(0,0,0)", width/2+2, height/2-2);
+  textAlign(RIGHT, BASELINE);
+  text("(0,0,255)", width-2, height/2);
+  fill(0);
+  textAlign(LEFT, BOTTOM);
+  text("(255,0,0)", width/2+2, height-2);
+  textAlign(RIGHT, BOTTOM);
+  text("(255,0,255)", width-2, height-2);
+}
+
+void draw() {
+  color c = posToColor(mouseX, mouseY);
+  noStroke();
+  fill(c);
+  rect(width/10, 6*height/10, 3*width/10, 3*height/10);
+  fill(250);
+  rect(width/10, 9*height/10, 3*width/10, height/15);
+  fill(0);
+  textSize(height/27);
+  textAlign(LEFT, BASELINE);
+  text("color("+red(c)+","+green(c)+","+blue(c)+")", width/10, height*19/20);
+}
+```
+
+# EllipseTool
+
+このプログラムは楕円を書く命令をお見せします。キャンバス内でマウス・ドラッグしてみてください。
+
+```prerender
+// EllipseTool
+void setup() {
+  size(200, 200);
+}
+
+int x1, y1, x2, y2;
+boolean pressed = false;
+
+void draw() {
+  background(220);
+  if (pressed) {
+    x2 = mouseX;
+    y2 = mouseY;
+  }
+  if (x2 != x1) {
+    fill(255);
+    ellipse(x1, y1, (x2-x1)*2, (y2-y1)*2);
+  }
+  textSize(18);
+  fill(0);
+  text("ellipse("+x1+","+y1+","+((x2-x1)*2)+","+((y2-y1)*2)+")", 10, height-10);
+}
+
+void mousePressed() {
+  if (!pressed) {
+    x1 = mouseX;
+    y1 = mouseY;
+    pressed = true;
+  }
+}
+
+void mouseReleased() {
+  if (pressed) {
+    x2 = mouseX;
+    y2 = mouseY;
+    pressed = false;
+  }
+}
+```
+
+# RectangleTool
+
+このプログラムは四角を書く命令をお見せします。キャンバス内でマウス・ドラッグしてみてください。
+
+```prerender
+// RectangleTool
+void setup() {
+  size(200, 200);
+}
+
+int x1, y1, x2, y2;
+boolean pressed = false;
+
+void draw() {
+  background(220);
+  if (pressed) {
+    x2 = mouseX;
+    y2 = mouseY;
+  }
+  if (x2 != x1) {
+    fill(255);
+    rect(x1, y1, (x2-x1), (y2-y1));
+  }
+  textSize(20);
+  fill(0);
+  text("rect("+x1+","+y1+","+(x2-x1)+","+(y2-y1)+")", 10, height-10);
+}
+
+void mousePressed() {
+  if (!pressed) {
+    x1 = mouseX;
+    y1 = mouseY;
+    pressed = true;
+  }
+}
+
+void mouseReleased() {
+  if (pressed) {
+    x2 = mouseX;
+    y2 = mouseY;
+    pressed = false;
+  }
+}
+```
 
 # スプライト {#ref-Sprites}
 
@@ -2047,9 +2251,61 @@ background(255, 0, 0);
 
 # Demos
 
+*   簡単なデモ
+    *   [ImageSave]
+    *   [ImageRotate]
 *   [RandomSentenceGenerator]
 *   [Drawing]
 *   [ChaseTheCircle]
+
+# ImageRotate
+
+このプログラムは、画像を回しています。
+
+```prerender
+// ImageRotateExample
+/* @pjs preload="/static/cat2-185x200.png"; */
+PImage img = loadImage("/static/cat2-185x200.png");
+
+void setup() {
+  imageMode(CENTER);
+}
+
+void draw() {
+  float angle = (mouseX+mouseY)/45*PI;
+  int x = 50, y = 50;
+  background(220);
+  translate(x, y);
+  rotate(frameCount/180*PI);
+  image(img, 0, 0, 92, 100);
+  rotate(-angle);
+  translate(-x, -y);
+}
+```
+
+# ImageSave
+
+このプログラムでは、キャンバスを消すことなく、一部だけを保存して、後もとに戻すことで 綺麗なアニメーションが成り立っています。
+
+```prerender
+// ImageSaveExample
+/* @pjs preload="/static/cat2-185x200.png"; */
+PImage img = loadImage("/static/cat2-185x200.png");
+
+void setup() {
+  imageMode(CENTER);
+}
+
+PImage imgSave = null;
+
+void draw() {
+  if (imgSave != null) {
+    image(imgSave, pmouseX, pmouseY, 100, 100);
+  }
+  imgSave = get(mouseX-50, mouseY-50, 100, 100);
+  image(img, mouseX, mouseY, 92, 100);
+}
+```
 
 # Drawing
 
@@ -4805,10 +5061,6 @@ void keyReleased() {
 
 # keyCodes
 
-[keyCode]の値を調べるときに次のキーコードを使えます。
-
-*   [BACKSPACE], [TAB], [ENTER], [RETURN], [ESC], [DELETE].
-
 以下のキーの条件を調べるときに先に`key == CODED`を確かめなければなりません。 [CODED]に参照。
 
 *   矢印キー: [UP], [DOWN], [RIGHT], [LEFT].
@@ -4849,13 +5101,7 @@ void draw() {
       }
       text(label, 10, 100);
     } else {
-      label = "key " + str(key) + " ";
-      switch (keyCode) {
-        case RETURN: label = label + "RETURN"; break;
-        case ENTER: label = label + "ENTER"; break;
-        case DELETE: label = label + "DELETE"; break;
-        case BACKSPACE: label = label + "BACKSPACE"; break;
-      }
+      label = "key '" + str(key) + "'";
       text(label, 10, 100);
     }
     return;
