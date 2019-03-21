@@ -1,14 +1,14 @@
 # Processing.js 春ワークショップ {#ref-help}
 
-*   はじめに
-*   Step 1
-*   Step 2
-*   Step 3
-*   Step 4
-*   Step 5
-*   Step 6
-*   Step 7
-*   [アンケート][https://forms.gle/yCLKJCymfWJqCPYJ6]
+*   [はじめに][SpringStep0]
+*   [Step 1: キャンバスと図形][SpringStep1]
+*   [Step 2: 色][SpringStep2]
+*   [Step 3][SpringStep3]
+*   [Step 4][SpringStep4]
+*   [Step 5][SpringStep5]
+*   [Step 6][SpringStep6]
+*   [Step 7][SpringStep7]
+*   [アンケート](https://forms.gle/yCLKJCymfWJqCPYJ6)
 *   ヘルプ
     *   [索引][index]
     *   [ツール][Tools]
@@ -21,6 +21,172 @@
 
 *   [2018年夏期ワークショップ][workshopSep]
 *   [2018年TTSワークショップ][workshopTTS]
+
+# はじめに {#ref-SpringStep0}
+
+このワークショップの目的は、皆さんにプログラミングを体験していただき、コンピューターサイエンスは誰でも気軽に楽しめるものだということを知っていただくことです。そこで、本日は皆さんに簡単なゲームを作っていただきます。
+
+今回はProcessingというプログラミング言語を使います。今回は本ワークショップ専用のページを使いますが、Processingには長い歴史があり、他の人の作ったプログラムがたくさんあります。
+
+プログラムに何か問題があると赤い波線が出てきます。この場合、プログラムの修正が必要です。何が問題なのか分からないときは、マウスを近づけると英語での説明が現れます。不明な点があれば、社員に遠慮なく質問してください。
+
+![/static/full-width-semicolon-warning.png](/static/full-width-semicolon-warning.png)
+
+ワークショップ中に出ているサンプルプログラムは全てヘルプに含まれています。タイピングが難しい場合や、いちいち入力していると講義に追い付けなくなりそうな場合は、ヘルプからサンプルを読み込むことができます。
+
+![/static/sketch-load.png](/static/sketch-load.png)
+
+プログラムを編集しながら別のサンプルを試したいときは、ブラウザで新しいタブを作ってみましょう。[ 新規作成 ] ボタンをクリックすると新しいタブが開きます。元のタブに戻ると、編集してきたプログラムを継続できます。
+
+![/static/new-sketch-button-highlight.png](/static/new-sketch-button-highlight.png)
+
+
+プログラムの中に現れる単語や関数が分からないときは、ヘルプを使ってみましょう。
+
+![/static/help-button-highlight.png](/static/help-button-highlight.png)
+
+次は[ステップ1][SpringStep1]へ。
+
+# ステップ１: カヤンバスと図形 {#ref-SpringStep1}
+
+コンピューターグラフィックでは、x座標は数学と同じように右に向かって増えますが、y座標は普通の数学と反対で下に向かって増えます。
+
+```render
+// CanvasAxes
+void arrow(int x1, int y1, int x2, int y2) {
+  line(x1, y1, x2, y2);
+  float x = x2-x1;
+  float y = y2-y1;
+  float l = sqrt(x*x+y*y);
+  x = x / l * 10;
+  y = y / l * 10;
+  alpha = PI/4;
+  line(x2, y2, x2 - x*cos(alpha) + y*sin(alpha), y2 - x*sin(alpha) - y*cos(alpha));
+  line(x2, y2, x2 - x*cos(-alpha) + y*sin(-alpha), y2 - x*sin(-alpha) - y*cos(-alpha));
+}
+
+arrow(10, 20, 90, 20);
+arrow(20, 10, 20, 90);
+fill(0);
+text("(0,0)", 1, 11);
+text("x", 80, 37);
+text("y", 30, 85);
+```
+
+設定しなければ、
+デフォルトのキャンバスは縦100かける横100ピクセルになります。
+キャンバスをもっと大きく
+するには、 size()関数を使って設定できます。
+
+```prerender
+size(150, 150);
+```
+
+座標の数字を使って様々な図形を描けます。
+よく使うのはrect(), ellipse(), line()です。
+
+![/static/rect.png](/static/rect.png)
+![/static/ellipse.png](/static/ellipse.png)
+![/static/line.png](/static/line.png)
+
+例えば、こちらのプログラムを打ってみましょう。
+
+```prerender
+rect(10, 10, 80, 40);
+ellipse(50, 75, 80, 40);
+line(10, 60, 90, 90);
+```
+
+実行してみましょう。キャンバスに右のような絵が出てきたでしょうか？
+プログラムを構成する一つ一つの行は命令といいます。Processingでは、各命令は必ずセミコロン(;)で終わらなければいけません。
+
+それでは、今習ったことを使ってみましょう。
+例として以下の雪だるまいかがでしょうか。
+
+```render
+// Snowman
+size(300, 300);
+ellipse(150, 250, 100, 100);
+ellipse(150, 170, 80, 80);
+ellipse(150, 110, 60, 60);
+```
+
+**問題１**: 雪だるまを描きましょう。  例に限らず、好きなような形の雪だるまにしましょう。
+
+次は、[ステップ2][SpringStep2]へ。
+
+# ステップ2: 色 {#ref-SpringStep2}
+
+今までの絵は白黒でしたが、それではつまらないので、色を加えてみましょう。ProcessingではRGBまたはRGBAカラーモデルを採用しています。RGBはR=Red (赤)、G=Green (緑)、B=Blue (青)から成り立っています。右の図はRGBのカラーミックスのイメージです。
+
+```render
+color posToColor(int x, int y) {
+  if (x < width/2 && y < height/2) {
+    return color((width/2-x)/width*512, (height/2-y)/height*512, 0);
+  } else if (x < width/2) {
+    return color(220);
+  } else if (y < height/2) {
+    return color(0, (height/2-y)/height*512, (x-width/2)/width*512);
+  } else {
+    return color((y-height/2)/height*512, 0, (x-width/2)/width*512);
+  }
+}
+
+void setup() {
+  size(200, 200);
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      set(x, y, posToColor(x, y));
+    }
+  }
+
+  fill(255);
+  textSize(height/20);
+  text("(255,0,0)", 5, height/2-5);
+  fill(0);
+  textAlign(LEFT, TOP);
+  text("(255,255,0)", 5, 2);
+  textAlign(RIGHT, TOP);
+  text("(0,255,255)", width-5, 2);
+  textAlign(CENTER, TOP);
+  text("(0,255,0)", width/2, 2);
+  textAlign(LEFT, BASELINE);
+  fill(255);
+  text("(0,0,0)", width/2+2, height/2-2);
+  textAlign(RIGHT, BASELINE);
+  text("(0,0,255)", width-2, height/2);
+  fill(0);
+  textAlign(LEFT, BOTTOM);
+  text("(255,0,0)", width/2+2, height-2);
+  textAlign(RIGHT, BOTTOM);
+  text("(255,0,255)", width-2, height-2);
+}
+```
+
+色の設定は２つあります。各図形を描くときは外線や内部を別々の色で塗ります。外線の色はstroke()で設定し、内部の色はfill()で設定します。
+
+例えば、こちらのプログラムを打って実行してみましょう。
+
+```prerender
+fill(0, 255, 0);  // 内部の色は緑
+stroke(0, 0, 255);  // 端の色は青
+ellipse(50, 50, 80, 80);
+```
+
+右側にあるの絵のようになりましたか？
+このプログラムの中に出てくる、`//`から始まる文章は、コメントと呼びます。コンピューターはコメントを無視するので、プログラムについて説明を入れたいときに便利です。
+
+RGBAカラーモデルはRGBに加えてA=Alpha(透明度)を設定します。例えば、中を塗らない楕円を描くために使えます：
+
+```prerender
+fill(0, 0, 0, 0);  // アルファは0だから、内部を塗らない
+ellipse(50, 50, 80, 80);
+```
+
+色を使わないで、明るさだけの設定するときに3つの数は同じなので、略できます:
+`fill(50);`は`fill(50,50,50);`と同じ意味です。また、`fill(60,60,60,150);`は
+`fill(60,150);`と同じ意味です。
+
 
 # ツール {#ref-Tools}
 
