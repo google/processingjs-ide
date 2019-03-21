@@ -94,7 +94,7 @@ color posToColor(int x, int y) {
 }
 
 void setup() {
-  size(400, 400);
+  size(300, 300);
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       set(x, y, posToColor(x, y));
@@ -2401,10 +2401,99 @@ void draw() {
 # ゲーム {#ref-Games}
 
 *   [JumpingBall]
+    *   [JumpingBall2]
 *   [TouchTheNumber]
 *   [形状ゲーム][ShapeGame]
 *   [IslandHopper]
 *   [PingPong]
+*   [RocketLanding]
+
+# RocketLanding
+
+```example
+// RocketLanding
+/* @pjs preload="/static/fire2-134x200.png"; */
+/* @pjs preload="/static/rocket-168x300.png"; */
+/* @pjs preload="/static/rocket1-168x300.png"; */
+PImage fire = loadImage("/static/fire2-134x200.png");
+PImage rocket = loadImage("/static/rocket-168x300.png");
+PImage rocket_fire = loadImage("/static/rocket1-168x300.png");
+PAudio explosion = loadSound("/static/explosion.flac");
+PAudio roar = loadSound("/static/rocket-roar.wav");
+PAudio win = loadSound("/static/win.wav");
+
+float x;
+float y;
+float vy;
+
+boolean burning = false;
+boolean gameOver = false;
+
+void initVars() {
+  x = 100;
+  y = 10;
+  vy = 0;
+  gameOver = false;
+  burning = false;
+}
+
+void setup() {
+  size(200, 200);
+  frameRate(20);
+  imageMode(CENTER);
+  initVars();
+}
+
+void draw() {
+  y = y + vy;
+  vy = vy + 0.2;
+
+  if (y > height - 30) {
+    if (abs(vy) > 3) {
+      background(200);
+      image(fire, x, y-25, 65, 100);
+      explosion.play();
+    } else {
+      win.play();
+    }
+    noLoop();
+    gameOver = true;
+    return;
+  }
+
+  background(100);
+  if (burning) {
+    image(rocket_fire, x, y, 34, 60);
+    burning = false;
+  } else {
+    image(rocket, x, y, 34, 60);
+  }
+}
+
+void burn() {
+  burning = true;
+  vy -= 2;
+  roar.play();
+}
+
+void keyPressed() {
+  if (gameOver) {
+    initVars();
+    loop();
+    return;
+  }
+  burn();
+}
+
+void mousePressed() {
+  if (gameOver) {
+    initVars();
+    loop();
+    return;
+  }
+  burn();
+}
+```
 
 # PingPong
 
@@ -2795,6 +2884,162 @@ class Wall {
     rect(x, skyHeight - 1 - y, 5, y);
   }
 }
+```
+
+# JumpingBall2
+
+```example
+// JumpingBall2
+/* @pjs preload="/static/football1-200x200.png"; */
+/* @pjs preload="/static/fire1-200x123.png"; */
+PImage img = loadImage("/static/football1-200x200.png");
+PImage fire = loadImage("/static/fire1-200x123.png");
+imageMode(CENTER);
+
+// 座標
+float x = 100;
+float y = 100;
+// 速度
+float vx = 0;
+float vy = 0;
+// 加速度
+float ax = 0.99;
+float ay = 0.1;
+
+float fireX = 200;
+float fireY = 300;
+float fireV = 1;
+float fireVX = 0.5;
+float fireVY = -0.1;
+float fireAngle = 0;
+
+float goalX = 450;
+float goalY = 465;
+
+boolean gameOver = false;
+String gameMessage = "";
+
+void initializeVars() {
+  x = 100;
+  y = 100;
+  vx = 0;
+  vy = 0;
+}
+
+void setup() {
+  size(500, 500);
+  initializeVars();
+}
+
+void draw() {
+  updatePosition();
+  drawFrame();
+}
+
+
+void updatePosition() {
+  // 座標や速度の計算。
+  x = x + vx;
+  y = y + vy;
+  if (vx != 0) {
+    vx = vx*abs(vx*ax)/abs(vx);
+  }
+  vy = vy + ay;
+  /*
+  if (y > height-5) {
+    gameOver = true;
+    gameMessage = "GAME OVER";
+    return;
+  }
+  */
+  // バウンス
+  if (x < 5) {
+    x = 5;
+    vx = abs(vx);
+  }
+  if (x > width-5) {
+    x = width - 5;
+    vx = -abs(vx);
+  }
+  if (y < 5) {
+    y = 5;
+    vy = abs(vy);
+  }
+  if (y > height-5) {
+    y = height-5;
+    vy = -abs(vy);
+  }
+  fireX += fireVX;
+  fireY += fireVY;
+  fireAngle += 0.02;
+  fireVX = fireV*cos(fireAngle) + fireV*sin(fireAngle);
+  fireVY = fireV*sin(fireAngle) - fireV*cos(fireAngle);
+
+  if (dist(x, y, fireX, fireY) < 100 && abs(y - fireY) < 60) {
+    gameOver = true;
+    gameMessage = "GAME OVER";
+  }
+  if (dist(x, y, goalX, goalY) < 25 && y <= goalY) {
+    gameOver = true;
+    gameMessage = "YOU WON";
+  }
+}
+
+
+void drawFrame() {
+  if (gameOver) {
+    background(220);
+    fill(0);
+    textSize(20);
+    text(gameMessage, 30, 100);
+    noLoop();
+    return;
+  }
+  background(220);
+  strokeWeight(3);
+  fill(255);
+  ellipse(goalX, goalY, 45, 25);
+  fill(255);
+  //ellipse(x, y, 10, 10);
+  image(img, x, y,  40, 40);
+  translate(fireX, fireY);
+  image(fire, 0, 0, 200, 130);
+  translate(-fireX, -fireY);
+}
+
+void keyPressed() {
+  if (gameOver) {
+    gameOver = false;
+    initializeVars();
+    loop();
+    return;
+  }
+  switch (key) {
+    case ' ':
+      break;
+    case '\n':
+      break;
+    case 'q':
+      gameOver = true;
+      gameMessage = "STOP";
+      break;
+  }
+  switch (keyCode) {
+    case UP:
+      vy -= 5;
+      break;
+    case DOWN:
+      vy += 5;
+      break;
+    case LEFT:
+      vx = -2;
+      break;
+    case RIGHT:
+      vx = 2;
+      break;
+  }
+}
+
 ```
 
 # TouchTheNumber
