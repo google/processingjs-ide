@@ -3094,6 +3094,7 @@ float y;
 float vy;
 
 boolean burning = false;
+boolean exploded = false;
 boolean gameOver = false;
 
 void initVars() {
@@ -3102,6 +3103,7 @@ void initVars() {
   vy = 0;
   gameOver = false;
   burning = false;
+  exploded = false;
 }
 
 void setup() {
@@ -3112,6 +3114,16 @@ void setup() {
 }
 
 void draw() {
+  if (gameOver) {
+    if (exploded) {
+      if(explosion.isPlaying()) {
+        return;
+      }
+      background(10);
+    }
+    noLoop();
+    return;
+  }
   y = y + vy;
   vy = vy + 0.2;
 
@@ -3119,11 +3131,11 @@ void draw() {
     if (abs(vy) > 3) {
       background(200);
       image(fire, x, y-25, 65, 100);
+      exploded = true;
       explosion.play();
     } else {
       win.play();
     }
-    noLoop();
     gameOver = true;
     return;
   }
