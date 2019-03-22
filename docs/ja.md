@@ -519,6 +519,7 @@ void draw() {
 音の場合も、音のデータを用意する必要があります。`loadSound()`を呼ぶことによって
 音のデータを用意します。用意されたデータを`PAudio`の変数に保存しておきます。
 用意してから適切なときに`play()`命令を使って再生します。音の場合は、再生は 時間かかりますが、その家にプログラムは実行し続きます。
+次のプログラムを実行して、 キャンバス内でクリックしてみてください。
 
 ```prerender
 PAudio sound = loadSound("/static/meow.ogg");
@@ -527,7 +528,9 @@ void mouseClicked() {
 }
 void draw() {
   if (sound.isPlaying()) {
-    background(50);
+    background(220);
+    fill(0); textSize(20);
+    text("Meow", 5, 20);
   } else {
     background(220);
   }
