@@ -3056,7 +3056,7 @@ PImage fire = loadImage("/static/fire2-134x200.png");
 PImage rocket = loadImage("/static/rocket-168x300.png");
 PImage rocket_fire = loadImage("/static/rocket1-168x300.png");
 PAudio explosion = loadSound("/static/explosion.ogg");
-PAudio roar = loadSound("/static/rocket-roar.ogg");
+PAudio roar = loadSound("/static/roar.ogg");
 PAudio win = loadSound("/static/win.ogg");
 
 float x;
