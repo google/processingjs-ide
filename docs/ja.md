@@ -49,7 +49,7 @@
 
 次は[ステップ1][SpringStep1]へ。
 
-# ステップ１: カヤンバスと図形 {#ref-SpringStep1}
+# ステップ１: キャンバスと図形 {#ref-SpringStep1}
 
 コンピューターグラフィックでは、x座標は数学と同じように右に向かって増えますが、y座標は普通の数学と反対で下に向かって増えます。
 
@@ -828,7 +828,6 @@ void mousePressed() {
 }
 ```
 
-
 *   `/static/Coin01.ogg` <audio src="/static/Coin01.ogg" controls/>
 *   `/static/Downer01.ogg` <audio src="/static/Downer01.ogg" controls/>
 *   `/static/FX01.ogg` <audio src="/static/FX01.ogg" controls/>
@@ -858,7 +857,8 @@ void mousePressed() {
 *   `/static/cannon_03.ogg` <audio src="/static/cannon_03.ogg" controls/>
 *   `/static/cannon_04.ogg` <audio src="/static/cannon_04.ogg" controls/>
 *   `/static/cannon_05.ogg` <audio src="/static/cannon_05.ogg" controls/>
-*   `/static/dog-frieda-grunt-96khz-01.ogg` <audio src="/static/dog-frieda-grunt-96khz-01.ogg" controls/>
+*   `/static/dog-frieda-grunt-96khz-01.ogg`
+    <audio src="/static/dog-frieda-grunt-96khz-01.ogg" controls/>
 *   `/static/explosion.ogg` <audio src="/static/explosion.ogg" controls/>
 *   `/static/fw_01.ogg` <audio src="/static/fw_01.ogg" controls/>
 *   `/static/fw_02.ogg` <audio src="/static/fw_02.ogg" controls/>
@@ -868,10 +868,13 @@ void mousePressed() {
 *   `/static/fw_06.ogg` <audio src="/static/fw_06.ogg" controls/>
 *   `/static/fw_loop.ogg` <audio src="/static/fw_loop.ogg" controls/>
 *   `/static/meow.ogg` <audio src="/static/meow.ogg" controls/>
-*   `/static/mutant_frog-1.ogg` <audio src="/static/mutant_frog-1.ogg" controls/>
-*   `/static/mutant_frog-2.ogg` <audio src="/static/mutant_frog-2.ogg" controls/>
+*   `/static/mutant_frog-1.ogg`
+    <audio src="/static/mutant_frog-1.ogg" controls/>
+*   `/static/mutant_frog-2.ogg`
+    <audio src="/static/mutant_frog-2.ogg" controls/>
 *   `/static/rocket-roar.ogg` <audio src="/static/rocket-roar.ogg" controls/>
-*   `/static/rocket_launch.ogg` <audio src="/static/rocket_launch.ogg" controls/>
+*   `/static/rocket_launch.ogg`
+    <audio src="/static/rocket_launch.ogg" controls/>
 *   `/static/shot_01.ogg` <audio src="/static/shot_01.ogg" controls/>
 *   `/static/shot_02.ogg` <audio src="/static/shot_02.ogg" controls/>
 *   `/static/shot_03.ogg` <audio src="/static/shot_03.ogg" controls/>
