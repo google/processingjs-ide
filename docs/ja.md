@@ -818,11 +818,70 @@ void mouseReleased() {
 }
 ```
 
-# 画像 {#ref-ImageLibrary}
+# 音のリスト {#ref-SoundLibrary}
 
 ```prerender
+// SoundExample
+PAudio sound = loadSound("/static/explosion.ogg");
+void mousePressed() {
+  sound.play();
+}
+```
+
+
+*   `/static/Coin01.ogg` <audio src="/static/Coin01.ogg" controls/>
+*   `/static/Downer01.ogg` <audio src="/static/Downer01.ogg" controls/>
+*   `/static/FX01.ogg` <audio src="/static/FX01.ogg" controls/>
+*   `/static/FX02.ogg` <audio src="/static/FX02.ogg" controls/>
+*   `/static/Rise01.ogg` <audio src="/static/Rise01.ogg" controls/>
+*   `/static/Rise02.ogg` <audio src="/static/Rise02.ogg" controls/>
+*   `/static/Rise03.ogg` <audio src="/static/Rise03.ogg" controls/>
+*   `/static/Rise04.ogg` <audio src="/static/Rise04.ogg" controls/>
+*   `/static/Rise05.ogg` <audio src="/static/Rise05.ogg" controls/>
+*   `/static/Rise06.ogg` <audio src="/static/Rise06.ogg" controls/>
+*   `/static/Rise07.ogg` <audio src="/static/Rise07.ogg" controls/>
+*   `/static/Upper01.ogg` <audio src="/static/Upper01.ogg" controls/>
+*   `/static/bang_01.ogg` <audio src="/static/bang_01.ogg" controls/>
+*   `/static/bang_02.ogg` <audio src="/static/bang_02.ogg" controls/>
+*   `/static/bang_03.ogg` <audio src="/static/bang_03.ogg" controls/>
+*   `/static/bang_04.ogg` <audio src="/static/bang_04.ogg" controls/>
+*   `/static/bang_05.ogg` <audio src="/static/bang_05.ogg" controls/>
+*   `/static/bang_06.ogg` <audio src="/static/bang_06.ogg" controls/>
+*   `/static/bang_07.ogg` <audio src="/static/bang_07.ogg" controls/>
+*   `/static/bang_08.ogg` <audio src="/static/bang_08.ogg" controls/>
+*   `/static/bang_09.ogg` <audio src="/static/bang_09.ogg" controls/>
+*   `/static/bang_10.ogg` <audio src="/static/bang_10.ogg" controls/>
+*   `/static/bell_ding1.ogg` <audio src="/static/bell_ding1.ogg" controls/>
+*   `/static/bell_ding2.ogg` <audio src="/static/bell_ding2.ogg" controls/>
+*   `/static/cannon_01.ogg` <audio src="/static/cannon_01.ogg" controls/>
+*   `/static/cannon_02.ogg` <audio src="/static/cannon_02.ogg" controls/>
+*   `/static/cannon_03.ogg` <audio src="/static/cannon_03.ogg" controls/>
+*   `/static/cannon_04.ogg` <audio src="/static/cannon_04.ogg" controls/>
+*   `/static/cannon_05.ogg` <audio src="/static/cannon_05.ogg" controls/>
+*   `/static/dog-frieda-grunt-96khz-01.ogg` <audio src="/static/dog-frieda-grunt-96khz-01.ogg" controls/>
+*   `/static/explosion.ogg` <audio src="/static/explosion.ogg" controls/>
+*   `/static/fw_01.ogg` <audio src="/static/fw_01.ogg" controls/>
+*   `/static/fw_02.ogg` <audio src="/static/fw_02.ogg" controls/>
+*   `/static/fw_03.ogg` <audio src="/static/fw_03.ogg" controls/>
+*   `/static/fw_04.ogg` <audio src="/static/fw_04.ogg" controls/>
+*   `/static/fw_05.ogg` <audio src="/static/fw_05.ogg" controls/>
+*   `/static/fw_06.ogg` <audio src="/static/fw_06.ogg" controls/>
+*   `/static/fw_loop.ogg` <audio src="/static/fw_loop.ogg" controls/>
+*   `/static/meow.ogg` <audio src="/static/meow.ogg" controls/>
+*   `/static/mutant_frog-1.ogg` <audio src="/static/mutant_frog-1.ogg" controls/>
+*   `/static/mutant_frog-2.ogg` <audio src="/static/mutant_frog-2.ogg" controls/>
+*   `/static/rocket-roar.ogg` <audio src="/static/rocket-roar.ogg" controls/>
+*   `/static/rocket_launch.ogg` <audio src="/static/rocket_launch.ogg" controls/>
+*   `/static/shot_01.ogg` <audio src="/static/shot_01.ogg" controls/>
+*   `/static/shot_02.ogg` <audio src="/static/shot_02.ogg" controls/>
+*   `/static/shot_03.ogg` <audio src="/static/shot_03.ogg" controls/>
+*   `/static/win.ogg` <audio src="/static/win.ogg" controls/>
+
+# 画像リスト {#ref-ImageLibrary}
+
+```prerender
+// ImageExample
 /* @pjs preload="/static/baloon1-170x200.png"; */
-// SpriteExample
 PImage img = loadImage("/static/baloon1-170x200.png");
 imageMode(CENTER);
 image(img, 50, 50, 85, 100);
@@ -3012,9 +3071,9 @@ void draw() {
 PImage fire = loadImage("/static/fire2-134x200.png");
 PImage rocket = loadImage("/static/rocket-168x300.png");
 PImage rocket_fire = loadImage("/static/rocket1-168x300.png");
-PAudio explosion = loadSound("/static/explosion.flac");
-PAudio roar = loadSound("/static/rocket-roar.wav");
-PAudio win = loadSound("/static/win.wav");
+PAudio explosion = loadSound("/static/explosion.ogg");
+PAudio roar = loadSound("/static/rocket-roar.ogg");
+PAudio win = loadSound("/static/win.ogg");
 
 float x;
 float y;
@@ -6142,7 +6201,7 @@ image(walker, 10, 10, 80, 80);
 音のデータ。
 
 ```prerender
-PAudio sound = loadSound("/static/explosion.flac");
+PAudio sound = loadSound("/static/explosion.ogg");
 
 void mouseClicked() {
   sound.play();
