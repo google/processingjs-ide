@@ -3,11 +3,11 @@
 *   [はじめに][SpringStep0]
 *   [Step 1: キャンバスと図形][SpringStep1]
 *   [Step 2: 色][SpringStep2]
-*   [Step 3][SpringStep3]
-*   [Step 4][SpringStep4]
-*   [Step 5][SpringStep5]
-*   [Step 6][SpringStep6]
-*   [Step 7][SpringStep7]
+*   [Step 3: アニメーション][SpringStep3]
+*   [Step 4: マウスの使い方][SpringStep4]
+*   [Step 5: キーボードの使い方][SpringStep5]
+*   [Step 6: シミュレーション][SpringStep6]
+*   [Step 7: ゲームサンプル][SpringStep7]
 *   [アンケート](https://forms.gle/yCLKJCymfWJqCPYJ6)
 *   ヘルプ
     *   [索引][index]
@@ -36,10 +36,10 @@
 
 ![/static/sketch-load.png](/static/sketch-load.png)
 
-プログラムを編集しながら別のサンプルを試したいときは、ブラウザで新しいタブを作ってみましょう。[ 新規作成 ] ボタンをクリックすると新しいタブが開きます。元のタブに戻ると、編集してきたプログラムを継続できます。
+プログラムを編集しながら別のサンプルを試したいときは、ブラウザで新しいタブを作ってみましょう。[ 新規作成 ]
+ボタンをクリックすると新しいタブが開きます。元のタブに戻ると、編集してきたプログラムを継続できます。
 
 ![/static/new-sketch-button-highlight.png](/static/new-sketch-button-highlight.png)
-
 
 プログラムの中に現れる単語や関数が分からないときは、ヘルプを使ってみましょう。
 
@@ -73,17 +73,14 @@ text("x", 80, 37);
 text("y", 30, 85);
 ```
 
-設定しなければ、
-デフォルトのキャンバスは縦100かける横100ピクセルになります。
-キャンバスをもっと大きく
-するには、 size()関数を使って設定できます。
+設定しなければ、 デフォルトのキャンバスは縦100かける横100ピクセルになります。 キャンバスをもっと大きく するには、
+size()関数を使って設定できます。
 
 ```prerender
 size(150, 150);
 ```
 
-座標の数字を使って様々な図形を描けます。
-よく使うのはrect(), ellipse(), line()です。
+座標の数字を使って様々な図形を描けます。 よく使うのはrect(), ellipse(), line()です。
 
 ![/static/rect.png](/static/rect.png)
 ![/static/ellipse.png](/static/ellipse.png)
@@ -100,8 +97,7 @@ line(10, 60, 90, 90);
 実行してみましょう。キャンバスに右のような絵が出てきたでしょうか？
 プログラムを構成する一つ一つの行は命令といいます。Processingでは、各命令は必ずセミコロン(;)で終わらなければいけません。
 
-それでは、今習ったことを使ってみましょう。
-例として以下の雪だるまいかがでしょうか。
+それでは、今習ったことを使ってみましょう。 例として以下の雪だるまいかがでしょうか。
 
 ```render
 // Snowman
@@ -111,13 +107,14 @@ ellipse(150, 170, 80, 80);
 ellipse(150, 110, 60, 60);
 ```
 
-**問題１**: 雪だるまを描きましょう。  例に限らず、好きなような形の雪だるまにしましょう。
+**問題１**: 雪だるまを描きましょう。 例に限らず、好きなような形の雪だるまにしましょう。
 
 次は、[ステップ2][SpringStep2]へ。
 
 # ステップ2: 色 {#ref-SpringStep2}
 
-今までの絵は白黒でしたが、それではつまらないので、色を加えてみましょう。ProcessingではRGBまたはRGBAカラーモデルを採用しています。RGBはR=Red (赤)、G=Green (緑)、B=Blue (青)から成り立っています。右の図はRGBのカラーミックスのイメージです。
+今までの絵は白黒でしたが、それではつまらないので、色を加えてみましょう。ProcessingではRGBまたはRGBAカラーモデルを採用しています。RGBはR=Red
+(赤)、G=Green (緑)、B=Blue (青)から成り立っています。右の図はRGBのカラーミックスのイメージです。
 
 ```render
 color posToColor(int x, int y) {
@@ -187,6 +184,368 @@ ellipse(50, 50, 80, 80);
 `fill(50);`は`fill(50,50,50);`と同じ意味です。また、`fill(60,60,60,150);`は
 `fill(60,150);`と同じ意味です。
 
+では、雪だるまに色を加えましょう。
+
+**問題２**：前に作った雪だるまに色をつけたり、アイテムをあげたりしてみましょう。
+
+次は[ステップ3][SpringStep3]へ。
+
+# ステップ3: アニメーション {#ref-SpringStep3}
+
+今日のワークショップの目的は皆さんに自分で簡単なゲームを作ってもらうことなので、単に図形を描くだけでは足りません。図形を動かしてみましょう。
+
+そのためには、同じプログラムを何回も繰り返し実行する必要があります。Processingにはアニメーションを作るのための仕組みがすでに含まれています。
+
+一回だけ実行したいプログラムの部分は`void setup() { ... }` の中に書き、何回も繰り返しで実行したい部分は`void draw() {
+... }`の中に書くと、簡単なアニメーションを作れます。 このように`{}`で囲ったプログラムの部分は「関数」といいます。
+
+![/static/execute-diagram.png](/static/execute-diagram.png)
+
+いくつかの例を見てみましょう。
+
+```example
+void setup() {
+  textSize(50); // 文字を大きくする
+  fill(0);      // 文字を黒にする
+}
+
+void draw() {
+  text(frameCount, 10, 50);
+}
+```
+
+早すぎて何が起きたかよくわかりません。実行をもう少し遅くするには`frameRate()`が便利です。`draw()`を一回実行されたときに一つのフレームとして考えると、フレーム・レートは一秒あたり何回`draw()`が呼ばれるかを示します。
+
+```example
+void setup() {
+  textSize(50);
+  fill(0);
+  frameRate(1);
+}
+
+void draw() {
+  text(frameCount, 10, 50);
+}
+```
+
+今回は分かりやすくなりましたね。同じところに連続で１、２、３などの数字を表示します。`frameCount`は毎回フレーム番号を表しています。`draw()`の実行ごとに違う数が表示されます。
+
+番号がはっきり見えるようにしましょう。新しい番号を見せる前にキャンバスを消すことで、新しい番号がはっきり見えます。キャンバスを消すためには`background()`を使います。`background()`には前と同様にRGBの形式色を指定できます。
+
+```example
+void setup() {
+  textSize(50);
+  fill(0);
+  frameRate(1);
+}
+
+void draw() {
+  background(200);  // キャンバスをグレーに塗りつぶす
+  text(frameCount, 10, 50);
+}
+```
+
+この例で出てきた`frameCount`は変数といいます。
+
+**問題３**:
+`draw()`や`frameCount`や図形の命令を使って好きなように雪だるまのアニメーションを作りましょう。何か分からないことがあったら質問してください。
+
+次は[ステップ4][SpringStep4]へ。
+
+# ステップ4: マウスの使い方 {#ref-SpringStep4}
+
+ゲームを作るにはユーザーからの入力を処理する必要があります。まずはマウスを使ってみましょう。プログラムの実行中にマウスがキャンバスの中に入ると、`mouseX`と`mouseY`の変数にマウスの位置が設定されます。
+
+```prerender
+void draw() {
+  background(255);  // 白
+  ellipse(mouseX, mouseY, 10, 10);
+}
+```
+
+マウスをキャンバス内で動かしてみましょう。丸がマウスについてくるのがわかるでしょう。
+
+では、ユーザーがマウスをクリックしたらキャンバスを黒くしてみましょう。
+ユーザーがマウスをクリックしたことに反応するためには、`mousePressed()`関数を定義します。この関数は、マウスのボタンが押されたときに呼ばれます。次のプログラムを実行して、マウスをキャンバス内でクリックすると、一瞬だけキャンバスが黒くなります。
+
+```prerender
+void draw() {
+  background(255);  // 白
+  ellipse(mouseX, mouseY, 10, 10);
+  frameRate(10);
+}
+
+voId mousePressed() {
+  background(0);  // 黒
+}
+```
+
+なぜキャンバスが黒のままにならないのでしょうか。それは、`draw()`関数が繰り返し実行され、`draw()`の中にキャンバスを白く塗りつぶす命令`background(255)`が入っているからです。
+
+マウスをクリックした後、キャンバスを一瞬だけではなくずっと黒にするには、どうすればいいでしょうか。
+
+ここでは変数が役に立ちます。ただ、前と違って、Processingの標準の変数ではなくて、自分で新しい変数を作ります。変数を作るには、`int c =
+255;`のような文をプログラムに追加します。この中で`int`は変数の型を表しています：整数(integerの略)。 `=
+255`は変数の値を指定しています。`c`は変数の名前です。マウスがクリックされたときに`mousePressed()`が呼ばれるので、その中で変数の値を変えることができます。
+
+```prerender
+int c = 255;
+
+void draw() {
+  background(c);
+  ellipse(mouseX, mouseY, 10, 10);
+  frameRate(10);
+}
+
+void mousePressed() {
+  c = 0;
+}
+```
+
+ここでは、プログラムの実行を始めた時に変数cが作られて、最初の値は255になっています。変数の値は255なので、`background(c);`はキャンバスを白く塗りつぶします。ユーザがマウスをクリックすると、`mousePressed()`が呼ばれて、変数cの値が0になります。その後は、`background(c);`という命令はキャンバスを黒く塗りつぶすことになります。
+
+**問題4**: 雪だるまをマウスと一緒に動かしてみましょう。
+
+```hidden
+// SnowmanMouse2
+void setup() {
+  size(300, 300);
+}
+
+void draw() {
+  background(220);
+  ellipse(mouseX, mouseY+80, 100, 100);
+  ellipse(mouseX, mouseY, 80, 80);
+  ellipse(mouseX, mouseY-60, 60, 60);
+}
+```
+
+次は[ステップ5][SpringStep5]へ。
+
+# ステップ5: キーボードの使い方 {#ref-SpringStep5}
+
+ゲーム機には普通マウスはついてないので、キーパッドで遊ぶことが多いでしょう。では、ゲーム機のようにキーボードを使って遊べるようにするにはどうすればいいでしょう。
+
+Processingでは、キーボードの使い方はマウスととても似ています。キーボードのボタンが押されるたびに`keyPressed()`関数が呼ばれます。次の例を見ましょう。その関数の中に`keyCode`を参照すれば、押されたキーが分かります。次のプログラムは丸を描いています。実行したら、キャンバス内をクリックして、左右の矢印キーを押してみましょう。
+
+```prerender
+int x = 50;
+
+void draw() {
+  background(220);
+  ellipse(x, 50, 30, 30);
+}
+
+void keyPressed() {
+  switch(keyCode) {
+    case LEFT:
+      x = x - 5;
+      break;
+    case RIGHT:
+      x = x + 5;
+      break;
+  }
+}
+```
+
+**問題5**: 雪だるまをキーボードの左右矢印キーで動かしてみましょう。
+
+```hidden
+// SnowmanKeyboard
+
+int x = 150;
+
+void setup() {
+  size(300, 300);
+}
+
+void draw() {
+  background(220);
+  ellipse(x, 250, 100, 100);
+  ellipse(x, 170, 80, 80);
+  ellipse(x, 110, 60, 60);
+}
+
+void keyPressed() {
+  switch(keyCode) {
+    case LEFT:
+      x = x - 5;
+      break;
+    case RIGHT:
+      x = x + 5;
+      break;
+  }
+}
+```
+
+次は[ステップ6][SpringStep6]へ。
+
+# ステップ6: シミュレーション {#ref-SpringStep6}
+
+ゲームのなかのオブジェクトは馴染みがあると遊びやすくなります。たとえば、重力で落ちるボールはどのようにプログラムで表現するのでしょうか？それはシミュレーションを使って実装できます。ボールのシミュレーションにはボールの位置と速度が必要です。重力の場合は加速度は定数です。
+
+```example
+float y = 10;
+float vy = 0;
+
+void draw() {
+  // シミュレーション
+  y = y + vy;     // 縦位置
+  vy = vy + 0.1;  // 加速
+  // アニメーション
+  background(220);
+  ellipse(50, y, 30, 30);
+}
+```
+
+ボールのシミュレーションに２つの変数を使います。`y`は縦位置と`vy`は縦速度を表しています。`draw()`は一秒で何回も呼ばれるので、毎回新しい位置や速度を計算します。シミュレーションの計算の後、キャンバスを書き直すことでアニメーションを実装します。この例では前と違って`float`の変数を使います。`float`は浮動小数点数といいえ、整数ではない数を保存できます。
+
+以上のシミュレーションでボールが一回キャンバスの下に落ちたらキャンバスから消えます。ボールをゲームから消えさせないようにキャンバスの端からバウンドさせることできます。
+プログラムの実行の世界では端というものが存在しないので、プログラムは「壁にぶつかったか」という条件を調べなければいけません。
+
+```example
+float y = 10;
+float vy = 0;
+
+void draw() {
+  y = y + vy;     // 縦位置
+  vy = vy + 0.1;  // 加速
+  if (y > height) {  // 床に当たる条件
+    y = height;
+    vy = -4;
+  }
+  background(220);
+  ellipse(50, y, 30, 30);
+}
+```
+
+この例では、円が床に当たっているかどうかという条件を調べています。`y`軸は下向きなので、キャンバスの下の部分のY座標は`height`です。シミュレーションの計算の結果でボールは床下に行きそうの条件は
+`y > height`で調べます。
+
+ボールが床に当たったら、ボールに上向きの速度を与えれば、本物のボールのようにバウンドします。
+
+**問題6:** 雪だるまを飛びさせましょう。
+
+```hidden
+// SnowmanBounce
+
+int x = 150;
+float y;
+float vy = -2;
+
+void setup() {
+  size(300, 300);
+  y = height;
+}
+
+void draw() {
+  y = y + vy;
+  vy = vy + 0.1;
+  if (y > height) {
+    y = height;
+    vy = -4;
+  }
+  background(220);
+  ellipse(x, y-50, 100, 100);
+  ellipse(x, y-130, 80, 80);
+  ellipse(x, y-190, 60, 60);
+}
+
+void keyPressed() {
+  switch(keyCode) {
+    case LEFT:
+      x = x - 5;
+      break;
+    case RIGHT:
+      x = x + 5;
+      break;
+  }
+}
+```
+
+次は[ステプ7][SpringStep7]へ。
+
+# ステップ7: ゲームサンプル {#ref-SpringStep7}
+
+```hidden
+// GameTemplate
+/* @pjs preload="/static/fire2-134x200.png"; */
+/* @pjs preload="/static/rocket-168x300.png"; */
+/* @pjs preload="/static/rocket1-168x300.png"; */
+PImage fire = loadImage("/static/fire2-134x200.png");
+PImage rocket = loadImage("/static/rocket-168x300.png");
+PImage rocket_fire = loadImage("/static/rocket1-168x300.png");
+
+float x;
+float y;
+float vy;
+
+boolean burning = false;
+boolean gameOver = false;
+
+void initVars() {
+  x = 100;
+  y = 10;
+  vy = 0;
+  gameOver = false;
+  burning = false;
+}
+
+void setup() {
+  size(200, 200);
+  frameRate(20);
+  imageMode(CENTER);
+  initVars();
+}
+
+void draw() {
+  y = y + vy;
+  vy = vy + 0.2;
+
+  if (y > height - 30) {
+    if (abs(vy) > 3) {
+      background(200);
+      image(fire, x, y-25, 65, 100);
+    }
+    noLoop();
+    gameOver = true;
+    return;
+  }
+
+  background(100);
+  if (burning) {
+    image(rocket_fire, x, y, 34, 60);
+    burning = false;
+  } else {
+    image(rocket, x, y, 34, 60);
+  }
+}
+
+void burn() {
+  burning = true;
+  vy -= 2;
+}
+
+void keyPressed() {
+  if (gameOver) {
+    initVars();
+    loop();
+    return;
+  }
+  burn();
+}
+
+void mousePressed() {
+  if (gameOver) {
+    initVars();
+    loop();
+    return;
+  }
+  burn();
+}
+```
+
+次は[サンプルゲーム][Games]を参照。
 
 # ツール {#ref-Tools}
 
