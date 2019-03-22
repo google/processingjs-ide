@@ -128,7 +128,17 @@ There are 4 ways to render code snippets:
 
 ## License
 
-Apache-2.0; see [LICENSE](LICENSE) for details.
+Source code is licensed under Apache-2.0; see [LICENSE](LICENSE) for details.
+
+
+## Image and sound samples
+
+The sound samples has been downloaded from the CC0-licensed section of 
+https://opengameart.org.
+
+The photo samples were downloaded from Unsplash.com and edited (Unsplash license).
+
+The clipart has been downloaded from https://openclipart.org/ (CC0 license).
 
 ## Disclaimer
 
