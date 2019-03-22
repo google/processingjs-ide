@@ -839,56 +839,28 @@ void mousePressed() {
 }
 ```
 
-*   `/static/Coin01.ogg` <audio src="/static/Coin01.ogg" controls/>
-*   `/static/Downer01.ogg` <audio src="/static/Downer01.ogg" controls/>
-*   `/static/FX01.ogg` <audio src="/static/FX01.ogg" controls/>
-*   `/static/FX02.ogg` <audio src="/static/FX02.ogg" controls/>
-*   `/static/Rise01.ogg` <audio src="/static/Rise01.ogg" controls/>
-*   `/static/Rise02.ogg` <audio src="/static/Rise02.ogg" controls/>
-*   `/static/Rise03.ogg` <audio src="/static/Rise03.ogg" controls/>
-*   `/static/Rise04.ogg` <audio src="/static/Rise04.ogg" controls/>
-*   `/static/Rise05.ogg` <audio src="/static/Rise05.ogg" controls/>
-*   `/static/Rise06.ogg` <audio src="/static/Rise06.ogg" controls/>
-*   `/static/Rise07.ogg` <audio src="/static/Rise07.ogg" controls/>
-*   `/static/Upper01.ogg` <audio src="/static/Upper01.ogg" controls/>
-*   `/static/bang_01.ogg` <audio src="/static/bang_01.ogg" controls/>
-*   `/static/bang_02.ogg` <audio src="/static/bang_02.ogg" controls/>
-*   `/static/bang_03.ogg` <audio src="/static/bang_03.ogg" controls/>
-*   `/static/bang_04.ogg` <audio src="/static/bang_04.ogg" controls/>
-*   `/static/bang_05.ogg` <audio src="/static/bang_05.ogg" controls/>
-*   `/static/bang_06.ogg` <audio src="/static/bang_06.ogg" controls/>
-*   `/static/bang_07.ogg` <audio src="/static/bang_07.ogg" controls/>
-*   `/static/bang_08.ogg` <audio src="/static/bang_08.ogg" controls/>
-*   `/static/bang_09.ogg` <audio src="/static/bang_09.ogg" controls/>
-*   `/static/bang_10.ogg` <audio src="/static/bang_10.ogg" controls/>
-*   `/static/bell_ding1.ogg` <audio src="/static/bell_ding1.ogg" controls/>
-*   `/static/bell_ding2.ogg` <audio src="/static/bell_ding2.ogg" controls/>
-*   `/static/cannon_01.ogg` <audio src="/static/cannon_01.ogg" controls/>
-*   `/static/cannon_02.ogg` <audio src="/static/cannon_02.ogg" controls/>
-*   `/static/cannon_03.ogg` <audio src="/static/cannon_03.ogg" controls/>
-*   `/static/cannon_04.ogg` <audio src="/static/cannon_04.ogg" controls/>
-*   `/static/cannon_05.ogg` <audio src="/static/cannon_05.ogg" controls/>
-*   `/static/dog-frieda-grunt-96khz-01.ogg`
-    <audio src="/static/dog-frieda-grunt-96khz-01.ogg" controls/>
+*   `/static/coin.ogg` <audio src="/static/coin.ogg" controls/>
+*   `/static/tututun.ogg` <audio src="/static/tututun.ogg" controls/>
+*   `/static/didin.ogg` <audio src="/static/didin.ogg" controls/>
+*   `/static/rururun.ogg` <audio src="/static/rururun.ogg" controls/>
+*   `/static/bells.ogg` <audio src="/static/bells.ogg" controls/>
+*   `/static/strings.ogg` <audio src="/static/strings.ogg" controls/>
+*   `/static/ugh.ogg` <audio src="/static/ugh.ogg" controls/>
+*   `/static/bang.ogg` <audio src="/static/bang.ogg" controls/>
+*   `/static/ding.ogg` <audio src="/static/ding.ogg" controls/>
+*   `/static/cannon.ogg` <audio src="/static/cannon.ogg" controls/>
+*   `/static/growl.ogg`
+    <audio src="/static/growl.ogg" controls/>
 *   `/static/explosion.ogg` <audio src="/static/explosion.ogg" controls/>
-*   `/static/fw_01.ogg` <audio src="/static/fw_01.ogg" controls/>
-*   `/static/fw_02.ogg` <audio src="/static/fw_02.ogg" controls/>
-*   `/static/fw_03.ogg` <audio src="/static/fw_03.ogg" controls/>
-*   `/static/fw_04.ogg` <audio src="/static/fw_04.ogg" controls/>
-*   `/static/fw_05.ogg` <audio src="/static/fw_05.ogg" controls/>
-*   `/static/fw_06.ogg` <audio src="/static/fw_06.ogg" controls/>
-*   `/static/fw_loop.ogg` <audio src="/static/fw_loop.ogg" controls/>
+*   `/static/clicks.ogg` <audio src="/static/clicks.ogg" controls/>
+*   `/static/fireworks.ogg` <audio src="/static/fireworks.ogg" controls/>
 *   `/static/meow.ogg` <audio src="/static/meow.ogg" controls/>
-*   `/static/mutant_frog-1.ogg`
-    <audio src="/static/mutant_frog-1.ogg" controls/>
-*   `/static/mutant_frog-2.ogg`
-    <audio src="/static/mutant_frog-2.ogg" controls/>
-*   `/static/rocket-roar.ogg` <audio src="/static/rocket-roar.ogg" controls/>
-*   `/static/rocket_launch.ogg`
-    <audio src="/static/rocket_launch.ogg" controls/>
-*   `/static/shot_01.ogg` <audio src="/static/shot_01.ogg" controls/>
-*   `/static/shot_02.ogg` <audio src="/static/shot_02.ogg" controls/>
-*   `/static/shot_03.ogg` <audio src="/static/shot_03.ogg" controls/>
+*   `/static/frog.ogg`
+    <audio src="/static/frog.ogg" controls/>
+*   `/static/roar.ogg` <audio src="/static/roar.ogg" controls/>
+*   `/static/launch.ogg`
+    <audio src="/static/launch.ogg" controls/>
+*   `/static/shot.ogg` <audio src="/static/shot.ogg" controls/>
 *   `/static/win.ogg` <audio src="/static/win.ogg" controls/>
 
 # 画像リスト {#ref-ImageLibrary}
@@ -3094,7 +3066,6 @@ float y;
 float vy;
 
 boolean burning = false;
-boolean exploded = false;
 boolean gameOver = false;
 
 void initVars() {
@@ -3103,7 +3074,6 @@ void initVars() {
   vy = 0;
   gameOver = false;
   burning = false;
-  exploded = false;
 }
 
 void setup() {
@@ -3114,16 +3084,6 @@ void setup() {
 }
 
 void draw() {
-  if (gameOver) {
-    if (exploded) {
-      if(explosion.isPlaying()) {
-        return;
-      }
-      background(10);
-    }
-    noLoop();
-    return;
-  }
   y = y + vy;
   vy = vy + 0.2;
 
@@ -3131,11 +3091,11 @@ void draw() {
     if (abs(vy) > 3) {
       background(200);
       image(fire, x, y-25, 65, 100);
-      exploded = true;
       explosion.play();
     } else {
       win.play();
     }
+    noLoop();
     gameOver = true;
     return;
   }
