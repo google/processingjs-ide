@@ -879,6 +879,7 @@ void mousePressed() {
 *   `/static/fw_06.ogg` <audio src="/static/fw_06.ogg" controls/>
 *   `/static/fw_loop.ogg` <audio src="/static/fw_loop.ogg" controls/>
 *   `/static/meow.ogg` <audio src="/static/meow.ogg" controls/>
+*   `/static/dog.ogg` <audio src="/static/dog.ogg" controls/>
 *   `/static/mutant_frog-1.ogg`
     <audio src="/static/mutant_frog-1.ogg" controls/>
 *   `/static/mutant_frog-2.ogg`
