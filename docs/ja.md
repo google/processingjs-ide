@@ -7,14 +7,16 @@
 *   [Step 4: マウスの使い方][SpringStep4]
 *   [Step 5: キーボードの使い方][SpringStep5]
 *   [Step 6: シミュレーション][SpringStep6]
-*   [Step 7: ゲームサンプル][SpringStep7]
+*   [Step 7: 画像と音][SpringStep7]
+*   [Step 8: ゲームサンプル][SpringStep8]
 *   [アンケート](https://forms.gle/yCLKJCymfWJqCPYJ6)
 *   ヘルプ
     *   [索引][index]
     *   [ツール][Tools]
     *   [デモ][Demos]
     *   [ゲーム][Games]
-    *   [スプライト][Sprites]
+    *   [画像リスト][ImageLibrary]
+    *   [音リスト][SoundLibrary]
 *   [その他ワークショップ][otherworkshops]
 
 # その他 {#ref-otherworkshops}
@@ -465,10 +467,76 @@ void keyPressed() {
 
 次は[ステプ7][SpringStep7]へ。
 
-# ステップ7: ゲームサンプル {#ref-SpringStep7}
+# ステップ7: 画像と音 {#ref-SpringStep7}
 
-```hidden
-// GameTemplate
+楽しいゲーム作りにいくつかの秘密があります。以前は作り方の基本を学びましたが、 基本の上で美しい絵や音を加えなければいけません。本ワークショップでは、
+簡単な画像や音のエフェクトの使い方を紹介します。
+
+画像を使うにはそれをロードしなければいけません。 このプログラムでは、`@pjs preload="...";`と`loadImage("...")`
+二箇所で画像名を入れて、画像データを用意します。
+
+```prerender
+/* @pjs preload="/static/baloon1-170x200.png"; */
+PImage img = loadImage("/static/baloon1-170x200.png");
+imageMode(CENTER);
+image(img, 50, 50, 85, 100);
+```
+
+`imageMode`は画像の写し方を設定します。 `CENTER`(中心)を設定すると座標の(x,y)の点に画像の中心が写します。
+`CORNER`(角)を設定すると(x,y)の点に左上角が写します。
+
+```render
+/* @pjs preload="/static/baloon1-170x200.png"; */
+PImage img = loadImage("/static/baloon1-170x200.png");
+void setup() {
+  size(300, 200);
+  frameRate(1);
+  textSize(16);
+  fill(0);
+  textAlign(LEFT, TOP);
+  strokeWeight(5);
+}
+void draw() {
+  background(220);
+  if (frameCount % 2 == 0) {
+    imageMode(CENTER);
+    image(img, width/2, height/2, 85, 100);
+    text("imageMode(CENTER);", 2, 5);
+  } else {
+    imageMode(CORNER);
+    image(img, width/2, height/2, 85, 100);
+    text("imageMode(CORNER);", 2, 5);
+  }
+  point(width/2, height/2);
+  text("(x,y)", width/2, height/2);
+}
+```
+
+画像をいくつか用意しましたので、[画像リスト][ImageLibrary]でご確認ください。
+
+音の場合も、音のデータを用意する必要があります。
+
+```prerender
+PAudio sound = loadSound("/static/meow.ogg");
+void mouseClicked() {
+  sound.play();
+}
+void draw() {
+  if (sound.isPlaying()) {
+    background(50);
+  } else {
+    background(220);
+  }
+}
+```
+
+# ステップ7: ゲームサンプル {#ref-SpringStep8}
+
+次のプログラムをサンプルとして使って自由自在ゲームを作ってみましょう。 以下に部分ごとに説明あります。
+
+```example
+// Game
+
 /* @pjs preload="/static/fire2-134x200.png"; */
 /* @pjs preload="/static/rocket-168x300.png"; */
 /* @pjs preload="/static/rocket1-168x300.png"; */
@@ -750,7 +818,7 @@ void mouseReleased() {
 }
 ```
 
-# スプライト {#ref-Sprites}
+# 画像 {#ref-ImageLibrary}
 
 ```prerender
 /* @pjs preload="/static/baloon1-170x200.png"; */
@@ -2673,8 +2741,9 @@ void setup() {
 
 ## 文字
 
-*   [textSize()] 文字の大きさを設定する
 *   [text()] 文字を表示する
+*   [textSize()] 文字の大きさを設定する
+*   [textAlign()] 文字の写し方を設定する
 *   [textFont()] 字体を設定する
 *   [loadFont()] 字体を読み込みする
 
