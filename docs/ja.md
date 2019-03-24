@@ -346,13 +346,11 @@ void draw() {
 }
 
 void keyPressed() {
-  switch(keyCode) {
-    case LEFT:
-      x = x - 5;
-      break;
-    case RIGHT:
+  if (keyCode == LEFT) {
+    x = x - 5;
+  }
+  if (keyCode == RIGHT) {
       x = x + 5;
-      break;
   }
 }
 ```
@@ -376,13 +374,11 @@ void draw() {
 }
 
 void keyPressed() {
-  switch(keyCode) {
-    case LEFT:
-      x = x - 5;
-      break;
-    case RIGHT:
+  if (keyCode == LEFT) {
+    x = x - 5;
+  }
+  if (keyCode == RIGHT) {
       x = x + 5;
-      break;
   }
 }
 ```
@@ -461,13 +457,11 @@ void draw() {
 }
 
 void keyPressed() {
-  switch(keyCode) {
-    case LEFT:
-      x = x - 5;
-      break;
-    case RIGHT:
+  if (keyCode == LEFT) {
+    x = x - 5;
+  }
+  if (keyCode == RIGHT) {
       x = x + 5;
-      break;
   }
 }
 ```
