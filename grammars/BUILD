@@ -63,10 +63,10 @@ load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
 nodejs_binary(
     name = "try_parse",
     data = [
-        "try_parse.js",
+        ":try_parse.js",
         ":toplevel",
         "@npm//google-closure-library",
     ],
-    entry_point = "__main__/grammars/try_parse.js",
+    entry_point = ":try_parse.js",
     templated_args = [],
 )
