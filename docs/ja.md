@@ -1,4 +1,4 @@
-# Processing.js 春ワークショップ {#ref-help}
+# Processing.js 春ワークショップ {#ref-workshopMar}
 
 *   [はじめに][SpringStep0]
 *   [Step 1: キャンバスと図形][SpringStep1]
@@ -22,7 +22,8 @@
 # その他 {#ref-otherworkshops}
 
 *   [2018年夏期ワークショップ][workshopSep]
-*   [2018年TTSワークショップ][workshopTTS]
+*   [2018年春ワークショップ][workshopMar]
+*   [TTS ワークショップ][help]
 
 # はじめに {#ref-SpringStep0}
 
@@ -2320,7 +2321,7 @@ void turnRight() {
 }
 ```
 
-# プログラミング体験ワークショップ {#ref-workshopTTS}
+# プログラミング体験ワークショップ {#ref-help}
 
 *   プログラミング体験ワークショップ
     *   [ステップ1][step1]
@@ -2330,20 +2331,7 @@ void turnRight() {
 *   [補足][Addendum]
 *   [デモ][Demos]
 *   [ゲーム][Games]
-
-たとえば、こちらのスケッチを試してみましょう。「読み込み」にクリックしてから、 「実行」を押してください。
-
-```prerender
-// Rect
-// キャンバスの大きさを設定する。
-size(150, 150);
-// キャンバスをホワイトで塗る
-background(255);
-// 今度描く色は黒に設定する。
-fill(0);
-// 長方形を描く。
-rect(25, 25, 100, 100);
-```
+*   [その他ワークショップ][otherworkshops]
 
 # ステップ1 {#ref-step1}
 
@@ -2621,7 +2609,7 @@ void mouseClicked() {
   if (x != next) {  // 間違った場合
     speak("ぶぶ");
     speak("もう一回いいます");
-    speak(shapes[next], "en");  // 英語でも話せます！
+    speak(shapes[next], "en");  // 英語でも話せます
   } else {          // 正しくあたった場合
     speak("ピンポン");
     next = -1;
