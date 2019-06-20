@@ -15,8 +15,8 @@ programming. For this reason the main focus areas of this project are:
 
 Currently this project includes the local version of HTML files for quick
 development and a very small application to serve the static HTML file of the
-IDE from Google App Engine and provide the saving of the sketch source code
-to Cloud datastore.
+IDE from Google App Engine and provide the saving of the sketch source code to
+Cloud datastore.
 
 ## Install the dependencies
 
@@ -32,7 +32,7 @@ To build the project use the standard Bazel command line:
 
     bazel build ...
 
-Note, that you need a fairly recent verion of Bazel (tested with 0.22). The
+Note, that you need a fairly recent verion of Bazel (last tested with 0.27). The
 built IDE is in the file `bazel-genfiles/ide-bin.html`, but it cannot be opened
 directly in the browser, as it has been modified for being served by an HTTP
 server. You can use the AppEngine development server instead (see
@@ -42,12 +42,28 @@ for the instruction on how to install Google Cloud SDK):
     cd appengine
     dev_appserver.py app.yaml
 
+Note: if you would like to use server-side TTS functionality when running a
+local development server, you need to create service account key for accessing
+TTS service, download the key in JSON format and define the following
+environment variable:
+
+    export GOOGLE_APPLICATION_CREDENTIALS=path/to/service-account-key.json
+    (cd appengine && dev_appserver.py app.yaml)&
+
 Then you can open the IDE at http://localhost:8080. Alternatively you can run a
 small HTTP server written in Go:
 
     go run cmd/server/server.go
 
 and visit http://localhost:8080/static/ide-ja.html
+
+### Note on upgrading the Bazel dependencies
+
+Use the command
+
+    bazel sync --experimental_repository_resolved_file=resolved.bzl
+
+to update the pinned versions listed in `resolved.bzl`.
 
 ## Deploy to Google App Engine
 
@@ -130,13 +146,13 @@ There are 4 ways to render code snippets:
 
 Source code is licensed under Apache-2.0; see [LICENSE](LICENSE) for details.
 
-
 ## Image and sound samples
 
-The sound samples has been downloaded from the CC0-licensed section of 
+The sound samples has been downloaded from the CC0-licensed section of
 https://opengameart.org.
 
-The photo samples were downloaded from Unsplash.com and edited (Unsplash license).
+The photo samples were downloaded from Unsplash.com and edited (Unsplash
+license).
 
 The clipart has been downloaded from https://openclipart.org/ (CC0 license).
 

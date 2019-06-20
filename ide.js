@@ -358,8 +358,7 @@ var ide = (/** @type {function(): !Object} */ (function() {
       $hover.mousemove(function(ev) {
         return false;
       });
-      /** @type {?HTMLDivElement} */
-      ide.hoverElement = $hover[0];
+      ide.hoverElement = (/** @type {?HTMLDivElement} */($hover[0]));
       document.getElementsByTagName('body')[0].appendChild(ide.hoverElement);
     }
     // tmp

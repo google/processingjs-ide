@@ -15,25 +15,22 @@
 # For Bazel 0.21 or later, the minimum Protocol Buffer version required is 3.6.1.2,
 # because of the REPOSITORY_NAME removal.
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-http_archive(
+git_repository(
     name = "com_google_protobuf",
-    sha256 = "2244b0308846bb22b4ff0bcc675e99290ff9f1115553ae9671eba1030af31bc0",
-    strip_prefix = "protobuf-3.6.1.2",
-    urls = ["https://github.com/google/protobuf/archive/v3.6.1.2.tar.gz"],
+    branch = "master",
+    remote = "https://github.com/google/protobuf.git",
 )
 
 #
 # Bazel rules for Closure compiler.
 #
-http_archive(
+
+git_repository(
     name = "io_bazel_rules_closure",
-    sha256 = "b29a8bc2cb10513c864cb1084d6f38613ef14a143797cea0af0f91cd385f5e8c",
-    strip_prefix = "rules_closure-0.8.0",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/0.8.0.tar.gz",
-        "https://github.com/bazelbuild/rules_closure/archive/0.8.0.tar.gz",
-    ],
+    branch = "master",
+    remote = "https://github.com/bazelbuild/rules_closure.git",
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
@@ -55,6 +52,7 @@ new_local_repository(
 http_archive(
     name = "jquery",
     build_file = "//:third_party/jquery.BUILD",
+    sha256 = "31d8c2e22dd48a7973fe3617cc656fe6b64d2250d07a258cd8ab30ead031c24a",
     strip_prefix = "jquery-3.2.1",
     urls = ["https://github.com/jquery/jquery/archive/3.2.1.tar.gz"],
 )
@@ -75,22 +73,27 @@ http_archive(
 #
 http_archive(
     name = "io_bazel_rules_go",
+    sha256 = "f04d2373bcaf8aa09bccb08a98a57e721306c8f6043a2a0ee610fd6853dcde3d",
     urls = [
         "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/rules_go/releases/download/0.18.6/rules_go-0.18.6.tar.gz",
         "https://github.com/bazelbuild/rules_go/releases/download/0.18.6/rules_go-0.18.6.tar.gz",
     ],
-    sha256 = "f04d2373bcaf8aa09bccb08a98a57e721306c8f6043a2a0ee610fd6853dcde3d",
 )
+
 load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies", "go_register_toolchains")
+
 go_rules_dependencies()
+
 go_register_toolchains()
 
 http_archive(
     name = "bazel_gazelle",
-    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.17.0/bazel-gazelle-0.17.0.tar.gz"],
     sha256 = "3c681998538231a2d24d0c07ed5a7658cb72bfb5fd4bf9911157c0e9ac6a2687",
+    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.17.0/bazel-gazelle-0.17.0.tar.gz"],
 )
+
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
+
 gazelle_dependencies()
 
 #
