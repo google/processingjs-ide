@@ -9707,6 +9707,22 @@ module.exports = function setupParser(Processing, options) {
     delete processingInstanceIds[id];
   };
 
+  var isLanguageVoicePresent = function(lang) {
+    try {
+      var matchingVoices = window.speechSynthesis.getVoices().filter(function(x) {
+	return x.lang == lang;
+      });
+      var ret = matchingVoices.length > 0;
+      window.console.log("Available voices: ", window.speechSynthesis.getVoices().map(function(x) {
+	return x.lang;
+      }));
+      window.console.log("Voice " + lang + " is " + (ret ? "present." : "absent."));
+      return ret;
+    } catch(e) {
+      window.console.log("TTS is not available.");
+      return false;
+    }
+  };
 
   /**
    * The Processing object
@@ -9961,10 +9977,20 @@ module.exports = function setupParser(Processing, options) {
         playPromise = null,
         audioCache = {},
         useClientTTS = false,
+        voiceCheckDone = false,
         codedKeys = [ PConstants.SHIFT, PConstants.CONTROL, PConstants.ALT, PConstants.CAPSLK, PConstants.PGUP, PConstants.PGDN,
                       PConstants.END, PConstants.HOME, PConstants.LEFT, PConstants.UP, PConstants.RIGHT, PConstants.DOWN, PConstants.NUMLK,
                       PConstants.INSERT, PConstants.F1, PConstants.F2, PConstants.F3, PConstants.F4, PConstants.F5, PConstants.F6, PConstants.F7,
                       PConstants.F8, PConstants.F9, PConstants.F10, PConstants.F11, PConstants.F12, PConstants.META ];
+
+    try {
+      // Delay the check of voice presence.
+      window.speechSynthesis.onvoiceschanged = function() {
+        if (voiceCheckDone) return;
+        useClientTTS = isLanguageVoicePresent("ja-JP");
+        voiceCheckDone = true;
+      };
+    } catch(e) {/* ignore */}
 
     // User can only have MAX_LIGHTS lights
     var lightCount = 0;
@@ -18560,7 +18586,7 @@ module.exports = function setupParser(Processing, options) {
     }
 
     var PAudio = function(audio) {
-      console.log("audio", audio);
+      window.console.log("audio", audio);
       if (audio instanceof HTMLAudioElement) {
         this.audio = audio;
       } else {
@@ -21085,12 +21111,14 @@ module.exports = function setupParser(Processing, options) {
 
     p.setClientTTS = function(on) {
       useClientTTS = on;
+      // Prevent the automatic check from overwriting useClientTTS.
+      voiceCheckDone = true;
     };
 
-    p.speak = function(text, lang='ja-JP') {
+    var speakReal = function (text, lang='ja-JP') {
       if (useClientTTS) {
         var msg = new SpeechSynthesisUtterance();
-        msg.voice = globalVoices[10]; // Note: some voices don't support altering params
+        //msg.voice = globalVoices[10]; // Note: some voices don't support altering params
         msg.voiceURI = 'native';
         //msg.volume = volume; // 0 to 1
         //msg.rate = rate; // 0.1 to 10
@@ -21139,6 +21167,17 @@ module.exports = function setupParser(Processing, options) {
           window.console.error(err);
         });
       }
+    };
+
+    p.speak = function (text, lang='ja-JP') {
+      if (voiceCheckDone) {
+	speakReal(text, lang);
+	return;
+      }
+      // Delay the speech production for a little bit so that voice check has a chance to complete.
+      setTimeout(function() {
+	speakReal(text, lang);
+      }, 2);  // Hopefully a delay of 2ms is imperceptible.
     };
 
     /**
