@@ -9960,7 +9960,7 @@ module.exports = function setupParser(Processing, options) {
         globalVoices = window.speechSynthesis.getVoices(),
         playPromise = null,
         audioCache = {},
-        useClientTTS = true,
+        useClientTTS = false,
         codedKeys = [ PConstants.SHIFT, PConstants.CONTROL, PConstants.ALT, PConstants.CAPSLK, PConstants.PGUP, PConstants.PGDN,
                       PConstants.END, PConstants.HOME, PConstants.LEFT, PConstants.UP, PConstants.RIGHT, PConstants.DOWN, PConstants.NUMLK,
                       PConstants.INSERT, PConstants.F1, PConstants.F2, PConstants.F3, PConstants.F4, PConstants.F5, PConstants.F6, PConstants.F7,
