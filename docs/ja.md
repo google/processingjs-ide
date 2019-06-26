@@ -2415,7 +2415,7 @@ speak("こんにちは、" + sei + mei);
 String yotei[] = {"顔洗い", "朝ゴハン", "歯磨き", "登校"};
 speak("明日の最初の予定は" + yotei[0] + "です。");
 speak("次は" + yotei[1] + "です。");
-speak("全部で" + yotei.length + "つの予定があります。");
+speak("全部で" + yotei.length + "個の予定があります。");
 ```
 
 詳しく知りたい人へ：
@@ -2446,12 +2446,12 @@ size(400, 200);
 fill(0);
 textSize(25);
 
-int itsuIndex = int(random(itsu.length));
-int daregaIndex = int(random(darega.length));
-int dokodeIndex = int(random(dokode.length));
-int doushitaIndex = int(random(doushita.length));
+int itsuBangou = int(random(itsu.length));
+int daregaBangou = int(random(darega.length));
+int dokodeBangou = int(random(dokode.length));
+int doushitaBangou = int(random(doushita.length));
 
-String phrase = itsu[itsuIndex] + darega[daregaIndex] + dokode[dokodeIndex] + doushita[doushitaIndex];
+String phrase = itsu[itsuBangou] + darega[daregaBangou] + dokode[dokodeBangou] + doushita[doushitaBangou];
 text(phrase, 10, 100);
 speak(phrase);
 ```
@@ -3851,12 +3851,12 @@ size(400, 200);
 fill(0);
 textSize(25);
 
-int itsuIndex = int(random(itsu.length));
-int daregaIndex = int(random(darega.length));
-int dokodeIndex = int(random(dokode.length));
-int doushitaIndex = int(random(doushita.length));
+int itsuBangou = int(random(itsu.length));
+int daregaBangou = int(random(darega.length));
+int dokodeBangou = int(random(dokode.length));
+int doushitaBangou = int(random(doushita.length));
 
-String phrase = itsu[itsuIndex] + darega[daregaIndex] + dokode[dokodeIndex] + doushita[doushitaIndex];
+String phrase = itsu[itsuBangou] + darega[daregaBangou] + dokode[dokodeBangou] + doushita[doushitaBangou];
 text(phrase, 10, 100);
 speak(phrase);
 ```
