@@ -585,7 +585,7 @@ void draw() {
 次のプログラムをサンプルとして使って自由自在ゲームを作ってみましょう。 以下に部分ごとに説明あります。
 
 ```example
-// Game
+// RocketLandingExample
 
 /* @pjs preload="/static/fire2-134x200.png"; */
 /* @pjs preload="/static/rocket-168x300.png"; */
@@ -593,6 +593,9 @@ void draw() {
 PImage fire = loadImage("/static/fire2-134x200.png");
 PImage rocket = loadImage("/static/rocket-168x300.png");
 PImage rocket_fire = loadImage("/static/rocket1-168x300.png");
+PAudio explosion = loadSound("/static/explosion.ogg");
+PAudio roar = loadSound("/static/roar.ogg");
+PAudio win = loadSound("/static/win.ogg");
 
 float x;
 float y;
@@ -619,17 +622,20 @@ void setup() {
 void draw() {
   y = y + vy;
   vy = vy + 0.2;
-
+  
   if (y > height - 30) {
     if (abs(vy) > 3) {
       background(200);
       image(fire, x, y-25, 65, 100);
+      explosion.play();
+    } else {
+      win.play();
     }
     noLoop();
     gameOver = true;
     return;
   }
-
+  
   background(100);
   if (burning) {
     image(rocket_fire, x, y, 34, 60);
@@ -642,6 +648,7 @@ void draw() {
 void burn() {
   burning = true;
   vy -= 2;
+  roar.play();
 }
 
 void keyPressed() {
@@ -655,6 +662,7 @@ void keyPressed() {
 
 void mousePressed() {
   if (gameOver) {
+    explosion.pause();
     initVars();
     loop();
     return;
