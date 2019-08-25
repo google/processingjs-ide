@@ -114,6 +114,14 @@ ellipse(150, 170, 80, 80);
 ellipse(150, 110, 60, 60);
 ```
 
+```hidden
+// Snowman1
+size(300, 300);
+ellipse(150, 250, 100, 100);
+ellipse(150, 170, 80, 80);
+ellipse(150, 110, 60, 60);
+```
+
 次は、[ステップ2][SpringStep2]へ。
 
 # ステップ2: 色 {#ref-SpringStep2}
@@ -197,6 +205,18 @@ ellipse(50, 50, 80, 80);
 
 **問題２**：前に作った雪だるまに色をつけたり、アイテムをあげたりしてみましょう。
 
+```hidden
+// Snowman2Color
+size(300,300);
+strokeWeight(5);
+stroke(255, 100, 100);
+ellipse(150, 250, 100, 100);
+stroke(100, 255, 100);
+ellipse(150, 170, 80, 80);
+stroke(100, 100, 255);
+ellipse(150, 110, 60, 60);
+```
+
 次は[ステップ3][SpringStep3]へ。
 
 # ステップ3: アニメーション {#ref-SpringStep3}
@@ -258,6 +278,26 @@ void draw() {
 
 **問題３**:
 `draw()`や`frameCount`や図形の命令を使って好きなように雪だるまのアニメーションを作りましょう。何か分からないことがあったら質問してください。
+
+
+```hidden
+// Snowman3Animated
+void setup() {
+  size(300, 300);
+}
+
+void draw() {
+  background(220);
+  int x = 150, y = 170;
+  strokeWeight(5);
+  stroke(255, 100, 100);
+  ellipse(x, y+80, 100, 100);
+  stroke(100, 255, 100);
+  ellipse(x-5*cos(frameCount/18), y, 80, 80);
+  stroke(100, 100, 255);
+  ellipse(x+5*sin(frameCount/18), y-60, 60, 60);
+}
+```
 
 次は[ステップ4][SpringStep4]へ。
 
