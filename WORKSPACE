@@ -12,11 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# For Bazel 0.21 or later, the minimum Protocol Buffer version required is 3.6.1.2,
-# because of the REPOSITORY_NAME removal.
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
+# Dependency of rules_closure
+git_repository(
+    name = "rules_cc",
+    remote = "https://github.com/bazelbuild/rules_cc.git",
+    branch = "master",
+)
+
+git_repository(
+    name = "rules_java",
+    remote = "https://github.com/bazelbuild/rules_java.git",
+    branch = "master",
+)
+
+git_repository(
+    name = "rules_proto",
+    remote = "https://github.com/bazelbuild/rules_proto.git",
+    branch = "master",
+)
+
+# Dependency of com_google_protobuf
+git_repository(
+    name = "rules_python",
+    remote = "https://github.com/bazelbuild/rules_python.git",
+    branch = "master",
+)
+
+# For Bazel 0.21 or later, the minimum Protocol Buffer version required is 3.6.1.2,
+# because of the REPOSITORY_NAME removal.
 git_repository(
     name = "com_google_protobuf",
     branch = "master",
