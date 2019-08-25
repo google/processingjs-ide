@@ -161,7 +161,9 @@ var ide = (/** @type {function(): !Object} */ (function() {
       iframe.style.width = '' + (inst.width) + 'px';
       ide.prevWidth = inst.width;
       ide.prevHeight = inst.height;
-    }, 1000);
+      contentWindow.document.getElementsByTagName('canvas')[0].focus();
+      window.console.log('focused ', contentWindow);
+    }, 400);
     // Detect the size inside of the sketch.
     var m = processingCode.match(/[\r\n \t]size[ \t]*\([ \t]*([0-9]+)[ \t]*,[ \t]*([0-9]+)[ \t]*\)/);
     if (m) {
