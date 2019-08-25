@@ -1,4 +1,4 @@
-# Processing.js 春ワークショップ {#ref-workshopMar}
+# Processing.js 春ワークショップ {#ref-help}
 
 *   [はじめに][SpringStep0]
 *   [Step 1: キャンバスと図形][SpringStep1]
@@ -22,8 +22,8 @@
 # その他 {#ref-otherworkshops}
 
 *   [2018年夏期ワークショップ][workshopSep]
-*   [2018年春ワークショップ][workshopMar]
-*   [TTS ワークショップ][help]
+*   [2018年春ワークショップ][help]
+*   [TTS ワークショップ][TTSWorkshop]
 
 # はじめに {#ref-SpringStep0}
 
@@ -2361,7 +2361,7 @@ void turnRight() {
 }
 ```
 
-# プログラミング体験ワークショップ {#ref-help}
+# プログラミング体験ワークショップ {#ref-TTSWorkshop}
 
 *   プログラミング体験ワークショップ
     *   [ステップ1][step1]
