@@ -15,6 +15,6 @@
                 "jquery": "^3.2.1",
                 "mocha": "^4.0.1",
                 "pegjs": "^0.10.0",
-                "google-closure-library": "^20190121"
+                "google-closure-library": "^20200830"
         }
 }
